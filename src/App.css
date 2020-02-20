@@ -1,0 +1,79 @@
+body {
+    background: rgb(245, 245, 245);
+    justify-content: center;
+}
+
+.panel-heading {
+    background: rgb(136, 164, 255);
+    border-radius: 4px;
+}
+
+.task-list {
+    overflow: auto;
+    height: 400px;
+}
+
+.chat-group {
+    height: 400px;
+    margin-top: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.chat-box {
+    overflow-y: scroll;
+    height: 300px;
+}
+
+#chat-name,
+#chat-message {
+    margin: 0;
+}
+
+#chat-name {
+    color: rgb(5, 8, 206);
+}
+
+#time-send {
+    margin-top: -20px;
+    font-size: 10px;
+    color: grey;
+}
+
+#chat-name {
+    margin-right: 5px;
+}
+
+.m-2 {
+    margin-top: 20px;
+}
+
+#chat-content {
+    width: 100%;
+}
+
+input[type="text"] {
+    margin: 5px;
+}
+
+.footer {
+    margin-top: 25px;
+    color: grey;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
