@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>React</title>
 </head>
 
@@ -11,9 +10,12 @@
     <div id="root">
 
     </div>
-
-    <script src="%PUBLIC_URL%/js/jquery.min.js"></script>
-    <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
 </body>
+<script>
+    const coverText = [...document.querySelectorAll('.animate-text')]
+    coverText.forEach(t => {
+        t.innerHTML = "Phóng to"
+    })
+</script>
 
 </html>

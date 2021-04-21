@@ -1,79 +1,159 @@
-body {
-    background: rgb(245, 245, 245);
-    justify-content: center;
+/* @import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap'); */
+
+body,
+html {
+    height: 100%;
 }
 
-.panel-heading {
-    background: rgb(136, 164, 255);
-    border-radius: 4px;
-}
-
-.task-list {
-    overflow: auto;
-    height: 400px;
-}
-
-.chat-group {
-    height: 400px;
-    margin-top: 5px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.chat-box {
-    overflow-y: scroll;
-    height: 300px;
-}
-
-#chat-name,
-#chat-message {
+* {
+    padding: 0;
     margin: 0;
+    text-decoration: none;
+    /* font-family: 'PT Serif', serif !important; */
 }
 
-#chat-name {
-    color: rgb(5, 8, 206);
+#root {
+    height: 100%;
 }
 
-#time-send {
-    margin-top: -20px;
-    font-size: 10px;
-    color: grey;
+hr {
+    margin-bottom: 0 !important
 }
 
-#chat-name {
+a {
+    color: black;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none !important;
+}
+
+p {
+    font-size: 20px;
+}
+
+.MuiButton-label {
+    font-size: 15px;
+}
+
+.MuiTypography-root {
+    font-size: 15px !important;
+}
+
+.MuiAvatar-colorDefault {
+    background-color: transparent !important;
+}
+
+.MuiListItemAvatar-root {
+    min-width: 0 !important;
     margin-right: 5px;
 }
 
-.m-2 {
-    margin-top: 20px;
+.MuiSvgIcon-root {
+    color: black !important;
+    font-size: 30px !important;
 }
 
-#chat-content {
+.MuiDialog-paperScrollPaper {
+    width: 40% !important;
+    border-radius: 10px !important;
+}
+
+
+/* fb-grid */
+
+.height-one {
+    width: 100%;
+    padding-top: 50% !important;
+}
+
+
+/*  */
+
+#searchInput {
+    border: none !important;
+    font-size: 15px;
+    padding: 7px;
+}
+
+.MuiBadge-colorPrimary {
+    background-color: rgb(0, 218, 0) !important;
+}
+
+
+/* tabbar */
+
+.MuiTab-textColorInherit {
+    width: 50% !important;
+    color: black !important;
+    text-transform: initial !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+.MuiAppBar-colorPrimary {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.MuiTabs-flexContainer .Mui-selected {
+    color: #0478B9 !important;
+}
+
+.MuiTab-textColorInherit {
+    max-width: 50% !important
+}
+
+.MuiTabs-indicator {
+    width: 50% !important;
+    background-color: #0478B9 !important
+}
+
+
+/* group title */
+
+.group-title {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    background-color: #0478b9eb!important;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 10px;
+}
+
+
+/* photo list */
+
+.photo-grid {
     width: 100%;
 }
 
-input[type="text"] {
+.photo-grid_column {
+    width: 100% !important;
+}
+
+div.fullscreen-container {
+    position: static !important;
+}
+
+.photoItem {
+    width: 133px;
+    height: auto;
+    margin: 1px;
+    border: 3px solid white;
+    border-radius: 7px;
+}
+
+.images {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.fullscreen-image img {
+    width: 120px;
+    height: auto;
     margin: 5px;
-}
-
-.footer {
-    margin-top: 25px;
-    color: grey;
-}
-
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }
