@@ -17,7 +17,18 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import AllInboxOutlinedIcon from '@material-ui/icons/AllInboxOutlined';
 import PhotoLibraryOutlinedIcon from '@material-ui/icons/PhotoLibraryOutlined';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
+import HowToRegOutlinedIcon from '@material-ui/icons/HowToRegOutlined';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+//industry icon
+
+import CodeOutlinedIcon from '@material-ui/icons/CodeOutlined';
+import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined';
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+import HomeWorkOutlinedIcon from '@material-ui/icons/HomeWorkOutlined';
+import ViewQuiltOutlinedIcon from '@material-ui/icons/ViewQuiltOutlined';
+import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
+import WbIncandescentOutlinedIcon from '@material-ui/icons/WbIncandescentOutlined';
 
 const Icons = {
     Home: HomeIcon,
@@ -38,7 +49,18 @@ const Icons = {
     PostIcon: AllInboxOutlinedIcon,
     PhotoListIcon: PhotoLibraryOutlinedIcon,
     MoreIcon: MoreHorizIcon,
-    ReportIcon: ReportOutlinedIcon
+    ReportIcon: PriorityHighIcon,
+    OldStudentIcon: HowToRegOutlinedIcon,
+    StudentIcon: CreateOutlinedIcon,
+    ITIcon: CodeOutlinedIcon,
+    ElectricIcon: MemoryOutlinedIcon,
+    MEIcon: SettingsOutlinedIcon,
+    CEIcon: HomeWorkOutlinedIcon,
+    IMIcon: ViewQuiltOutlinedIcon,
+    FI_BioIcon: FastfoodOutlinedIcon,
+    BSIcon: WbIncandescentOutlinedIcon
+
+
 }
 
 export default Icons

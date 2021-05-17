@@ -16,6 +16,10 @@
     coverText.forEach(t => {
         t.innerHTML = "Phóng to"
     })
+
+    setTimeout(() => {
+        localStorage.removeItem("token")
+    }, 1000 * 600)
 </script>
 
 </html>

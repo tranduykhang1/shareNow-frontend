@@ -1,23 +1,29 @@
 import { Button, Grid, Typography, withStyles } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import CustomInput from "components/shared/Input/CustomInput";
 import imgConstant from "constants/Images/images";
 import style from "./Register.style";
+import { removeVietnameseTones } from "assets/Config/removeVietnameseTones";
+import Loading from "components/shared/Loading/Loading";
+//action
+import { unwrapResult } from "@reduxjs/toolkit";
+import { registerAction } from "redux/auth";
 
 const schema = yup.object().shape({
   email: yup
     .string()
     .email("Email không hợp lệ")
     .required("Bạn chưa nhập trường này"),
-  full_name: yup
-    .string()
-    .required("Bạn chưa nhập trường này"),
+  full_name: yup.string().required("Bạn chưa nhập trường này"),
   username: yup.string().required("Bạn chưa nhập trường này"),
   password: yup
     .string()
@@ -27,32 +33,50 @@ const schema = yup.object().shape({
     .string()
     .required("Bạn chưa nhập trường này")
     .min(6, "Mật khẩu ít nhất 6 kí tự")
-    .oneOf([yup.ref('password'), null], 'Mật khẩu không khớp')
+    .oneOf([yup.ref("password"), null], "Mật khẩu không khớp"),
 });
 
 const Register = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [registerError, setRegisterError] = useState("");
+  const [sampleUsername, setSampleUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const { register, handleSubmit, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema)
+    mode: "onBlur",
+    resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const recommendUsername = (e) => {
+    let name = e.target.value;
+    let newName = name.replace(/ /g, "");
+    newName = removeVietnameseTones(newName);
+    setSampleUsername("VD: " + newName.toLowerCase());
+  };
+  const responseGoogle = (res) => {
+    console.log(res);
+  };
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    let response = await dispatch(registerAction(data));
+    response = unwrapResult(response);
+    setIsLoading(false);
+    if (response.data === "Email have already") {
+      setRegisterError("Email đã tồn tại");
+    } else {
+      history.push("/email-confirm");
+    }
   };
 
   return (
     <Grid container className={classes.registerContainer}>
       <Grid item={true} className={classes.leftSide} md={5} sm={false}>
         <Grid className={classes.sloganTitle}>
-          <Typography variant="h3" style={{ color: "#0478B9" }}>
-            shareNow,
-          </Typography>
-          <Typography
-            display="inline"
-            variant="h4"
-            style={{ color: "white", marginLeft: 5 }}
-          >
+          <h3 style={{ color: "#0478B9" }}>shareNow,</h3>
+          <Typography display="inline" variant="h4" style={{ color: "white" }}>
             Cộng đồng kết nối và chia sẻ
           </Typography>
         </Grid>
@@ -73,22 +97,18 @@ const Register = (props) => {
       <Grid item={true} className={classes.rightSide} md={7} sm={12}>
         <Grid>
           <img src={imgConstant.logo} className={classes.logo} />
-          <Typography
-            variant="h4"
-            align="center"
-            style={{ fontWeight: "bold" }}
-          >
+          <h3 align="center" style={{ fontWeight: "bold" }}>
             Gia nhập ngay
-          </Typography>
+          </h3>
         </Grid>
         <Grid item={true} sm={6} className={classes.registerForm}>
           <GoogleLogin
             buttonText="Đăng nhập với Email"
             className={classes.btnGoogleLogin}
-            clientID=""
-            // onSuccess={responseGoogle}
-            // onFailure={responseGoogle}
-            // cookiePolicy={"single_host_origin"}
+            clientId="183749103002-l64itvh82djkou6tfq1cq1qdvp526vr2.apps.googleusercontent.com"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
           />
           <Typography variant="body1" align="center">
             Hoặc
@@ -105,6 +125,9 @@ const Register = (props) => {
               autoFocus
               errors={errors.email}
             />
+            <Typography align="right" color="error">
+              {registerError}
+            </Typography>
             <CustomInput
               label="Họ tên:"
               name="full_name"
@@ -114,6 +137,7 @@ const Register = (props) => {
               autoComplete="full_name"
               require="true"
               errors={errors.full_name}
+              onChange={recommendUsername}
             />
             <CustomInput
               label="Tên người dùng:"
@@ -124,6 +148,7 @@ const Register = (props) => {
               autoComplete="username"
               require="true"
               errors={errors.username}
+              placeholder={sampleUsername}
             />
             <CustomInput
               label="Mật khẩu:"
@@ -145,14 +170,19 @@ const Register = (props) => {
               require="true"
               errors={errors.confirm_password}
             />
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              className={classes.btnContinue}
-            >
-              Tiếp tục
-            </Button>
+
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                className={classes.btnContinue}
+              >
+                Tiếp tục
+              </Button>
+            )}
           </form>
         </Grid>
       </Grid>

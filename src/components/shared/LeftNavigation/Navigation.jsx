@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Grid,
@@ -11,16 +11,36 @@ import {
   Button,
   Hidden,
 } from "@material-ui/core";
-import { Link, NavLink, useRouteMatch } from "react-router-dom";
+import { Link, NavLink, useHistory, useRouteMatch } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Icons from "constants/Icons/Icons";
 import imgConstant from "constants/Images/images";
+import token  from "assets/Config/jwtChecker";
 
 import style from "./Style";
+//action
+import {getUser} from "redux/user"
+
 
 const Navigation = (props) => {
   const { classes } = props;
-  const { url,path } = useRouteMatch();
+  const { url, path } = useRouteMatch();
+  const dispatch = useDispatch();
+  const history = useHistory()
+
+  const userState = useSelector(state => state.user.response)
+
+  console.log(userState)
+ 
+  useEffect(() =>{
+    dispatch(getUser())
+  }, [])
+
+  const toggleModal = () =>{
+    // dispatch(toggleModal())
+  }
+
 
   const navItems = [
     {
@@ -85,12 +105,12 @@ const Navigation = (props) => {
         </Box>
         <Grid container direction="column" alignItems="center">
           <List>{renderItems}</List>
-          <Button variant="contained" className={classes.btnShare}>
+          <Button variant="contained" className={classes.btnShare} onClick={toggleModal}>
             Hãy chia sẻ gì đó!
           </Button>
         </Grid>
         <Grid className={classes.navFooter}>
-          <Typography color="textSecondary">@username</Typography>
+          <Typography color="textSecondary">{userState.username}</Typography>
         </Grid>
       </Grid>
     </Hidden>

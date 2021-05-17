@@ -111,6 +111,13 @@ p {
 }
 
 
+/* input */
+
+.MuiInputBase-input {
+    font-size: 17px !important;
+}
+
+
 /* group title */
 
 .group-title {
@@ -120,6 +127,10 @@ p {
     color: white;
     padding: 8px 10px;
     border-radius: 10px;
+}
+
+.MuiInput-underline {
+    width: 100%
 }
 
 

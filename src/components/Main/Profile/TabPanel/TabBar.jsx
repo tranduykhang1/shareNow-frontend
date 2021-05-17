@@ -7,6 +7,7 @@ import Masonry from "react-masonry-css";
 import TabPanel from "./TabPanel";
 import PostItems from "components/shared/Post/PostItems/PostItems";
 import PhotoList from "../PhotoList/PhotoList";
+import { Box, Typography } from "@material-ui/core";
 
 function a11yProps(index) {
   return {
@@ -38,6 +39,7 @@ export default function TabBar(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(newValue);
   };
 
   return (
@@ -49,24 +51,32 @@ export default function TabBar(props) {
           variant="fullWidth"
           indicatorColor="primary"
           scrollButtons="auto"
-          variant="outlined"
         >
+          s
           <Tab label="Bài viết" fullWidth={true} {...a11yProps(0)} />
           <Tab label="Ảnh" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      {value === 0 ? (
+        <Box>{renderItems}</Box>
+      ) : (
+        <Box display="flex" style={{flexWrap: 'wrap', marginLeft: 50}}>
+          {" "}
+          <PhotoList />
+        </Box>
+      )}
+
+      {/* <TabPanel value={value} index={0} component="div">
         {renderItems}
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={1} component="div">
         <Masonry
           breakpointCols={3}
           className="photo-grid"
           columnClassName="photo-grid_column"
-        >
-        </Masonry>
-          <PhotoList />
-      </TabPanel>
+        ></Masonry>
+        <PhotoList />
+      </TabPanel> */}
     </div>
   );
 }

@@ -13,10 +13,10 @@ const style = () => ({
     avatar: {
         height: 130,
         width: 130,
-        border: '5px solid white',
+        border: '5px solid #fdfdfd',
         fontSize: 80,
         color: 'white',
-        background: '#eaeaea !important',
+        background: '#fdfdfd !important',
         boxShadow: '-3px 0px 5px 0px #e4e4e4'
     },
     cardBody: {

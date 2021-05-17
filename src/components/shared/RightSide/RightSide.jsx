@@ -48,7 +48,7 @@ const RightSide = (props) => {
 
   const renderListUser = listUser.map((u, i) => {
     return (
-      <Link>
+      <Link to="/" key={i}>
         <List className={classes.userList}>
           <ListItem alignItems="flex-start" className={classes.userItem}>
             <ListItemAvatar>

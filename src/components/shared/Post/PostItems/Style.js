@@ -1,9 +1,10 @@
 const style = () => ({
     postItem: {
         minHeight: 100,
+        margin: 'auto',
         marginTop: 15,
         padding: '10px 0',
-        backgroundColor: 'white',
+        backgroundColor: '#fdfdfd',
         boxShadow: '1px 1px 3px 1px #e4e4e4',
         borderRadius: 15
     },
@@ -22,7 +23,8 @@ const style = () => ({
     },
     cardContainer: {
         boxShadow: 'none !important',
-        position: 'relative'
+        position: 'relative',
+        backgroundColor: '#fdfdfd'
     },
     cardContent: {
         paddingTop: '0 !important',
@@ -48,6 +50,7 @@ const style = () => ({
         flexWrap: 'nowrap',
     },
     reportIcon: {
+        fontSize: '19px !important',
         color: "#c3c3c3 !important",
         cursor: "pointer"
     },

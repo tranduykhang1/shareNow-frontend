@@ -6,11 +6,13 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import TabBar from '../TabPanel/TabBar'
+import TabBar from "../TabPanel/TabBar";
 import Icons from "constants/Icons/Icons";
 import style from "./Style";
+import bgDefault from "assets/Images/bgDefault.png";
 
 const a11yProps = (index) => {
   return {
@@ -21,8 +23,15 @@ const a11yProps = (index) => {
 
 const ProfileInfo = (props) => {
   const { classes } = props;
-  const bgCover = "https://wallpaperaccess.com/full/2409545.jpg",
-    avatar = "https://picsum.photos/200/300?random=2";
+  const [background, setBackground] = useState(bgDefault);
+
+  let userState = useSelector((state) => state.user.response);
+
+  useEffect(() => {
+    if (userState.background) {
+      setBackground(userState.background);
+    }
+  }, [userState]);
 
   return (
     <Grid item={true} sm={12} md={12} style={{ padding: "0 40px" }}>
@@ -32,26 +41,26 @@ const ProfileInfo = (props) => {
           md={12}
           sm={7}
           className={classes.backgroundCover}
-          style={{ backgroundImage: `url(${bgCover})` }}
+          style={{ backgroundImage: `url(${background})` }}
         ></Grid>
-        <Avatar src={avatar} className={classes.avatar}>
+        <Avatar src={userState.avatar} className={classes.avatar}>
           H
         </Avatar>
       </Grid>
       <div className={classes.importantInfo}>
-        <Typography className={classes.fullName}>Leah Collins</Typography>
-        <Typography className={classes.username}>@Katie</Typography>
+        <Typography className={classes.fullName}>{userState.fullname}</Typography>
+        <Typography className={classes.username}>{userState.username}</Typography>
       </div>
       <Grid container className={classes.userInfo}>
         <div>
           <Typography className={classes.department}>
-            <strong>Khoa:</strong> IT
+            <strong>Khoa:</strong> {userState.department}
           </Typography>
           <Typography className={classes.industry}>
-            <strong>Ngành:</strong> Software Engineer
+            <strong>Ngành:</strong> {userState.industry}
           </Typography>
           <Typography className={classes.class}>
-            <strong>Lớp:</strong> SE0117
+            <strong>Lớp:</strong> { userState.class}
           </Typography>
           <Box display="flex">
             <Box display="flex" alignItems="center">
@@ -67,7 +76,14 @@ const ProfileInfo = (props) => {
           </Box>
           <Grid container>
             <Typography className={classes.followState}>
-              <strong>10</strong> Theo dõi - <strong>20</strong> đang theo dõi
+              <strong>
+                {userState.followers && userState.followers.length}
+              </strong>{" "}
+              Theo dõi -{" "}
+              <strong>
+                {userState.following && userState.following.length}
+              </strong>{" "}
+              đang theo dõi
             </Typography>
           </Grid>
         </div>
@@ -75,7 +91,7 @@ const ProfileInfo = (props) => {
       </Grid>
       <hr />
       <Grid container className={classes.timeline}>
-        <TabBar/>
+        <TabBar />
       </Grid>
     </Grid>
   );

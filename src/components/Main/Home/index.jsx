@@ -3,14 +3,14 @@ import React from "react";
 
 import Navigation from "components/shared/LeftNavigation/Navigation";
 import HomePage from "./HomePage/HomePage";
-import RightSide from "components/shared/RightSide/RightSide";
+import TopicList from "components/shared/TopicList/TopicList";
 
 const index = () => {
   return (
     <Grid container item={true} sm={12} md={12} xs={12}>
       <Navigation />
       <HomePage />
-      <RightSide/>
+      <TopicList/>
     </Grid>
   );
 };

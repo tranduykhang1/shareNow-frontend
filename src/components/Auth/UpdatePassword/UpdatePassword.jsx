@@ -1,13 +1,18 @@
 import { Button, Grid, Typography, withStyles } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import CustomInput from "components/shared/Input/CustomInput";
 import images from "constants/Images/images";
 import style from "./UpdatePassword.style";
+//action
+import { updatePassword } from "redux/auth";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const schema = yup.object().shape({
   password: yup
@@ -23,13 +28,25 @@ const schema = yup.object().shape({
 
 const UpdatePassword = (props) => {
   const { classes } = props;
+  const dispath = useDispatch();
+  const history = useHistory();
+  const [err, setErr] = useState("");
+
   const { register, handleSubmit, errors } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    let response = await dispath(updatePassword(data));
+    response = unwrapResult(response);
+    if (response.status === 200) {
+      setTimeout(() => {
+        history.push("/login");
+      }, 5000);
+    } else {
+      setErr("Có lỗi xảy ra!");
+    }
   };
 
   return (
@@ -64,6 +81,9 @@ const UpdatePassword = (props) => {
           require="true"
           errors={errors.confirm_password}
         />
+        <Typography align="center" color="error">
+          {err}
+        </Typography>
         <Button
           variant="contained"
           color="primary"

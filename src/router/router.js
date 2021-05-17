@@ -1,72 +1,79 @@
 import React from "react";
 
+
 import Login from "components/Auth/Login/Login";
 import Register from "components/Auth/Register/Register";
 import ForgotPassword from "components/Auth/ForgotPassoword/ForgotPassword";
 import UpdatePassword from "components/Auth/UpdatePassword/UpdatePassword";
+import EmailConfirm from "components/Auth/EmailConfirm/EmailConfirm";
 import HomePage from "components/Main/Home/index";
-import Message from "components/Main/Messages/index"
+import Message from "components/Main/Messages/index";
 import GroupPage from "components/Main/Group/index";
-import Notification from "components/Main/Notification/index"
-import Profile from "components/Main/Profile/Index"
+import Notification from "components/Main/Notification/index";
+import Profile from "components/Main/Profile/Index";
 import PostDetail from "components/Main/PostDetail/PostDetail";
-import GroupDetail from "components/Main/GroupDetail/index"
+import GroupDetail from "components/Main/GroupDetail/index";
 
-
-const routes = [{
+const routes = [
+    {
         path: "/",
         exact: true,
-        main: () => < HomePage / > ,
+        main: () => <HomePage />,
     },
     {
         path: "/message",
         exact: false,
-        main: () => < Message / > ,
+        main: () => <Message />,
     },
     {
         path: "/groups",
         exact: false,
-        main: () => < GroupPage / > ,
+        main: () => <GroupPage />,
     },
     {
         path: "/notification",
         exact: false,
-        main: () => < Notification / > ,
+        main: () => <Notification />,
     },
     {
         path: "/profile/:id",
         exact: false,
-        main: () => < Profile / > ,
+        main: () => <Profile />,
     },
     {
         path: "/post/:id",
         exact: false,
-        main: () => < PostDetail / > ,
+        main: () => <PostDetail />,
     },
     {
         path: "/group/:id",
         exact: false,
-        main: () => < GroupDetail / > ,
+        main: () => <GroupDetail />,
     },
     {
         path: "/login",
         exact: false,
-        main: () => < Login / > ,
+        main: () => <Login />,
     },
     {
         path: "/register",
         exact: false,
-        main: () => < Register / > ,
+        main: () => <Register />,
     },
     {
         path: "/forgot-password",
         exact: false,
-        main: () => < ForgotPassword / > ,
+        main: () => <ForgotPassword />,
     },
     {
         path: "/update-password",
         exact: false,
-        main: () => < UpdatePassword / > ,
+        main: () => <UpdatePassword />,
+    },
+    {
+        path: "/email-confirm",
+        exact: false,
+        main: () => <EmailConfirm />,
     },
 ];
 

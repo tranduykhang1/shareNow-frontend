@@ -9,7 +9,7 @@ const style = {
   marginLeft: "auto",
   borderRadius: 10,
   boxShadow: "1px 1px 5px 1px #e4e4e4",
-  backgroundColor: 'white'
+  backgroundColor: '#fdfdfd'
 };
 const MessagePage = () => {
   return (

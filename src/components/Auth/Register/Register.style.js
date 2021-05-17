@@ -3,7 +3,6 @@ import imgConst from "constants/Images/images.js";
 const style = theme => ({
     registerContainer: {
         flexWrap: 'nowrap !important',
-        height: '100% !important'
     },
     sloganTitle: {
         margin: "200px 0 0 20px"

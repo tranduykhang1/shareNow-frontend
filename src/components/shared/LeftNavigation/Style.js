@@ -63,7 +63,7 @@ const style = () => ({
     navFooter: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '260px'
+        marginTop: '190px'
     }
 })
 

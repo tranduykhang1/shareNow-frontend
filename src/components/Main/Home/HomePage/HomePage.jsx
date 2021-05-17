@@ -1,6 +1,7 @@
 import { Grid, withStyles } from '@material-ui/core';
 import {} from '@material-ui/core'
 import PostList from 'components/shared/Post/PostList/PostList';
+import TagList from 'components/shared/TagList/TagList';
 import React from 'react';
 
 import UploadCard from '../UploadForm/UploadCard';
@@ -14,6 +15,7 @@ const HomePage = (props) => {
   return (
     <Grid item sm={12} md={6} style={style}>
       <UploadCard/>
+      <TagList/>
       <PostList/>
      </Grid>
   );
