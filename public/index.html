@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>React</title>
+    <title>ShareNow</title>
 </head>
 
 <body>
@@ -17,9 +17,9 @@
         t.innerHTML = "Phóng to"
     })
 
-    setTimeout(() => {
-        localStorage.removeItem("token")
-    }, 1000 * 600)
+    window.addEventListener('beforeunload', () => {
+        alert("hello")
+    })
 </script>
 
 </html>

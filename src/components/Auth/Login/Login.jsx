@@ -19,7 +19,7 @@ import CustomInput from "components/shared/Input/CustomInput";
 import style from "./Login.style";
 import Loading from "components/shared/Loading/Loading";
 //store
-import { loginAction } from "redux/auth";
+import { googleLogin, loginAction } from "redux/auth";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const schema = yup.object().shape({
@@ -48,8 +48,15 @@ const Login = (props) => {
     resolver: yupResolver(schema),
   });
 
-  const responseGoogle = (res) => {
-    console.log(res);
+  const responseGoogle = async(res) => {
+    setIsLoading(true);
+    const resp = await dispatch(googleLogin(res));
+    const response = unwrapResult(resp);
+    setIsLoading(false);
+
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
+    window.location.pathname = "/";
   };
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -67,7 +74,9 @@ const Login = (props) => {
         msg: "Không tìm thấy Email",
       });
     } else {
-      localStorage.setItem("token", response.data);
+      console.log(response);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
       window.location.pathname = "/";
     }
   };

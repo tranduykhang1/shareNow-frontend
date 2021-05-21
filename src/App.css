@@ -1,5 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap'); */
-
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:ital,wght@0,100;1,300&display=swap');
 body,
 html {
     height: 100%;
@@ -9,7 +8,8 @@ html {
     padding: 0;
     margin: 0;
     text-decoration: none;
-    /* font-family: 'PT Serif', serif !important; */
+    font-family: 'Open Sans', sans-serif !important;
+    /* font-family: 'Roboto', sans-serif !important; */
 }
 
 #root {
@@ -22,6 +22,10 @@ hr {
 
 a {
     color: black;
+}
+
+button {
+    border: none
 }
 
 a:hover,
@@ -133,6 +137,15 @@ p {
     width: 100%
 }
 
+.UserList-searchInput-35>.MuiInputBase-input {
+    font-size: 15px !important;
+}
+
+input:focus-visible {
+    border: none;
+    outline: none
+}
+
 
 /* photo list */
 
@@ -167,4 +180,10 @@ div.fullscreen-container {
     width: 120px;
     height: auto;
     margin: 5px;
+}
+
+@media(max-width: 958px) {
+    .responsiveGrid {
+        margin: 0 !important
+    }
 }

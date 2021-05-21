@@ -39,7 +39,7 @@ const style = () => ({
     },
     navTitle: {
         fontWeight: 'bold',
-        fontSize: '18px !important',
+        fontSize: '17px !important',
     },
     iconActive: {
         color: '#0478B9 !important ',

@@ -19,9 +19,10 @@ const App = () => {
     padding = 0;
   }
 
+
   const containerStyle = {
     backgroundColor: "rgb(239 239 239 / 35%)",
-    padding: { padding },
+    padding: padding,
     flexWrap: "nowrap",
     minHeight: "100%",
   };

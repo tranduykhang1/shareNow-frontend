@@ -16,37 +16,38 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Icons from "constants/Icons/Icons";
 import imgConstant from "constants/Images/images";
-import token  from "assets/Config/jwtChecker";
+import token from "assets/Config/jwtChecker";
 
 import style from "./Style";
 //action
-import {getUser} from "redux/user"
-
+import { getUser } from "redux/user";
 
 const Navigation = (props) => {
   const { classes } = props;
   const { url, path } = useRouteMatch();
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
 
-  const userState = useSelector(state => state.user.response)
+  const userState = useSelector((state) => state.user.currentUser);
 
-  console.log(userState)
- 
-  useEffect(() =>{
-    dispatch(getUser())
-  }, [])
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
 
-  const toggleModal = () =>{
+  const toggleModal = () => {
     // dispatch(toggleModal())
-  }
-
+  };
 
   const navItems = [
     {
       icon: Icons.Home,
       text: "Trang chủ",
       link: "/",
+    },
+    {
+      icon: Icons.SearchIcon,
+      text: "Tìm kiếm",
+      link: "/search",
     },
     {
       icon: Icons.ChatBubble,
@@ -105,7 +106,11 @@ const Navigation = (props) => {
         </Box>
         <Grid container direction="column" alignItems="center">
           <List>{renderItems}</List>
-          <Button variant="contained" className={classes.btnShare} onClick={toggleModal}>
+          <Button
+            variant="contained"
+            className={classes.btnShare}
+            onClick={toggleModal}
+          >
             Hãy chia sẻ gì đó!
           </Button>
         </Grid>

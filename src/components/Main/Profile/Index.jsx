@@ -1,17 +1,18 @@
 import React from "react";
-import { useParams } from "react-router";
+import { useRouteMatch } from "react-router";
 
 import Navigation from "components/shared/LeftNavigation/Navigation";
 import RightSide from "components/shared/RightSide/RightSide";
 import ProfilePage from "./ProfilePage/ProfilePage";
+import UpdateProfileForm from "./UpdateProfileForm/UpdateProfileForm";
 
 const Index = () => {
-  const { id } = useParams();
+  const { path } = useRouteMatch();
 
   return (
     <>
       <Navigation />
-      <ProfilePage />
+      {path === "/update-profile/:id" ? <UpdateProfileForm /> : <ProfilePage />}
       <RightSide />
     </>
   );

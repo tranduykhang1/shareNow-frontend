@@ -29,6 +29,13 @@ import HomeWorkOutlinedIcon from '@material-ui/icons/HomeWorkOutlined';
 import ViewQuiltOutlinedIcon from '@material-ui/icons/ViewQuiltOutlined';
 import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
 import WbIncandescentOutlinedIcon from '@material-ui/icons/WbIncandescentOutlined';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import FlipCameraIosIcon from '@material-ui/icons/FlipCameraIos';
+import GroupAddOutlinedIcon from '@material-ui/icons/GroupAddOutlined';
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import ArrowRightAltOutlinedIcon from '@material-ui/icons/ArrowRightAltOutlined';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import DoneOutlinedIcon from '@material-ui/icons/DoneOutlined';
 
 const Icons = {
     Home: HomeIcon,
@@ -58,9 +65,14 @@ const Icons = {
     CEIcon: HomeWorkOutlinedIcon,
     IMIcon: ViewQuiltOutlinedIcon,
     FI_BioIcon: FastfoodOutlinedIcon,
-    BSIcon: WbIncandescentOutlinedIcon
-
-
+    BSIcon: WbIncandescentOutlinedIcon,
+    BackIcon: KeyboardBackspaceIcon,
+    CameraIcon: FlipCameraIosIcon,
+    CreateIcon: AddOutlinedIcon,
+    AddMemberIcon: GroupAddOutlinedIcon,
+    ArrowRightIcon: ArrowRightAltOutlinedIcon,
+    CloseIcon: CloseOutlinedIcon,
+    DoneIcon: DoneOutlinedIcon
 }
 
 export default Icons

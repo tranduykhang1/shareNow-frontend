@@ -4,7 +4,8 @@ const style = theme => ({
     },
     //Select
     selectWrapper: {
-        margin: '10px 0'
+        margin: '10px 0',
+        width: '47% !important'
     },
     selectLabel: {
         color: 'black !important',
@@ -12,6 +13,7 @@ const style = theme => ({
         padding: "0 !important"
     },
     select: {
+        backgroundColor: 'transparent',
         padding: 10,
         width: '100%',
         border: '1px solid #c5c5c5',

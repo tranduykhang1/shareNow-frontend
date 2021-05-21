@@ -3,12 +3,25 @@ const style = () => ({
         borderRight: '1px solid #CCCCCC'
     },
     listHeader: {
-        padding: 19,
-        borderBottom: '1px solid #CCCCCC'
+        padding: "0 15px",
+        height: '61px',
+        borderBottom: '1px solid #CCCCCC',
+        alignItems: 'center'
     },
     headerText: {
         fontWeight: 'bold',
         fontSize: 25
+    },
+    createGroupIcon: {
+        fontSize: '22px !important',
+        color: '#2196f3 !important',
+        cursor: 'pointer',
+        marginLeft: 5,
+    },
+    AddMemberIcon: {
+        fontSize: '22px !important',
+        color: '#2196f3 !important',
+        cursor: 'pointer'
     },
     listBody: {
         marginTop: 10,
@@ -16,11 +29,10 @@ const style = () => ({
     },
     searchBar: {
         borderBottom: '1px solid #CCCCCC'
-
     },
     searchForm: {
         margin: 10,
-        padding: 7,
+        padding: "0 7px",
         borderRadius: 7,
         alignItems: 'center',
         display: 'flex',
@@ -28,6 +40,7 @@ const style = () => ({
         backgroundColor: "#D6D6D6"
     },
     searchIcon: {
+        fontSize: '20px !important',
         color: 'grey !important'
     },
     searchInput: {

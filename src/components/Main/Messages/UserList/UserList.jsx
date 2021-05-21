@@ -12,15 +12,19 @@ import {
   withStyles,
 } from "@material-ui/core";
 import Icons from "constants/Icons/Icons";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import CreateGroup from "../GroupManage/CreateGroup";
+import FindGroup from "../GroupManage/FindGroup";
 
 import style from "./Style";
 
 const UserList = (props) => {
   const { classes } = props;
-  const {register, handleSubmit} = useForm();
+  const [isCreate, setIsCreate] = useState(false);
+  const [isFind, setIsFind] = useState(false);
+  const { register, handleSubmit } = useForm();
 
   const userList = [
     {
@@ -49,9 +53,20 @@ const UserList = (props) => {
     },
   ];
 
-  const search = data =>{
-    console.log(data)
-  }
+  const search = (data) => {
+    console.log(data);
+  };
+  const toggleForm = (type) => {
+    if (type === "create") {
+      setIsCreate(!isCreate);
+      setIsFind(false);
+    }
+    if (type === "find") {
+      setIsFind(!isFind);
+      setIsCreate(false);
+    }
+  };
+
   const renderUserList = userList.map((u, i) => {
     return (
       <List className={classes.userList}>
@@ -86,9 +101,31 @@ const UserList = (props) => {
   });
   return (
     <Grid item={true} md={3} sm={2} className={classes.listContainer}>
-      <Grid className={classes.listHeader}>
-        <Typography className={classes.headerText}>Tin nhắn của bạn</Typography>
-      </Grid>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        className={classes.listHeader}
+      >
+        {!isCreate & !isFind ? (
+          <Typography className={classes.headerText}>
+            Tin nhắn của bạn
+          </Typography>
+        ) : isCreate ? (
+          <CreateGroup isCreate={isCreate} />
+        ) : (
+          <FindGroup isFind={isFind} />
+        )}
+        <Box display="flex" align="center">
+          <Icons.AddMemberIcon
+            className={classes.AddMemberIcon}
+            onClick={() => toggleForm("find")}
+          />
+          <Icons.CreateIcon
+            className={classes.createGroupIcon}
+            onClick={() => toggleForm("create")}
+          />
+        </Box>
+      </Box>
       <Grid className={classes.listBody}>
         <Box className={classes.searchBar}>
           <form onSubmit={handleSubmit(search)} className={classes.searchForm}>
