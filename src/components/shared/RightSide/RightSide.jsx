@@ -97,13 +97,13 @@ const RightSide = (props) => {
           sm={10}
           className={classes.searchContainer}
         >
-          <form onSubmit={handleSubmit(search)} className={classes.searchForm}>
+          {/* <form onSubmit={handleSubmit(search)} className={classes.searchForm}>
             <Icons.SearchIcon className={classes.searchIcon} />
             <InputBase
               placeholder="Tìm kiếm..."
               className={classes.searchInput}
             />
-          </form>
+          </form> */}
         </Grid>
         <Grid item={true} md={10} sm={10} className={classes.usersRecommend}>
           <Typography style={{ fontWeight: "bold" }}>Gợi ý cho bạn</Typography>

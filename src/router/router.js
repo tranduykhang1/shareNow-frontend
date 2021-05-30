@@ -8,9 +8,10 @@ import UpdatePassword from "components/Auth/UpdatePassword/UpdatePassword";
 import EmailConfirm from "components/Auth/EmailConfirm/EmailConfirm";
 import HomePage from "components/Main/Home/index";
 import Message from "components/Main/Messages/index";
+import Search from "components/Main/Search/index";
 import GroupPage from "components/Main/Group/index";
 import Notification from "components/Main/Notification/index";
-import Profile from "components/Main/Profile/Index";
+import Profile from "components/Main/Profile/index";
 import PostDetail from "components/Main/PostDetail/PostDetail";
 import GroupDetail from "components/Main/GroupDetail/index";
 
@@ -23,6 +24,11 @@ const routes = [{
         path: "/message",
         exact: false,
         main: () => < Message / > ,
+    },
+    {
+        path: "/search",
+        exact: false,
+        main: () => < Search / > ,
     },
     {
         path: "/groups",

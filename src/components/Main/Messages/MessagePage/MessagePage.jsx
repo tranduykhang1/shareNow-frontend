@@ -5,7 +5,7 @@ import MessageList from "../MessageList/MessageList";
 import UserList from "../UserList/UserList";
 
 const style = {
-  height: 740,
+  height: '97vh',
   marginLeft: "auto",
   borderRadius: 10,
   boxShadow: "1px 1px 5px 1px #e4e4e4",

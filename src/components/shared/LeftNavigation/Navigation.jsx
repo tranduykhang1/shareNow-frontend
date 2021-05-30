@@ -16,11 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Icons from "constants/Icons/Icons";
 import imgConstant from "constants/Images/images";
-import token from "assets/Config/jwtChecker";
 
 import style from "./Style";
 //action
 import { getUser } from "redux/user";
+import {toggleUploadForm} from "redux/toggleComponent";
 
 const Navigation = (props) => {
   const { classes } = props;
@@ -34,8 +34,8 @@ const Navigation = (props) => {
     dispatch(getUser());
   }, []);
 
-  const toggleModal = () => {
-    // dispatch(toggleModal())
+  const toggle = () => {
+    dispatch(toggleUploadForm(true))
   };
 
   const navItems = [
@@ -109,7 +109,7 @@ const Navigation = (props) => {
           <Button
             variant="contained"
             className={classes.btnShare}
-            onClick={toggleModal}
+            onClick={toggle}
           >
             Hãy chia sẻ gì đó!
           </Button>

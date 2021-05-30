@@ -86,14 +86,20 @@ const PostItems = (props) => {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <Link to='/'>
-                    <Typography component={"span"} className={classes.postUsername}>
+                  <Link to="/">
+                    <Typography
+                      component={"span"}
+                      className={classes.postUsername}
+                    >
                       Username
-                    </Typography >
+                    </Typography>
                   </Link>
                   {url === "/group" && (
                     <Link>
-                      <Typography component={"span"} className={classes.postGroupName}>
+                      <Typography
+                        component={"span"}
+                        className={classes.postGroupName}
+                      >
                         - Groups
                       </Typography>
                     </Link>
@@ -109,9 +115,9 @@ const PostItems = (props) => {
           <div style={{ position: "relative" }}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body1" style={{ fontSize: "20px" }}>
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
+                Khi học trên ghế nhà trường, chúng ta đã rất quen thuộc với việc
+                phát triển sản phẩm với mô hình Monolithic, nói nôm na là toàn
+                bộ code được đóng gói phát triển trên duy nhất một project.
               </Typography>
             </CardContent>
             <CardMedia>

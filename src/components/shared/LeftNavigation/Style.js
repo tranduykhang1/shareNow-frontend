@@ -1,7 +1,7 @@
 const style = () => ({
     navContainer: {
         position: 'fixed',
-        height: '738px',
+        height: '100%',
         width: '22%',
         // backgroundColor: 'white',
         borderRadius: 10,

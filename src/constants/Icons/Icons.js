@@ -36,6 +36,9 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ArrowRightAltOutlinedIcon from '@material-ui/icons/ArrowRightAltOutlined';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import DoneOutlinedIcon from '@material-ui/icons/DoneOutlined';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
+import BarChartOutlinedIcon from '@material-ui/icons/BarChartOutlined';
 
 const Icons = {
     Home: HomeIcon,
@@ -72,7 +75,10 @@ const Icons = {
     AddMemberIcon: GroupAddOutlinedIcon,
     ArrowRightIcon: ArrowRightAltOutlinedIcon,
     CloseIcon: CloseOutlinedIcon,
-    DoneIcon: DoneOutlinedIcon
+    DoneIcon: DoneOutlinedIcon,
+    PersonIcon: PersonOutlineOutlinedIcon,
+    FilterAllIcon: FilterNoneOutlinedIcon,
+    ChartIcon: BarChartOutlinedIcon
 }
 
 export default Icons

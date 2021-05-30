@@ -1,6 +1,6 @@
 const style = () => ({
     uploadCard: {
-        height: 150,
+        height: 130,
         margin: 'auto',
         flexWrap: 'nowrap',
         position: 'relative'
@@ -11,34 +11,49 @@ const style = () => ({
 
     },
     avatar: {
-        height: 130,
-        width: 130,
+        height: 90,
+        width: 90,
         border: '5px solid #fdfdfd',
         fontSize: 80,
         color: 'white',
         background: '#fdfdfd !important',
         boxShadow: '-3px 0px 5px 0px #e4e4e4'
     },
+    clickToShare: {
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: "#f3f3f3",
+        padding: '10px 15px',
+        cursor: 'pointer'
+    },
+    slogan: {
+        color: 'grey'
+    },
+
     cardBody: {
         backgroundColor: 'white',
-        height: 110,
+        height: 70,
         zIndex: 1,
 
         borderRadius: 10,
         marginLeft: 50,
-        padding: '10px 30px 20px 100px',
+        padding: '0 27px 0 60px',
         boxShadow: '1px 1px 5px 1px #e4e4e4;',
+        display: 'flex',
+        alignItems: 'center'
     },
     capInput: {
         resize: 'none',
-        width: '90%',
+        width: '100%',
         maxWidth: '100%',
-        padding: 10,
+        // padding: 10,
         border: 'none',
+        borderRadius: 5,
         fontSize: 15,
+        // border: '1px solid #f1f1f1',
 
         "&:focus": {
-            border: 'none',
+            // border: '1px solid #f1f1f1',
             outline: 'none'
         }
     },
@@ -52,6 +67,8 @@ const style = () => ({
         border: '1px solid #cacaca',
         borderRadius: 4,
         padding: '2px 10px',
+        display: 'flex',
+        alignItems: 'center'
     },
     listIcon: {
         display: 'flex',
@@ -88,11 +105,16 @@ const style = () => ({
         }
     },
     // upload form modal
+    title: {
+        fontSize: '15px !important',
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
     modal: {
         width: '40% !important'
     },
     exDesc: {
-        fontSize: 13,
+        fontSize: '13px !important',
         marginRight: 5
     }
 })

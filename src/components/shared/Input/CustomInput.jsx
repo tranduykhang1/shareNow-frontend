@@ -5,9 +5,9 @@ const CustomInput = (props) => {
   const { className, register, id, label, errors, ...inputProps } = props;
   return (
     <Grid style={{ marginBottom: 5 }}>
-      <Typography variant="body1" htmlFor={id} margin={10}>
+      <label htmlFor={id} margin={10} style={{fontSize: '13px !important', fontWeight: 'normal'}}>
         {label}
-      </Typography>
+      </label>
       <TextField
         fullWidth
         size="small"

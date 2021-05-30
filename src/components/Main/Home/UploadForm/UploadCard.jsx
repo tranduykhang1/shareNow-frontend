@@ -14,22 +14,29 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import Picker from "emoji-picker-react";
 
 import style from "./Style";
 import Icons from "constants/Icons/Icons";
+import { toggleUploadForm } from "redux/toggleComponent";
+import { useDispatch } from "react-redux";
 
 const UploadCard = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
 
   const { register, handleSubmit } = useForm();
   const [isShow, setIsShow] = useState(false);
   const [chosenEmoji, setChosenEmoji] = useState([]);
 
-  const avatar = "https://picsum.photos/200/300?random=2"
+  const avatar = "https://picsum.photos/200/300?random=2";
 
+  //
   const uploadStatus = (data) => {
     console.log(data);
+  };
+
+  const toggle = () => {
+    dispatch(toggleUploadForm(true));
   };
 
   const toggleEmoji = () => {
@@ -39,9 +46,9 @@ const UploadCard = (props) => {
     if (isShow) {
       document.addEventListener("click", toggleEmoji);
     }
-    return () =>{
-      document.removeEventListener('click', toggleEmoji)
-    }
+    return () => {
+      document.removeEventListener("click", toggleEmoji);
+    };
   }, [isShow]);
 
   const onEmojiClick = (event, emojiObject) => {
@@ -58,10 +65,17 @@ const UploadCard = (props) => {
       className={classes.uploadCard}
     >
       <Grid className={classes.cardAvatar}>
-        <Avatar className={classes.avatar} src={avatar}>K</Avatar>
+        <Avatar className={classes.avatar} src={avatar}>
+          K
+        </Avatar>
       </Grid>
       <Grid item={true} sm={12} md={12} className={classes.cardBody}>
-      <form onSubmit={handleSubmit(uploadStatus)}>
+        <div className={classes.clickToShare} onClick={toggle}>
+          <span className={classes.slogan}>
+            Khang, bạn muốn chia sẻ điều gì?
+          </span>
+        </div>
+        {/* <form onSubmit={handleSubmit(uploadStatus)}>
               <TextareaAutosize
                 className={classes.capInput}
                 name="caption"
@@ -98,7 +112,7 @@ const UploadCard = (props) => {
                 </Button>
               </Grid>
               {isShow && <Picker onEmojiClick={onEmojiClick} />}
-            </form>
+            </form> */}
       </Grid>
     </Grid>
   );

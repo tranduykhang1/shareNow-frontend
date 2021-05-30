@@ -9,18 +9,19 @@ const style = theme => ({
     },
     selectLabel: {
         color: 'black !important',
-        fontSize: "15px !important",
-        padding: "0 !important"
+        fontSize: "14px !important",
+        padding: "0 !important",
+        fontWeight: 'normal !important'
     },
     select: {
         backgroundColor: 'transparent',
-        padding: 10,
+        padding: 5,
         width: '100%',
         border: '1px solid #c5c5c5',
         borderRadius: 5
     },
     option: {
-        fontSize: '14px !important'
+        fontSize: '13px !important'
     },
     btn: {
         marginTop: "10px !important"
