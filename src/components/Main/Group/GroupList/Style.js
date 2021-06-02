@@ -34,7 +34,9 @@ const style = () => ({
         fontSize: 15
     },
     usersRecommend: {
-        margin: '0 auto'
+        margin: '0 auto',
+        height: "80%",
+        overflow: 'auto',
     },
     groupList: {
         padding: '0 !important'

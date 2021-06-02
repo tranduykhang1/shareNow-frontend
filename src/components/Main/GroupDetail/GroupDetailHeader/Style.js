@@ -2,7 +2,22 @@ const style = () => ({
     headerContainer: {
         position: 'relative'
     },
-
+    editIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 40,
+        color: 'white !important',
+        fontSize: "25px !important",
+        cursor: 'pointer'
+    },
+    trashIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        color: 'white !important',
+        fontSize: "25px !important",
+        cursor: 'pointer'
+    },
     groupInfo: {
         position: 'absolute',
         bottom: 0,

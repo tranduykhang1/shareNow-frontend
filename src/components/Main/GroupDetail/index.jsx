@@ -4,6 +4,8 @@ import GroupList from "../Group/GroupList/GroupList";
 import GroupDetailPage from "./GroupDetailPage/GroupDetailPage";
 
 const index = () => {
+
+
   return (
     <>
       <Navigation />

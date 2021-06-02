@@ -26,7 +26,7 @@ const style = () => ({
         display: "flex",
         flexDirection: "column",
         overflow: 'auto',
-        height: '84%',
+        height: '91%',
         backgroundColor: '#b2b2b21f',
         borderRight: '1px solid #CCCCCC',
 
@@ -46,7 +46,7 @@ const style = () => ({
         position: 'sticky',
         left: 0,
         bottom: 0,
-        
+
         height: 50,
         width: 50,
         margin: '0 15px'
@@ -57,12 +57,15 @@ const style = () => ({
         position: "absolute",
         bottom: "0",
         width: "100%",
+
     },
     msgForm: {
-        padding: 10,
+        padding: "5px 10px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        backgroundColor: 'white',
+        borderRadius: "0px 0px 10px",
     },
     attachIcon: {
         alignItems: "center",
@@ -71,17 +74,20 @@ const style = () => ({
         marginRight: 10
     },
     photoIcon: {
-        fontSize: "25px !important",
-        color: '#0165ba !important',
+        fontSize: "20px !important",
+        color: '#2196f3  !important',
         cursor: 'pointer'
     },
     emojiIcon: {
-        fontSize: "25px !important",
-        color: '#ff6a00  !important',
+        fontSize: "20px !important",
+        color: '#2196f3  !important',
         cursor: 'pointer'
     },
     msgInput: {
-        fontSize: "15px !important",
+        fontSize: "13px !important",
+        padding: "3px 10px",
+        border: 'none',
+        width: '100%',
     },
     inputFocused: {
         "& $msgFooter": {

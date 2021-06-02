@@ -1,6 +1,6 @@
 const style = () => ({
     commentContainer: {
-
+        height: '80% !important'
     },
     headerTitle: {
         fontWeight: 'bold',
@@ -23,7 +23,7 @@ const style = () => ({
     commentBody: {
         position: 'relative',
         overflow: 'auto',
-        height: 300,
+        height: "70%",
         '&::-webkit-scrollbar': {
             width: '0.4em'
         },
@@ -55,30 +55,32 @@ const style = () => ({
         display: 'block',
         position: 'absolute',
         bottom: 0,
+        left: 0,
         margin: '0 !important',
         boxShadow: '0px 0px 3px 1px gainsboro',
 
     },
     commentForm: {
+        height: 30,
         width: '90%',
         padding: '0 10px',
-        margin: '15px auto 0 auto !important',
+        margin: '0 auto !important',
         backgroundColor: '#d3d3d3',
         borderRadius: 40,
         display: 'flex',
         alignItems: 'center',
     },
     emojiIcon: {
-        color: '#ff6a00  !important',
-        fontSize: '25px !important'
+        color: '#0478B9  !important',
+        fontSize: '20px !important'
     },
     commentInput: {
-        fontSize: 14,
+        fontSize: 12,
         padding: '3px 5px',
     },
     sendCommentIcon: {
         color: '#0478B9 !important',
-        fontSize: '25px !important'
+        fontSize: '20px !important'
     }
 })
 

@@ -20,7 +20,7 @@ import imgConstant from "constants/Images/images";
 import style from "./Style";
 //action
 import { getUser } from "redux/user";
-import {toggleUploadForm} from "redux/toggleComponent";
+import { toggleUploadForm } from "redux/toggleComponent";
 
 const Navigation = (props) => {
   const { classes } = props;
@@ -35,7 +35,7 @@ const Navigation = (props) => {
   }, []);
 
   const toggle = () => {
-    dispatch(toggleUploadForm(true))
+    dispatch(toggleUploadForm(true));
   };
 
   const navItems = [
@@ -67,7 +67,7 @@ const Navigation = (props) => {
     {
       icon: Icons.Person,
       text: "Trang cá nhân",
-      link: "/profile/:id",
+      link: `/profile/${userState._id}`,
     },
   ];
 
@@ -114,8 +114,13 @@ const Navigation = (props) => {
             Hãy chia sẻ gì đó!
           </Button>
         </Grid>
-        <Grid className={classes.navFooter}>
-          <Typography color="textSecondary">{userState.username}</Typography>
+        <Grid >
+          <Link to={`/profile/`+ userState._id} className={classes.navFooter}>
+          <Avatar src={userState.avatar} className={classes.userAvatar}>
+            {userState && userState.full_name.split("")[0]}
+          </Avatar>
+          <Typography color="textSecondary">@{userState.username}</Typography>
+          </Link>
         </Grid>
       </Grid>
     </Hidden>

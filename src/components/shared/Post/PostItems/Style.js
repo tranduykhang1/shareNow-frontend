@@ -44,9 +44,9 @@ const style = () => ({
         fontSize: '13px !important'
     },
     cardInteract: {
-        width: 'auto !important',
+        // width: 'auto !important',
         alignItems: 'center',
-        justifyContent: 'end',
+        justifyContent: 'flex-end',
         flexWrap: 'nowrap',
     },
     reportIcon: {

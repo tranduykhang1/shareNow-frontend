@@ -14,14 +14,21 @@ import Picker from "emoji-picker-react";
 import style from "./Style";
 import CommentList from "../CommentList/CommentList";
 import CommentForm from "./CommentForm"
+import { useDispatch, useSelector } from "react-redux";
 
 const CommentDialog = (props) => {
   const pickerRel = useRef();
 
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { classes } = props;
   const [isShowPicker, setIsShowPicker] = useState(false);
 
+
+  let isOpen = useSelector((state) => state.toggle.commentForm)
+  useEffect(() =>{
+    setOpen(!open)
+  }, [isOpen])
 
   const handleClickOpen = () => {
     setOpen(true);

@@ -1,7 +1,7 @@
 const style = () => ({
     navContainer: {
         position: 'fixed',
-        height: '100%',
+        height: '97%',
         width: '22%',
         // backgroundColor: 'white',
         borderRadius: 10,
@@ -61,10 +61,19 @@ const style = () => ({
         }
     },
     navFooter: {
+        position: "absolute",
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
-        marginTop: '190px'
-    }
+        alignItems: "center",
+        bottom: 0,
+        width: '100%',
+        margin: '0 auto'
+    },
+    userAvatar: {
+        color: 'grey',
+        border: '1px solid grey'
+    },
 })
 
 export default style

@@ -115,30 +115,34 @@ const style = () => ({
         marginBottom: 10
     },
     department: {
-        color: 'grey !important'
-
+        color: 'grey !important',
+        marginBottom: 3
     },
     industry: {
-        color: 'grey !important'
-
+        color: 'grey !important',
+        marginBottom: 3
     },
     course: {
-        color: 'grey !important'
-
+        color: 'grey !important',
+        marginBottom: 3
     },
     class: {
-        color: 'grey !important'
+        color: 'grey !important',
+            marginBottom: 3
     },
     infoIcon: {
         fontSize: '15px !important',
         color: 'grey !important'
     },
     joinAt: {
-        color: 'grey !important'
+        color: 'grey !important',
+        marginBottom: 3
 
     },
     followState: {
-        color: 'grey !important'
+        color: 'grey !important',
+        cursor: 'pointer',
+        margin: '0 2px'
     },
     btnUpdate: {
         textTransform: 'initial',

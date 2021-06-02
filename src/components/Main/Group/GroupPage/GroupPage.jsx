@@ -1,11 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Grid, SwipeableDrawer, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  SwipeableDrawer,
+  Typography,
+} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
 
-import CustomInput from "components/shared/Input/CustomInput";
 import PostItems from "components/shared/Post/PostItems/PostItems";
+import GroupForm from "./GroupForm";
+import SuccessAnimation from "components/shared/SuccessAnimtion/SuccessAnimation";
 
 const style = {
   container: {
@@ -20,17 +28,43 @@ const style = {
   createForm: {
     width: "30%",
     margin: "20px auto",
+    position: "relative",
   },
   formTitle: {
     marginTop: 20,
     fontWeight: "bold",
     fontSize: "20px !important",
   },
+  select: {
+    border: "1px solid #d0d0d0",
+    borderRadius: 4,
+    width: "100%",
+    padding: 9,
+  },
   btnCreate: {
     marginTop: 10,
-    background: "#e2e9ff",
-    textTransform: 'initial'
-  }
+    background: "black",
+    color: "white",
+    textTransform: "initial",
+  },
+  label: {
+    border: "1px dashed #d0d0d0",
+    borderRadius: 4,
+    width: "100%",
+    height: 200,
+    textAlign: "center",
+    padding: "90px 9px",
+    fontWeight: "normal",
+    fontSize: 13,
+    cursor: "pointer",
+    color: "#a5a5a5",
+  },
+  prePhoto: {
+    position: "absolute",
+    height: 200,
+    width: "100%",
+    zIndex: -1,
+  },
 };
 
 const schema = yup.object().shape({
@@ -38,66 +72,42 @@ const schema = yup.object().shape({
 });
 
 const GroupPage = (props) => {
+  const dispatch = useDispatch();
   const data = [1, 2, 3, 4, 5, 6, 7];
   const [drawer, setDrawer] = useState(false);
-
-  const { register, handleSubmit, errors } = useForm({
-    mode: "onBlur",
-    resolver: yupResolver(schema),
-  });
-
-  const toggleDrawer = (state) => {
-    setDrawer(state);
-  };
-  const createGroup = (data) => {
-    console.log(data);
-  };
+  const [success, setSuccess] = useState(false);
 
   const renderItems = data.map((data, i) => {
     return <PostItems key={i} />;
   });
+  let isUpload = useSelector((state) => state.group.uploadForm);
+
+  useEffect(() => {
+    if (isUpload) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 2300);
+    }
+  }, [isUpload]);
 
   return (
     <Grid item sm={12} md={6} style={style.container}>
+      {success && <SuccessAnimation />}
       <Grid>
         <Typography className="group-title">Các bài đăng trong nhóm</Typography>
         <div>
           <Button
             fullWidth
             style={style.btnToggle}
-            onClick={() => toggleDrawer(true)}
+            onClick={() => setDrawer(!drawer)}
           >
             Tạo nhóm mới
           </Button>
-          <SwipeableDrawer
-            anchor="top"
-            open={drawer}
-            onClose={() => toggleDrawer(false)}
-            onOpen={() => toggleDrawer(true)}
-          >
-            <Typography align="center" style={style.formTitle}>
-              Tạo nhóm
-            </Typography>
-            <form style={style.createForm} onSubmit={handleSubmit(createGroup)}>
-              <CustomInput
-                label="Tên nhóm: "
-                name="groupName"
-                type="text"
-                defaultValue=""
-                register={register}
-                autoComplete="off"
-                require="true"
-                errors={errors.groupName}
-              />
-              <Typography color="textSecondary" align="center">Mặc định nhóm này là riêng tư</Typography>
-              <Button type="submit"variant="outlined" color="primary" style={style.btnCreate} fullWidth>
-                Tiếp theo
-              </Button>
-            </form>
-          </SwipeableDrawer>
+          <GroupForm drawer={drawer} />
         </div>
       </Grid>
-      {renderItems}
+      {/* {renderItems} */}
     </Grid>
   );
 };

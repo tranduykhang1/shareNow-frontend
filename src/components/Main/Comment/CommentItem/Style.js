@@ -3,7 +3,7 @@ const style = () => ({
         borderBottom: '1px solid #ededed',
     },
     commentHeader: {
-        padding: '15px 0'
+        padding: '10px 0'
     },
     commentAvatar: {
         background: 'grey !important',
@@ -16,19 +16,22 @@ const style = () => ({
     },
     commentUsername: {
         fontWeight: 'bold',
-        marginRight: 5
+        marginRight: 5,
+        fontSize: '13px !important'
     },
     commentContent: {
-        color: 'black !important'
+        color: 'black !important',
+        fontSize: '13px !important'
+
     },
     commentAt: {
-        fontSize: '12px !important',
+        fontSize: '11px !important',
         color: 'grey',
         paddingTop: 4
     },
     reply: {
         position: 'relative',
-        top: -13,
+        top: -11,
         left: 60,
         width: '40%'
     },

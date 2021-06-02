@@ -11,63 +11,64 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import style from "./Style";
 import Icons from "constants/Icons/Icons";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { groupByUser } from "redux/group";
 
 const GroupList = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-  const listUser = [
-    {
-      name: "Joshua Rodriquez",
-      avatar: "https://picsum.photos/200/300?random=2",
-    },
-    {
-      name: "Joshua Rodriquez",
-      avatar: "https://picsum.photos/200/300?random=2",
-    },
-    {
-      name: "Joshua Rodriquez",
-      avatar: "https://picsum.photos/200/300?random=2",
-    },
-    {
-      name: "Joshua Rodriquez",
-      avatar: "https://picsum.photos/200/300?random=2",
-    },
-  ];
 
+  let userGroups = useSelector((state) => state.group.userGroups);
+
+  useEffect(() => {
+    dispatch(groupByUser());
+  }, []);
   const search = (data) => {};
 
-  const renderListUser = listUser.map((u, i) => {
-    return (
-      <Link>
-        <List className={classes.groupList}>
-          <ListItem alignItems="flex-start" className={classes.groupItem}>
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src={u.avatar} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.groupName}
-                  >
-                    {u.name}
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-        </List>
-      </Link>
-    );
-  });
+  console.log(userGroups);
+  let renderListUser = "";
+  if (userGroups) {
+    renderListUser = userGroups.map((group, i) => {
+      return (
+        <a href={`/group/${group._id}`} key={i}>
+          <List className={classes.groupList}>
+            <ListItem alignItems="flex-start" className={classes.groupItem}>
+              <ListItemAvatar>
+                <Avatar
+                  alt="Group background"
+                  src={group.background}
+                  style={{ border: "1px solid grey", color: "grey" }}
+                >
+                  Group
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.groupName}
+                    >
+                      {group.name}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          </List>
+        </a>
+      );
+    });
+  }
+
   return (
     <Hidden smDown>
       <Grid item={true} md={3} sm={false} className={classes.rightContainer}>

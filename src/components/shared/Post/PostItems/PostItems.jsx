@@ -23,21 +23,27 @@ import { useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
 import CommentPage from "components/Main/Comment/CommentPage/CommentPage";
 import PostSke from "components/shared/Skeleton/PostSke";
+import Moment from "react-moment";
+import { toggleCommentForm } from "redux/toggleComponent";
+import { useDispatch } from "react-redux";
 
 const PostItems = (props) => {
   const [isAnimated, setIsAnimated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const dispatch = useDispatch()
   const heartRel = useRef();
   const { path } = useRouteMatch();
   const { classes } = props;
   const { url } = useRouteMatch();
 
   useEffect(() => {
-    setTimeout(() => {
+    if (props.post.length) {
+      setIsLoading(true);
+    } else {
       setIsLoading(false);
-    }, 2000);
-  }, []);
+    }
+  }, [props.post]);
   useEffect(() => {
     if (heartRel) {
       lottie.loadAnimation({
@@ -71,6 +77,7 @@ const PostItems = (props) => {
     setIsAnimated(!isAnimated);
   };
 
+  console.log(props);
   return (
     <Grid item={true} sm={10} md={12} className={classes.postItem}>
       {isLoading ? (
@@ -79,23 +86,24 @@ const PostItems = (props) => {
         <Card className={classes.cardContainer}>
           <CardHeader
             avatar={
-              <Avatar src={colors[0]} className={classes.avatar}></Avatar>
+              <Avatar
+                src={props.post.user.avatar}
+                className={classes.avatar}
+              ></Avatar>
             }
             title={
               <React.Fragment>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <div style={{ display: "flex" }}>
                   <Link to="/">
                     <Typography
                       component={"span"}
                       className={classes.postUsername}
                     >
-                      Username
+                      {props.post.name}
                     </Typography>
                   </Link>
-                  {url === "/group" && (
-                    <Link>
+                  {url === "/groups" && (
+                    <Link to="/">
                       <Typography
                         component={"span"}
                         className={classes.postGroupName}
@@ -104,27 +112,35 @@ const PostItems = (props) => {
                       </Typography>
                     </Link>
                   )}
-                  <Tooltip title="Báo cáo">
+                  {/* <Tooltip title="Báo cáo">
                     <Icons.ReportIcon className={classes.reportIcon} />
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
               </React.Fragment>
             }
-            subheader="3 hours ago"
+            subheader={
+              parseInt((new Date() - new Date(props.post.create_at))/(24*3600*1000)) <= 1 ? (
+                <Moment fromNow>{props.post.create_at}</Moment>
+              ) : (
+                <Moment format="D MMM YYYY" withTitle>
+                  {props.post.create_at}
+                </Moment>
+              )
+            }
           />
           <div style={{ position: "relative" }}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body1" style={{ fontSize: "20px" }}>
-                Khi học trên ghế nhà trường, chúng ta đã rất quen thuộc với việc
-                phát triển sản phẩm với mô hình Monolithic, nói nôm na là toàn
-                bộ code được đóng gói phát triển trên duy nhất một project.
+                {props.post.caption}
               </Typography>
             </CardContent>
             <CardMedia>
-              <FbImageLibrary images={colors} />
+              {props.post.photos && (
+                <FbImageLibrary images={props.post.photos} />
+              )}
             </CardMedia>
             <CardActions disableSpacing className={classes.cardActions}>
-              <Grid container alignItems="center">
+              {/* <Grid container alignItems="center">
                 <Typography variant="subtitle1" color="textSecondary">
                   Tag:
                 </Typography>
@@ -142,18 +158,21 @@ const PostItems = (props) => {
                 >
                   Tag2
                 </Typography>
-              </Grid>
+              </Grid> */}
               <Grid container className={classes.cardInteract}>
                 <Box
                   display="flex"
                   alignItems="center"
                   className={classes.wrapperIcon}
+                  onClick={() => dispatch(toggleCommentForm())}
                 >
                   <Icons.CommentIcon
                     className={classes.interactIcons}
                     color="error"
                   />
-                  <Typography className={classes.countNumber}>100</Typography>
+                  <Typography className={classes.countNumber}>
+                    {props.post.comments.length}
+                  </Typography>
                 </Box>
                 <Box
                   display="flex"
@@ -171,7 +190,9 @@ const PostItems = (props) => {
                     onClick={emojiClick}
                   />
 
-                  <Typography className={classes.countNumber}>100</Typography>
+                  <Typography className={classes.countNumber}>
+                    {props.post.likers.length}
+                  </Typography>
                 </Box>
               </Grid>
             </CardActions>

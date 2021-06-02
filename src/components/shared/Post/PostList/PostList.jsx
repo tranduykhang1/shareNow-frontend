@@ -2,11 +2,10 @@ import CommentPage from "components/Main/Comment/CommentPage/CommentPage";
 import React from "react";
 import PostItems from "../PostItems/PostItems";
 
-const PostList = () => {
-  const data = [1, 2, 3, 4, 5, 6, 7];
+const PostList = (props) => {
 
-  const renderItems = data.map((data, i) => {
-    return <PostItems key={i} />;
+  const renderItems = props.data.map((post, index) => {
+    return <PostItems key={index} post={post} />;
   });
   return (
     <div>

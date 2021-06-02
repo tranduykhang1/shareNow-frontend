@@ -24,7 +24,7 @@ import style from "components/Main/Home/UploadForm/Style";
 import CustomSelect from "../Input/CustomSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleUploadForm } from "redux/toggleComponent";
-
+import { useRouteMatch } from "react-router";
 
 const UploadPostModel = (props) => {
   const { classes } = props;
@@ -35,6 +35,7 @@ const UploadPostModel = (props) => {
   const [isShow, setIsShow] = useState(false);
   const [chosenEmoji, setChosenEmoji] = useState([]);
 
+  const { pathname} = window.location
   //get state from store
   let toggle = useSelector((state) => state.toggle.uploadForm);
   let departmentList = useSelector((state) => state.theCurriculum.departments);
@@ -85,41 +86,44 @@ const UploadPostModel = (props) => {
                 placeholder="Hãy chia sẽ điều gì đó..."
                 ref={register}
               />
-              <Box display="flex" justifyContent="space-between">
-                <CustomSelect
-                  id="department"
-                  name="department"
-                  require="true"
-                  label="Chủ đề:"
-                  // value={value}
-                  register={register}
-                  options={departmentList}
-                />
-                <CustomSelect
-                  id="tag"
-                  name="tag"
-                  require="true"
-                  label="Tag:"
-                  // value={value}
-                  register={register}
-                  options={industryList}
-                />
-              </Box>
+              {pathname === "/" && (
+                <Box display="flex" justifyContent="space-between">
+                  <CustomSelect
+                    id="department"
+                    name="department"
+                    require="true"
+                    label="Chủ đề:"
+                    // value={value}
+                    register={register}
+                    options={departmentList}
+                  />
+                  <CustomSelect
+                    id="tag"
+                    name="tag"
+                    require="true"
+                    label="Tag:"
+                    // value={value}
+                    register={register}
+                    options={industryList}
+                  />
+                </Box>
+              )}
               <Grid container className={classes.cardFooter}>
                 <Box display="flex" className={classes.icons}>
                   <Typography color="textSecondary" className={classes.exDesc}>
                     Thêm vào bài đăng
                   </Typography>
-                  <label htmlFor="photo" style={{height: 15}}>
+                  <label htmlFor="photo" style={{ height: 15 }}>
                     <Icons.ImgIcon className={classes.iconPhoto} />
                   </label>
-                  <TextField
+                  <input
                     type="file"
                     name="photo"
                     id="photo"
                     defaultValue=""
                     ref={register}
                     style={{ display: "none" }}
+                    multiple
                   />
 
                   <Icons.MoodIcon

@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import Moment from "react-moment";
 
 import TabBar from "../TabPanel/TabBar";
 import Icons from "constants/Icons/Icons";
@@ -186,10 +187,12 @@ const ProfileInfo = (props) => {
       <Grid container className={classes.userInfo}>
         <div>
           <Typography className={classes.department}>
-            <strong>Khoa:</strong> {userState.department}
+            <strong>Khoa:</strong>{" "}
+            {userState.department && userState.department[0].name}
           </Typography>
           <Typography className={classes.industry}>
-            <strong>Ngành:</strong> {userState.industry}
+            <strong>Ngành:</strong>{" "}
+            {userState.industry && userState.industry[0].name}
           </Typography>
           <Typography className={classes.course}>
             <strong>Khóa:</strong> {userState.course}
@@ -201,12 +204,15 @@ const ProfileInfo = (props) => {
             <Box display="flex" alignItems="center">
               <Icons.LocationIcon className={classes.infoIcon} />
               <Typography className={classes.joinAt}>
-                Đến từ {userState.from}
+                {userState.from ? ` Đến từ ${userState.from}` : "Chưa cập nhật"}
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" ml={1}>
               <Icons.DateIcon className={classes.infoIcon} />
-              <Typography className={classes.joinAt}>Tham gia 1/20</Typography>
+              <Typography className={classes.joinAt}>
+                Tham gia từ
+                <Moment format="DD/MM/YYYY">{userState.create_at}</Moment>
+              </Typography>
             </Box>
           </Box>
           <Grid container>
@@ -214,7 +220,10 @@ const ProfileInfo = (props) => {
               <strong>
                 {userState.followers && userState.followers.length}
               </strong>{" "}
-              Theo dõi -{" "}
+              theo dõi{" "}
+            </Typography>
+            <Typography className={classes.followState}>-</Typography>
+            <Typography className={classes.followState}>
               <strong>
                 {userState.following && userState.following.length}
               </strong>{" "}
@@ -231,7 +240,7 @@ const ProfileInfo = (props) => {
       </Grid>
       <hr />
       <Grid container className={classes.timeline}>
-        <TabBar />
+        {/* <TabBar /> */}
       </Grid>
     </Grid>
   );

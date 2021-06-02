@@ -119,9 +119,8 @@ const MessageList = (props) => {
         )}
 
         <Grid ref={messageEndRel} style={{ marginBottm: 20 }}></Grid>
-      </Grid>
 
-      <Grid item={true} className={classes.msgFooter}>
+        <Grid item={true} className={classes.msgFooter}>
         {isShow && <Picker />}
         <form onSubmit={handleSubmit(sendMessage)} className={classes.msgForm}>
           <Grid container className={classes.attachIcon}>
@@ -140,11 +139,10 @@ const MessageList = (props) => {
             inputRef={register}
             style={{ display: "none" }}
           />
-          <InputBase
-            fullWidth
+          <input
             name="message"
             type="text"
-            placeholder="Message..."
+            placeholder="Nhập tin nhắn..."
             autoComplete="off"
             inputRef={register}
             className={classes.msgInput}
@@ -156,6 +154,9 @@ const MessageList = (props) => {
           </Button>
         </form>
       </Grid>
+      </Grid>
+
+
     </Grid>
   );
 };

@@ -10,6 +10,7 @@ import { Grid } from "@material-ui/core";
 import routes from "./router/router";
 import UploadPostModal from "components/shared/UploadPostModal/UploadPostModal";
 import ConfirmUserForm from "components/shared/ConfirmUserForm/ConfirmUserForm";
+import Notification from "components/shared/NoticeStatus/Notification";
 //const socket = io("http://localhost:1234");
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
         xs={12}
         style={containerStyle}
       >
+      {/* <Notification /> */}
         <UploadPostModal />
         <ConfirmUserForm/>
         <Switch> {switchRoute(routes)} </Switch>

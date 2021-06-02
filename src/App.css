@@ -20,10 +20,6 @@ hr {
     margin-bottom: 0 !important
 }
 
-a {
-    color: black;
-}
-
 button {
     border: none
 }
@@ -49,6 +45,10 @@ p {
     background-color: transparent !important;
 }
 
+.MuiAvatarGroup-root>.MuiAvatar-circle {
+    background-color: rgb(168, 168, 168) !important;
+}
+
 .MuiListItemAvatar-root {
     min-width: 0 !important;
     margin-right: 5px;
@@ -63,6 +63,10 @@ p {
     width: 40% !important;
     border-radius: 10px !important;
     padding: 15px
+}
+
+.MuiInputLabel-marginDense {
+    font-size: 13px !important
 }
 
 
@@ -147,6 +151,18 @@ input:focus-visible {
     outline: none
 }
 
+.MuiDialog-root {
+    z-index: 1200 !important;
+}
+
+.swal2-container {
+    z-index: 1300 !important;
+}
+
+.MuiInputBase-input {
+    font-size: 13px !important
+}
+
 
 /* photo list */
 
@@ -187,4 +203,37 @@ div.fullscreen-container {
     .responsiveGrid {
         margin: 0 !important
     }
+}
+
+.MuiBox-root-112>a {
+    color: black !important;
+}
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 10px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: rgb(175, 175, 175);
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgb(141, 141, 141);
 }
