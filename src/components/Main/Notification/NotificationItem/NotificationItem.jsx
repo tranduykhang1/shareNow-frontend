@@ -10,17 +10,29 @@ import { Link } from "react-router-dom";
 
 import style from "./Style";
 import NotificationSke from "components/shared/Skeleton/NotificationSke";
+import Moment from "react-moment";
 
 const NotificationItem = (props) => {
   const [isLoading, setIsLoading] = useState(true);
-  const heartRel = useRef();
+  const [url, setUrl] = useState(true);
   const { classes } = props;
   const { data } = props;
 
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 100);
+
+    switch (data.notification_list.type) {
+      case "follow":
+        setUrl("/profile");
+      case "like":
+        setUrl("/post");
+      case "comment":
+        setUrl("/post");
+      default:
+        setUrl("/notification");
+    }
   }, []);
 
   return (
@@ -28,17 +40,25 @@ const NotificationItem = (props) => {
       {isLoading ? (
         <NotificationSke />
       ) : (
-        <Link to="">
+        <Link to={`${url}/`}>
           <CardContent className={classes.cardBody}>
-            <Avatar src="" className={classes.notifyAvatar}>
-              {data.user}
+            <Avatar src={data.users[0].avatar} className={classes.notifyAvatar}>
+              {data.users[0].full_name[0]}
             </Avatar>
             <div>
-              <Link to="" className={classes.notifyUser}>
-                {data.user}
+              <Link
+                to={`/profile/${data.users[0]._id}`}
+                className={classes.notifyUser}
+              >
+                {data.users[0].full_name}
               </Link>
-              {data.content}
-              <Typography className={classes.notifyAt}>10m ago</Typography>
+              {data.notification_list.body}
+              <Typography className={classes.notifyAt}>
+                {" "}
+                <Moment fromNow ago>
+                  {data.notification_list.create_at}
+                </Moment>
+              </Typography>
             </div>
           </CardContent>
         </Link>

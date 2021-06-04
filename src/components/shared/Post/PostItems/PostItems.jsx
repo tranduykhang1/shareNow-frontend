@@ -25,25 +25,33 @@ import CommentPage from "components/Main/Comment/CommentPage/CommentPage";
 import PostSke from "components/shared/Skeleton/PostSke";
 import Moment from "react-moment";
 import { toggleCommentForm } from "redux/toggleComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { current } from "@reduxjs/toolkit";
 
-const PostItems = (props) => {
+const PostItems = ({ post, classes }) => {
   const [isAnimated, setIsAnimated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUser, setIsUser] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const heartRel = useRef();
   const { path } = useRouteMatch();
-  const { classes } = props;
   const { url } = useRouteMatch();
 
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   useEffect(() => {
-    if (props.post.length) {
+    let _id = post.name ? post.post.user._id : post.user.id;
+    setIsUser(_id);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (post.length) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
     }
-  }, [props.post]);
+  }, [post]);
   useEffect(() => {
     if (heartRel) {
       lottie.loadAnimation({
@@ -74,10 +82,8 @@ const PostItems = (props) => {
   const emojiClick = () => {
     const sound = new Audio(emojiSound);
     sound.play();
-    setIsAnimated(!isAnimated);
   };
 
-  console.log(props);
   return (
     <Grid item={true} sm={10} md={12} className={classes.postItem}>
       {isLoading ? (
@@ -87,43 +93,55 @@ const PostItems = (props) => {
           <CardHeader
             avatar={
               <Avatar
-                src={props.post.user.avatar}
+                src={post.post ? post.post.user.avatar : post.user.avatar}
                 className={classes.avatar}
               ></Avatar>
             }
             title={
               <React.Fragment>
-                <div style={{ display: "flex" }}>
-                  <Link to="/">
-                    <Typography
-                      component={"span"}
-                      className={classes.postUsername}
-                    >
-                      {props.post.name}
-                    </Typography>
-                  </Link>
-                  {url === "/groups" && (
-                    <Link to="/">
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div>
+                    <Link to={`/profile/${isUser}`}>
                       <Typography
                         component={"span"}
-                        className={classes.postGroupName}
+                        className={classes.postUsername}
                       >
-                        - Groups
+                        {post.post ? post.post.user.name : post.user.name}
                       </Typography>
                     </Link>
+                    {post.name && (
+                      <Link to={`/group/${post._id}`}>
+                        <Typography
+                          component={"span"}
+                          className={classes.postGroupName}
+                        >
+                          - {post.name}
+                        </Typography>
+                      </Link>
+                    )}
+                  </div>
+                  {currentUser._id === isUser ? (
+                    <Icons.TrashIcon className={classes.reportIcon} />
+                  ) : (
+                    ""
                   )}
-                  {/* <Tooltip title="Báo cáo">
-                    <Icons.ReportIcon className={classes.reportIcon} />
-                  </Tooltip> */}
                 </div>
               </React.Fragment>
             }
             subheader={
-              parseInt((new Date() - new Date(props.post.create_at))/(24*3600*1000)) <= 1 ? (
-                <Moment fromNow>{props.post.create_at}</Moment>
+              parseInt(
+                (new Date() -
+                  new Date(post.post ? post.post.create_at : post.create_at)) /
+                  (24 * 3600 * 1000)
+              ) <= 1 ? (
+                <Moment fromNow>
+                  {post.post ? post.post.create_at : post.create_at}
+                </Moment>
               ) : (
                 <Moment format="D MMM YYYY" withTitle>
-                  {props.post.create_at}
+                  {post.post ? post.post.create_at : post.create_at}
                 </Moment>
               )
             }
@@ -131,12 +149,14 @@ const PostItems = (props) => {
           <div style={{ position: "relative" }}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body1" style={{ fontSize: "20px" }}>
-                {props.post.caption}
+                {post.post ? post.post.caption : post.caption}
               </Typography>
             </CardContent>
             <CardMedia>
-              {props.post.photos && (
-                <FbImageLibrary images={props.post.photos} />
+              {post && (
+                <FbImageLibrary
+                  images={post.post ? post.post.photos : post.photos}
+                />
               )}
             </CardMedia>
             <CardActions disableSpacing className={classes.cardActions}>
@@ -164,14 +184,16 @@ const PostItems = (props) => {
                   display="flex"
                   alignItems="center"
                   className={classes.wrapperIcon}
-                  onClick={() => dispatch(toggleCommentForm())}
+                  onClick={() => dispatch(toggleCommentForm(post._id))}
                 >
                   <Icons.CommentIcon
                     className={classes.interactIcons}
                     color="error"
                   />
                   <Typography className={classes.countNumber}>
-                    {props.post.comments.length}
+                    {post.post
+                      ? post.post.comments.length
+                      : post.comments.length}
                   </Typography>
                 </Box>
                 <Box
@@ -191,7 +213,7 @@ const PostItems = (props) => {
                   />
 
                   <Typography className={classes.countNumber}>
-                    {props.post.likers.length}
+                    {post.post ? post.post.likers.length : post.likers.length}
                   </Typography>
                 </Box>
               </Grid>

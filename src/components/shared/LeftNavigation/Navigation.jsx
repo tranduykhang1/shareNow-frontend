@@ -21,6 +21,12 @@ import style from "./Style";
 //action
 import { getUser } from "redux/user";
 import { toggleUploadForm } from "redux/toggleComponent";
+import token from "assets/Config/jwtChecker";
+
+import socketIOClient from "socket.io-client"
+import constants from "constants/Const/socketIo";
+
+
 
 const Navigation = (props) => {
   const { classes } = props;
@@ -31,6 +37,9 @@ const Navigation = (props) => {
   const userState = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
+    const socket = socketIOClient(constants.ENDPOINT);
+    socket.emit("NEW_USER", (token) )
+
     dispatch(getUser());
   }, []);
 
@@ -114,12 +123,12 @@ const Navigation = (props) => {
             Hãy chia sẻ gì đó!
           </Button>
         </Grid>
-        <Grid >
-          <Link to={`/profile/`+ userState._id} className={classes.navFooter}>
-          <Avatar src={userState.avatar} className={classes.userAvatar}>
-            {userState && userState.full_name.split("")[0]}
-          </Avatar>
-          <Typography color="textSecondary">@{userState.username}</Typography>
+        <Grid>
+          <Link to={`/profile/` + userState._id} className={classes.navFooter}>
+            <Avatar src={userState.avatar} className={classes.userAvatar}>
+              {userState && userState.full_name.split("")[0]}
+            </Avatar>
+            <Typography color="textSecondary">@{userState.username}</Typography>
           </Link>
         </Grid>
       </Grid>

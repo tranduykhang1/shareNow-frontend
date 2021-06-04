@@ -4,6 +4,10 @@ html {
     height: 100%;
 }
 
+body {
+    overflow: visible !important;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -160,6 +164,14 @@ input:focus-visible {
 }
 
 .MuiInputBase-input {
+    font-size: 13px !important
+}
+
+.UploadPostModel-capInput-7 {
+    font-size: 13px !important
+}
+
+time {
     font-size: 13px !important
 }
 

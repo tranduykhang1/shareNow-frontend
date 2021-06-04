@@ -39,6 +39,8 @@ import DoneOutlinedIcon from '@material-ui/icons/DoneOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 import BarChartOutlinedIcon from '@material-ui/icons/BarChartOutlined';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 
 const Icons = {
     Home: HomeIcon,
@@ -58,7 +60,6 @@ const Icons = {
     DateIcon: CalendarTodayIcon,
     PostIcon: AllInboxOutlinedIcon,
     PhotoListIcon: PhotoLibraryOutlinedIcon,
-    MoreIcon: MoreHorizIcon,
     ReportIcon: PriorityHighIcon,
     OldStudentIcon: HowToRegOutlinedIcon,
     StudentIcon: CreateOutlinedIcon,
@@ -78,7 +79,8 @@ const Icons = {
     DoneIcon: DoneOutlinedIcon,
     PersonIcon: PersonOutlineOutlinedIcon,
     FilterAllIcon: FilterNoneOutlinedIcon,
-    ChartIcon: BarChartOutlinedIcon
+    ChartIcon: BarChartOutlinedIcon,
+    MoreIcon: MoreVertIcon
 }
 
 export default Icons

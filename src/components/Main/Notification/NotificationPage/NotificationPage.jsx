@@ -9,6 +9,7 @@ const style = {
 }
 
 const NotificationPage = (props) => {
+
   return (
     <Grid item sm={12} md={7} style={style}>
       <NotificationList/>

@@ -1,6 +1,6 @@
 const style = () => ({
     commentContainer: {
-        height: '80% !important'
+        height: '100% !important'
     },
     headerTitle: {
         fontWeight: 'bold',
@@ -65,14 +65,15 @@ const style = () => ({
         width: '90%',
         padding: '0 10px',
         margin: '0 auto !important',
-        backgroundColor: '#d3d3d3',
+        backgroundColor: '#ececec',
         borderRadius: 40,
         display: 'flex',
         alignItems: 'center',
     },
     emojiIcon: {
         color: '#0478B9  !important',
-        fontSize: '20px !important'
+        fontSize: '20px !important',
+        cursor: 'pointer'
     },
     commentInput: {
         fontSize: 12,
@@ -80,7 +81,8 @@ const style = () => ({
     },
     sendCommentIcon: {
         color: '#0478B9 !important',
-        fontSize: '20px !important'
+        fontSize: '20px !important',
+        cursor: 'pointer'
     }
 })
 

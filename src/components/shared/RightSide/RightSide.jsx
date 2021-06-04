@@ -23,24 +23,24 @@ const RightSide = (props) => {
   const { register, handleSubmit } = useForm();
   const listUser = [
     {
-      name: "Joshua Rodriquez",
+      name: "Minh Luân",
       industry: "KTPM",
       avatar: "https://picsum.photos/200/300?random=2",
     },
     {
-      name: "Joshua Rodriquez",
+      name: "Trường Nhật",
       industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=2",
+      avatar: "https://picsum.photos/200/300?random=3",
     },
     {
-      name: "Joshua Rodriquez",
+      name: "Phước Chung",
       industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=2",
+      avatar: "https://picsum.photos/200/300?random=4",
     },
     {
-      name: "Joshua Rodriquez",
+      name: "Hoài Nhật",
       industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=2",
+      avatar: "https://picsum.photos/200/300?random=6",
     },
   ];
 

@@ -16,6 +16,7 @@ import {
   addMember,
   checkUserIn,
   getGroupDetail,
+  newsInGroup,
   removeGroupAction,
 } from "redux/group";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +44,8 @@ const GroupDetailHeader = (props) => {
   let isUpload = useSelector((state) => state.group.uploadForm);
   let isJoin = useSelector((state) => state.group.isJoin);
   let isRemove = useSelector((state) => state.group.isRemove);
+  let isCreatePost = useSelector((state) => state.group.isCreatePost);
+
   //
 
   useEffect(() => {
@@ -53,7 +56,8 @@ const GroupDetailHeader = (props) => {
     };
 
     fetchData();
-  }, [isUpload]);
+  }, [isUpload, isCreatePost]);
+
   useEffect(() => {
     if (isRemove) {
       window.location.href = "/groups";
@@ -103,7 +107,7 @@ const GroupDetailHeader = (props) => {
         group ? group.background : background
       } )`,
       backgroundSize: "cover",
-      height: 200,
+      height:"25vh",
       width: "auto",
       borderRadius: 7,
     },
@@ -131,13 +135,22 @@ const GroupDetailHeader = (props) => {
             {group.members && group.members.length} thành viên
           </Typography>
         </div>
-        {!isJoin && (
+        {!isJoin ? (
           <Button
             variant="contained"
             className={classes.btnJoin}
             onClick={() => setOpen(true)}
           >
             Tham gia
+          </Button>
+        ) : (
+          <Button
+            size="small"
+            variant="contained"
+            className={classes.btnJoin}
+            onClick={() => setOpen(true)}
+          >
+            Rời nhóm
           </Button>
         )}
       </Grid>
@@ -176,7 +189,9 @@ const GroupDetailHeader = (props) => {
       {group && <GroupForm drawer={drawer} group={group} />}
     </Grid>
   ) : (
-    <Typography align="center" style={{fontSize: "25px !important"}}>Không tìm thấy nhóm này</Typography>
+    <Typography align="center" style={{ fontSize: "25px !important" }}>
+      Không tìm thấy nhóm này
+    </Typography>
   );
 };
 

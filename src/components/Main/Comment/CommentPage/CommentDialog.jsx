@@ -20,7 +20,7 @@ const CommentDialog = (props) => {
   const pickerRel = useRef();
 
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const { classes } = props;
   const [isShowPicker, setIsShowPicker] = useState(false);
 

@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PostItems from "components/shared/Post/PostItems/PostItems";
 import GroupForm from "./GroupForm";
 import SuccessAnimation from "components/shared/SuccessAnimtion/SuccessAnimation";
+import { getNews } from "redux/post";
+import { newsInAllGroup } from "redux/group";
 
 const style = {
   container: {
@@ -67,20 +69,25 @@ const style = {
   },
 };
 
-const schema = yup.object().shape({
-  groupName: yup.string().required("Bạn chưa nhập tên nhóm"),
-});
-
 const GroupPage = (props) => {
   const dispatch = useDispatch();
-  const data = [1, 2, 3, 4, 5, 6, 7];
+  // const data = [1, 2, 3, 4, 5, 6, 7];
   const [drawer, setDrawer] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const renderItems = data.map((data, i) => {
-    return <PostItems key={i} />;
+  const postList = useSelector((state) => state.group.posts)
+
+
+
+
+  const renderItems = postList.map((data, i) => {
+    return <PostItems key={i} post={data}/>;
   });
   let isUpload = useSelector((state) => state.group.uploadForm);
+
+  useEffect(() =>{
+    dispatch(newsInAllGroup())
+  },[])
 
   useEffect(() => {
     if (isUpload) {
@@ -107,7 +114,7 @@ const GroupPage = (props) => {
           <GroupForm drawer={drawer} />
         </div>
       </Grid>
-      {/* {renderItems} */}
+      {renderItems}
     </Grid>
   );
 };

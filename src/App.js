@@ -20,7 +20,6 @@ const App = () => {
     padding = 0;
   }
 
-
   const containerStyle = {
     backgroundColor: "rgb(239 239 239 / 35%)",
     padding: padding,
@@ -38,12 +37,12 @@ const App = () => {
         xs={12}
         style={containerStyle}
       >
-      {/* <Notification /> */}
-        <UploadPostModal />
-        <ConfirmUserForm/>
-        <Switch> {switchRoute(routes)} </Switch>
-        {/* <NotificationContainer /> */}
-      </Grid>
+        <Notification /> <UploadPostModal />
+        <ConfirmUserForm />
+        <Switch> {switchRoute(routes)} </Switch>{" "}
+        {/* <NotificationContainer /> */}{" "}
+      </Grid>{" "}
+
     </Router>
   );
 };

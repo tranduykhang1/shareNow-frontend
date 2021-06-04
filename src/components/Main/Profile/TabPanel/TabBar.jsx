@@ -33,8 +33,26 @@ export default function TabBar(props) {
   const { classes } = props;
   const data = [1, 2, 3, 4, 5, 6, 7];
 
-  const renderItems = data.map((data, i) => {
-    return <PostItems key={i} />;
+
+  let post = [
+    {
+      _id: "",
+      caption: "Xin chào! Mình là",
+      user: {
+        _id: "",
+        name: "Duy Khang",
+        avatar: "http://res.cloudinary.com/dfniu86vr/image/upload/v1622445257/avatar/rgixskumkjt7xkdewoly.jpg"
+      },
+      photos: ["https://picsum.photos/200/300"],
+      create_at: Date(),
+      comments: [1],
+      likers: [3]
+    }
+  ]
+
+
+  const renderItems = post.map((data, i) => {
+    return <PostItems key={i} post={data} />;
   });
 
   const handleChange = (event, newValue) => {
@@ -66,7 +84,7 @@ export default function TabBar(props) {
         </Box>
       )}
 
-      {/* <TabPanel value={value} index={0} component="div">
+      <TabPanel value={value} index={0} component="div">
         {renderItems}
       </TabPanel>
       <TabPanel value={value} index={1} component="div">
@@ -76,7 +94,7 @@ export default function TabBar(props) {
           columnClassName="photo-grid_column"
         ></Masonry>
         <PhotoList />
-      </TabPanel> */}
+      </TabPanel>
     </div>
   );
 }

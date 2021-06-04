@@ -15,6 +15,7 @@ const style = () => ({
     postUsername: {
         fontWeight: 'bold',
         color: 'black !important',
+        fontSize: '14px !important'
     },
     postGroupName: {
         fontWeight: 'bold',

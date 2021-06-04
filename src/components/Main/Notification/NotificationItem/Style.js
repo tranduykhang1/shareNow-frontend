@@ -1,6 +1,7 @@
 const style = () => ({
     notifyItem: {
         margin: '10px 40px',
+        boxShadow: '1px 2px 3px 1px whitesmoke'
     },
     notifyAvatar: {
         backgroundColor: 'grey !important',
@@ -22,7 +23,6 @@ const style = () => ({
     notifyAt: {
         color: 'grey !important',
         fontSize: '13px !important',
-        width: '10%'
     }
 
 })

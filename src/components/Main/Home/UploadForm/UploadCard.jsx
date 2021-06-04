@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import style from "./Style";
 import Icons from "constants/Icons/Icons";
 import { toggleUploadForm } from "redux/toggleComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const UploadCard = (props) => {
   const { classes } = props;
@@ -29,6 +29,7 @@ const UploadCard = (props) => {
   const [chosenEmoji, setChosenEmoji] = useState([]);
 
   const avatar = "https://picsum.photos/200/300?random=2";
+  const currentUser = useSelector((state) => state.user.currentUser)
 
   //
   const uploadStatus = (data) => {
@@ -65,14 +66,14 @@ const UploadCard = (props) => {
       className={classes.uploadCard}
     >
       <Grid className={classes.cardAvatar}>
-        <Avatar className={classes.avatar} src={avatar}>
+        <Avatar className={classes.avatar} src={currentUser && currentUser.avatar}>
           K
         </Avatar>
       </Grid>
       <Grid item={true} sm={12} md={12} className={classes.cardBody}>
         <div className={classes.clickToShare} onClick={toggle}>
           <span className={classes.slogan}>
-            Khang, bạn muốn chia sẻ điều gì?
+            {currentUser && currentUser.full_name.split(" ").pop()}, bạn muốn chia sẻ điều gì?
           </span>
         </div>
         {/* <form onSubmit={handleSubmit(uploadStatus)}>

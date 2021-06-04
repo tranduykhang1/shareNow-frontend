@@ -49,7 +49,7 @@ const style = () => ({
         // padding: 10,
         border: 'none',
         borderRadius: 5,
-        fontSize: 15,
+        fontSize: 13,
         // border: '1px solid #f1f1f1',
 
         "&:focus": {
@@ -81,12 +81,12 @@ const style = () => ({
         paddingRight: '25px !important'
     },
     iconPhoto: {
-        color: '#009612 !important',
+        color: '#006fad !important ',
         fontSize: '20px !important',
         cursor: 'pointer'
     },
     iconMood: {
-        color: '#ff972b !important',
+        color: '#006fad !important',
         fontSize: '20px !important',
         cursor: 'pointer'
     },
@@ -115,7 +115,10 @@ const style = () => ({
     },
     exDesc: {
         fontSize: '13px !important',
-        marginRight: 5
+        margin: '0 !important',
+        marginRight: 5,
+        color: 'grey',
+
     }
 })
 

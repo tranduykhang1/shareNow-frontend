@@ -149,9 +149,9 @@ const style = () => ({
         border: '1px solid #0478B9',
         color: '#0478B9',
         borderRadius: 20,
-        padding: 20,
-        height: 0,
-        width: 'auto',
+        // padding: 20,
+        height: "12%",
+        // width: 'auto',
         transition: '.4s',
 
         '&:hover': {

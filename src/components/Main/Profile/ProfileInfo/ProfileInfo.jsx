@@ -8,14 +8,14 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import Moment from "react-moment";
 
 import TabBar from "../TabPanel/TabBar";
 import Icons from "constants/Icons/Icons";
 import style from "./Style";
 import bgDefault from "assets/Images/bgDefault.png";
-import { updateAvatar, updateBackground } from "redux/user";
+import { getUser, getUserProfile, toggleFollowUser, updateAvatar, updateBackground } from "redux/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Loading from "components/shared/Loading/Loading";
 
@@ -29,6 +29,8 @@ const a11yProps = (index) => {
 const ProfileInfo = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
+  const { id } = useParams();
+
   const [tempPhoto, setTempPhoto] = useState({
     avatar: "",
     background: bgDefault,
@@ -38,20 +40,34 @@ const ProfileInfo = (props) => {
     url: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState({});
 
   const history = useHistory();
 
-  let userState = useSelector((state) => state.user.currentUser);
+  let currentUser = useSelector((state) => state.user.currentUser);
   let isUpdateAvatar = useSelector((state) => state.user.isUpdateAvatar);
+  let isFollow = useSelector((state) => state.user.isFollow);
+
   let isUpdateBackground = useSelector(
     (state) => state.user.isUpdateBackground
   );
 
   useEffect(() => {
-    if (userState.background) {
-      setTempPhoto({ ...tempPhoto, background: userState.background });
+    let getCurrentUser = async () => {
+      dispatch(getUser())
+      let resp = await dispatch(getUserProfile(id));
+      resp = unwrapResult(resp);
+      setUserProfile(resp);
+    };
+
+    getCurrentUser();
+  }, [isFollow]);
+
+  useEffect(() => {
+    if (currentUser.background) {
+      setTempPhoto({ ...tempPhoto, background: currentUser.background });
     }
-  }, [userState]);
+  }, [currentUser]);
   useEffect(() => {
     if (isUpdateAvatar || isUpdateBackground) {
       setIsLoading(false);
@@ -82,6 +98,11 @@ const ProfileInfo = (props) => {
       dispatch(updateBackground(photo.url));
     }
   };
+
+  const followUser = async() => {
+    dispatch(toggleFollowUser(userProfile._id))
+  };
+
 
   return (
     <Grid item={true} sm={12} md={12} style={{ padding: "0 40px" }}>
@@ -136,7 +157,7 @@ const ProfileInfo = (props) => {
         </Grid>
         <Box position="relative">
           <Avatar
-            src={tempPhoto.avatar || userState.avatar}
+            src={tempPhoto.avatar || userProfile.avatar}
             className={classes.avatar}
           >
             H
@@ -178,69 +199,93 @@ const ProfileInfo = (props) => {
       </Grid>
       <div className={classes.importantInfo}>
         <Typography className={classes.fullName}>
-          {userState.fullname}
+          {userProfile.fullname}
         </Typography>
         <Typography className={classes.username}>
-          @{userState.username}
+          @{userProfile.username}
         </Typography>
       </div>
       <Grid container className={classes.userInfo}>
         <div>
           <Typography className={classes.department}>
             <strong>Khoa:</strong>{" "}
-            {userState.department && userState.department[0].name}
+            {userProfile.department && userProfile.department[0].name}
           </Typography>
           <Typography className={classes.industry}>
             <strong>Ngành:</strong>{" "}
-            {userState.industry && userState.industry[0].name}
+            {userProfile.industry && userProfile.industry[0].name}
           </Typography>
           <Typography className={classes.course}>
-            <strong>Khóa:</strong> {userState.course}
+            <strong>Khóa:</strong> {userProfile.course}
           </Typography>
           <Typography className={classes.class}>
-            <strong>Lớp:</strong> {userState.class_room}
+            <strong>Lớp:</strong> {userProfile.class_room}
           </Typography>
           <Box display="flex">
             <Box display="flex" alignItems="center">
               <Icons.LocationIcon className={classes.infoIcon} />
               <Typography className={classes.joinAt}>
-                {userState.from ? ` Đến từ ${userState.from}` : "Chưa cập nhật"}
+                {userProfile.from
+                  ? ` Đến từ ${userProfile.from}`
+                  : "Chưa cập nhật"}
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" ml={1}>
               <Icons.DateIcon className={classes.infoIcon} />
               <Typography className={classes.joinAt}>
                 Tham gia từ
-                <Moment format="DD/MM/YYYY">{userState.create_at}</Moment>
+                <Moment format="DD/MM/YYYY">{userProfile.create_at}</Moment>
               </Typography>
             </Box>
           </Box>
           <Grid container>
             <Typography className={classes.followState}>
               <strong>
-                {userState.followers && userState.followers.length}
+                {userProfile.followers && userProfile.followers.length}
               </strong>{" "}
               theo dõi{" "}
             </Typography>
             <Typography className={classes.followState}>-</Typography>
             <Typography className={classes.followState}>
               <strong>
-                {userState.following && userState.following.length}
+                {userProfile.following && userProfile.following.length}
               </strong>{" "}
               đang theo dõi
             </Typography>
           </Grid>
         </div>
-        <Button
-          className={classes.btnUpdate}
-          onClick={() => history.push("/update-profile/123")}
-        >
-          Cập nhật thông tin
-        </Button>
+        {currentUser._id === userProfile._id ? (
+          <Button
+            size="small"
+            variant="outlined"
+            className={classes.btnUpdate}
+            onClick={() => history.push("/update-profile/123")}
+          >
+            Cập nhật thông tin
+          </Button>
+        ) : currentUser.following.includes(userProfile._id) ? (
+          <Button
+            size="small"
+            variant="outlined"
+            className={classes.btnUpdate}
+            onClick={followUser}
+          >
+            Bỏ theo dõi
+          </Button>
+        ) : (
+          <Button
+            size="small"
+            variant="outlined"
+            className={classes.btnUpdate}
+            onClick={followUser}
+          >
+            Theo dõi
+          </Button>
+        )}
       </Grid>
       <hr />
       <Grid container className={classes.timeline}>
-        {/* <TabBar /> */}
+        <TabBar />
       </Grid>
     </Grid>
   );

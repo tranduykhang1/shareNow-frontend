@@ -65,7 +65,7 @@ const MessageList = (props) => {
 
   const msg = [
     {
-      msg: "helloasdlf sjd asdf sdf ",
+      msg: "Hellooo",
       user: true,
     },
     {
@@ -105,7 +105,7 @@ const MessageList = (props) => {
             H
           </Avatar>
           <Box ml={1}>
-            <Typography className={classes.userName}>Username</Typography>
+            <Typography className={classes.userName}>Minh Luân</Typography>
             <Typography className={classes.userState}>
               Đang trưc tuyến
             </Typography>

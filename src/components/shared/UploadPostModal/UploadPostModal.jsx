@@ -17,113 +17,222 @@ import {
 } from "@material-ui/core";
 import Icons from "constants/Icons/Icons";
 import Picker from "emoji-picker-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+
+
 
 import style from "components/Main/Home/UploadForm/Style";
 import CustomSelect from "../Input/CustomSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleUploadForm } from "redux/toggleComponent";
 import { useRouteMatch } from "react-router";
+import { createGroupPost } from "redux/group";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Loading from "../Loading/Loading";
+import { createPost } from "redux/post";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+let array = [];
+
+
+const schema = yup.object().shape({
+  topic: yup
+    .string()
+    .required("Bạn cần phân loại bài đăng"),
+  tag: yup
+    .string()
+    .required("Bạn cần phân loại bài đăng"),
+});
+
 
 const UploadPostModel = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
+  const inputRef = useRef();
 
-  const { register, handleSubmit } = useForm();
-  const [open, setOpen] = useState(false);
+  const { register, handleSubmit, errors } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(schema),
+  });
+
+  const [open, setOpen] = useState(true);
   const [isShow, setIsShow] = useState(false);
-  const [chosenEmoji, setChosenEmoji] = useState([]);
+  const [isGroup, setIsGroup] = useState(false);
+  const [tempPhoto, setTemPhoto] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const { pathname} = window.location
+  let groupDetail = useSelector((state) => state.group.groupDetail);
+
+  const [post, setPost] = useState({
+    group_id: "",
+    photos: [],
+    caption: "",
+    topic: "",
+    tag: "",
+  });
+
   //get state from store
   let toggle = useSelector((state) => state.toggle.uploadForm);
   let departmentList = useSelector((state) => state.theCurriculum.departments);
-  let industryList = useSelector((state) => state.theCurriculum.industries);
+  let tagList = useSelector((state) => state.theCurriculum.tagList);
+  let isCreatePost = useSelector((state) => state.group.isCreatePost);
   //
 
   useEffect(() => {
-    if (isShow) {
-      document.addEventListener("click", toggleEmoji);
+    if (window.location.pathname.split("/")[1] === "group") {
+      setIsGroup(true);
     }
-    return () => {
-      document.removeEventListener("click", toggleEmoji);
-    };
   });
+  // useEffect(() => {
+  //   if (isShow) {
+  //     document.addEventListener("click", toggleEmoji);
+  //   }
+  //   return () => {
+  //     document.removeEventListener("click", toggleEmoji);
+  //   };
+  // });
   useEffect(() => {
-    setOpen(toggle);
+    setOpen(!open);
   }, [toggle]);
 
+  useEffect(() => {
+    setPost({ ...post, group_id: groupDetail._id });
+    if (isCreatePost > 0) {
+      setPost({ group_id: "", photos: [], caption: "", topic: "", tag: "" });
+      array = [];
+    }
+  }, [groupDetail, isCreatePost]);
+
   //handle event
-  const onEmojiClick = (e, emojiObject) => {};
+
+  // useEffect(() =>{
+  //   inputRef.current.selectionEnd = cursorPosition
+  // }, [cursorPosition])
+
+  const onEmojiClick = (e, emojiObject) => {
+    let { emoji } = emojiObject;
+    let ref = inputRef.current;
+    let start = post.caption.substring(0, ref.selectionStart);
+    let end = post.caption.substring(ref.selectionStart);
+    let msg = start + emoji + end;
+    setPost({ ...post, caption: msg });
+    // setCursorPosition(start.length + emoji.length);
+  };
+
   const toggleEmoji = () => {
     setIsShow(!isShow);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClose = () => {
+    dispatch(toggleUploadForm());
   };
 
-  const handleClose = () => {
-    dispatch(toggleUploadForm(false));
+  const selectOption = (e) => {
+    let { name, value } = e.target;
+    setPost({ ...post, [name]: value });
   };
-  const uploadStatus = () => {};
+
+  const inputChange = (e) => {
+    let { name, value } = e.target;
+    if (name === "photos") {
+      value = e.target.files;
+      for (let i = 0; i < value.length; i++) {
+        array.push(URL.createObjectURL(value[i]));
+      }
+    }
+    setTemPhoto(array);
+    setPost({ ...post, [name]: value });
+  };
+
+  const uploadStatus = () => {
+    setLoading(true);
+    if (isGroup) {
+      //  dispatch()
+      let resp = dispatch(createGroupPost(post));
+      resp = unwrapResult(resp);
+      dispatch(toggleUploadForm());
+      setLoading(false);
+    } else {
+      //  dispatch()
+      console.log(post)
+      let resp = dispatch(createPost(post));
+      resp = unwrapResult(resp);
+      dispatch(toggleUploadForm());
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      {/* <Button onClick={handleClickOpen}>click</Button> */}
+    <>
       <Dialog open={open} onClose={handleClose}>
-        <h5 className={classes.title}>Tạo bài đăng mới</h5>
+        {!isGroup ? (
+          <h5 className={classes.title}>Tạo bài đăng mới</h5>
+        ) : (
+          <h5 className={classes.title}>Tạo bài đăng trong nhóm</h5>
+        )}
         <DialogContent>
           <Grid item={true} sm={12} md={12} className={classes.modalContent}>
             <form onSubmit={handleSubmit(uploadStatus)}>
               <TextareaAutosize
+                name="caption"
                 className={classes.capInput}
                 rowsMin={3}
                 rowsMax={3}
                 aria-label="maximum height"
-                defaultValue={chosenEmoji}
+                value={post.caption}
                 placeholder="Hãy chia sẽ điều gì đó..."
-                ref={register}
+                onChange={inputChange}
+                ref={inputRef}
               />
-              {pathname === "/" && (
+              {!isGroup && (
                 <Box display="flex" justifyContent="space-between">
                   <CustomSelect
                     id="department"
-                    name="department"
+                    name="topic"
                     require="true"
                     label="Chủ đề:"
-                    // value={value}
+                    value={post.topic}
                     register={register}
+                    onChange={selectOption}
                     options={departmentList}
+                    errors={errors.topic}
                   />
                   <CustomSelect
                     id="tag"
                     name="tag"
                     require="true"
                     label="Tag:"
-                    // value={value}
+                    value={post.tag}
+                    onChange={selectOption}
                     register={register}
-                    options={industryList}
+                    options={tagList}
+                    errors={errors.tag}
                   />
                 </Box>
               )}
               <Grid container className={classes.cardFooter}>
-                <Box display="flex" className={classes.icons}>
-                  <Typography color="textSecondary" className={classes.exDesc}>
+                <Box
+                  display="flex"
+                  className={classes.icons}
+                  alignItems="center"
+                >
+                  <p color="textSecondary" className={classes.exDesc}>
                     Thêm vào bài đăng
-                  </Typography>
+                  </p>
                   <label htmlFor="photo" style={{ height: 15 }}>
                     <Icons.ImgIcon className={classes.iconPhoto} />
                   </label>
                   <input
                     type="file"
-                    name="photo"
+                    name="photos"
                     id="photo"
                     defaultValue=""
                     ref={register}
                     style={{ display: "none" }}
                     multiple
+                    onChange={inputChange}
                   />
 
                   <Icons.MoodIcon
@@ -131,21 +240,37 @@ const UploadPostModel = (props) => {
                     onClick={toggleEmoji}
                   />
                 </Box>
-
-                <Button
-                  variant="contained"
-                  className={classes.btnShare}
-                  disabled={true}
-                >
-                  Chia sẻ
-                </Button>
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.btnShare}
+                  >
+                    Chia sẻ
+                  </Button>
+                )}
               </Grid>
               {isShow && <Picker onEmojiClick={onEmojiClick} />}
             </form>
           </Grid>
+          <Box display="flex" align="center">
+            {tempPhoto.map((photo, index) => {
+              return (
+                <Box
+                  m={1}
+                  key={index}
+                  style={{ boxShadow: "0px 0px 3px 2px #c7c7c7" }}
+                >
+                  <img src={photo} alt="Ảnh" height="70" width="70" />
+                </Box>
+              );
+            })}
+          </Box>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 };
 
