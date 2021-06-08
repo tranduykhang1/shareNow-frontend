@@ -26,10 +26,11 @@ const GroupList = (props) => {
   const { register, handleSubmit } = useForm();
 
   let userGroups = useSelector((state) => state.group.userGroups);
+  let uploadForm = useSelector((state) => state.group.uploadForm)
 
   useEffect(() => {
     dispatch(groupByUser());
-  }, []);
+  }, [uploadForm]);
   const search = (data) => {};
 
   console.log(userGroups);

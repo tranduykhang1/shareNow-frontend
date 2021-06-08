@@ -15,7 +15,13 @@ import TabBar from "../TabPanel/TabBar";
 import Icons from "constants/Icons/Icons";
 import style from "./Style";
 import bgDefault from "assets/Images/bgDefault.png";
-import { getUser, getUserProfile, toggleFollowUser, updateAvatar, updateBackground } from "redux/user";
+import {
+  getUser,
+  getUserProfile,
+  toggleFollowUser,
+  updateAvatar,
+  updateBackground,
+} from "redux/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Loading from "components/shared/Loading/Loading";
 
@@ -54,7 +60,7 @@ const ProfileInfo = (props) => {
 
   useEffect(() => {
     let getCurrentUser = async () => {
-      dispatch(getUser())
+      dispatch(getUser());
       let resp = await dispatch(getUserProfile(id));
       resp = unwrapResult(resp);
       setUserProfile(resp);
@@ -99,10 +105,9 @@ const ProfileInfo = (props) => {
     }
   };
 
-  const followUser = async() => {
-    dispatch(toggleFollowUser(userProfile._id))
+  const followUser = async () => {
+    dispatch(toggleFollowUser(userProfile._id));
   };
-
 
   return (
     <Grid item={true} sm={12} md={12} style={{ padding: "0 40px" }}>
@@ -199,7 +204,7 @@ const ProfileInfo = (props) => {
       </Grid>
       <div className={classes.importantInfo}>
         <Typography className={classes.fullName}>
-          {userProfile.fullname}
+          {userProfile.full_name}
         </Typography>
         <Typography className={classes.username}>
           @{userProfile.username}
@@ -221,6 +226,15 @@ const ProfileInfo = (props) => {
           <Typography className={classes.class}>
             <strong>Lớp:</strong> {userProfile.class_room}
           </Typography>
+          {userProfile.student_type === "STUDENT" ? (
+            <Typography className={classes.class}>
+              <strong>Chưa ra trường</strong>
+            </Typography>
+          ) : (
+            <Typography className={classes.class}>
+              <strong>Đã ra trường</strong>
+            </Typography>
+          )}
           <Box display="flex">
             <Box display="flex" alignItems="center">
               <Icons.LocationIcon className={classes.infoIcon} />
@@ -230,13 +244,13 @@ const ProfileInfo = (props) => {
                   : "Chưa cập nhật"}
               </Typography>
             </Box>
-            <Box display="flex" alignItems="center" ml={1}>
+            {/* <Box display="flex" alignItems="center" ml={1}>
               <Icons.DateIcon className={classes.infoIcon} />
               <Typography className={classes.joinAt}>
                 Tham gia từ
-                <Moment format="DD/MM/YYYY">{userProfile.create_at}</Moment>
+                <Moment format="DD/MM/YYYY"><span style={{fontSize: "15px"}}>{userProfile.create_at} </span></Moment>
               </Typography>
-            </Box>
+            </Box> */}
           </Box>
           <Grid container>
             <Typography className={classes.followState}>

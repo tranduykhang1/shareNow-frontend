@@ -21,8 +21,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-
-
 import style from "components/Main/Home/UploadForm/Style";
 import CustomSelect from "../Input/CustomSelect";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,32 +34,29 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 let array = [];
 
-
-const schema = yup.object().shape({
-  topic: yup
-    .string()
-    .required("Bạn cần phân loại bài đăng"),
-  tag: yup
-    .string()
-    .required("Bạn cần phân loại bài đăng"),
-});
-
-
 const UploadPostModel = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
   const inputRef = useRef();
-
-  const { register, handleSubmit, errors } = useForm({
-    mode: "onBlur",
-    resolver: yupResolver(schema),
-  });
-
   const [open, setOpen] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [isGroup, setIsGroup] = useState(false);
   const [tempPhoto, setTemPhoto] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  let schema = {};
+
+  if (!isGroup) {
+    yup.object().shape({
+      topic: yup.string().required("Bạn cần phân loại bài đăng"),
+      tag: yup.string().required("Bạn cần phân loại bài đăng"),
+    });
+  }
+
+  const { register, handleSubmit, errors } = useForm({
+    mode: "onBlur",
+    // resolver: yupResolver(schema),
+  });
 
   let groupDetail = useSelector((state) => state.group.groupDetail);
 
@@ -85,31 +80,19 @@ const UploadPostModel = (props) => {
       setIsGroup(true);
     }
   });
-  // useEffect(() => {
-  //   if (isShow) {
-  //     document.addEventListener("click", toggleEmoji);
-  //   }
-  //   return () => {
-  //     document.removeEventListener("click", toggleEmoji);
-  //   };
-  // });
+
   useEffect(() => {
     setOpen(!open);
   }, [toggle]);
 
   useEffect(() => {
     setPost({ ...post, group_id: groupDetail._id });
+
     if (isCreatePost > 0) {
       setPost({ group_id: "", photos: [], caption: "", topic: "", tag: "" });
       array = [];
     }
   }, [groupDetail, isCreatePost]);
-
-  //handle event
-
-  // useEffect(() =>{
-  //   inputRef.current.selectionEnd = cursorPosition
-  // }, [cursorPosition])
 
   const onEmojiClick = (e, emojiObject) => {
     let { emoji } = emojiObject;
@@ -156,17 +139,22 @@ const UploadPostModel = (props) => {
       setLoading(false);
     } else {
       //  dispatch()
-      console.log(post)
       let resp = dispatch(createPost(post));
       resp = unwrapResult(resp);
+      console.log(post)
       dispatch(toggleUploadForm());
       setLoading(false);
+    }
+
+    if (isCreatePost > 0) {
+      setPost({ group_id: "", photos: [], caption: "", topic: "", tag: "" });
+      array = [];
     }
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} style={{height: "0 !important"}}>
         {!isGroup ? (
           <h5 className={classes.title}>Tạo bài đăng mới</h5>
         ) : (

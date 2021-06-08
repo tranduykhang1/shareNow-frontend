@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { checkUserIn, newsInGroup } from "redux/group";
+import { getFollowingList } from "redux/user";
 import GroupDetailHeader from "../GroupDetailHeader/GroupDetailHeader";
 import GroupDetailMembers from "../GroupDetailHeader/GroupDetailMembers";
 
@@ -58,7 +59,7 @@ const GroupDetailPage = (props) => {
   }, [isCreatePost]);
 
   return (
-    <Grid item sm={12} md={6} style={style}>
+    <Grid item sm={12} md={6} style={style} className="responseGrid">
       {success ? <SuccessAnimation text={"Thành công"}/> : ""}
       <GroupDetailHeader />
       {isJoin ? (

@@ -23,6 +23,7 @@ const style = () => ({
     commentBody: {
         position: 'relative',
         overflow: 'auto',
+        paddingBottom: 29,
         height: "70%",
         '&::-webkit-scrollbar': {
             width: '0.4em'
@@ -53,11 +54,11 @@ const style = () => ({
         background: 'white',
         width: '100%',
         display: 'block',
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 0,
         left: 0,
         margin: '0 !important',
-        boxShadow: '0px 0px 3px 1px gainsboro',
+        // boxShadow: '0px 0px 3px 1px gainsboro',
 
     },
     commentForm: {

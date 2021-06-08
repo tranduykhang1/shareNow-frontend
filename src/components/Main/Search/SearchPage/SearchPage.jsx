@@ -1,38 +1,87 @@
-import { Box, Grid, Typography, withStyles } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  InputLabel,
+  MenuItem,
+  NativeSelect,
+  Select,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
+import { unwrapResult } from "@reduxjs/toolkit";
 import Icons from "constants/Icons/Icons";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchGroup, searchUser } from "redux/search";
+import { getTagList } from "redux/theCurriculum";
 import SearchGroupList from "../SearchGroupList/SearchGroupList";
 import SearchUserList from "../SearchUserList/SearchUserList";
 
 import style from "./Style";
 const SearchPage = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
   const [showOption, setShowOption] = useState(false);
   const [optionId, setOptionId] = useState();
-  const { register, handleSubmit } = useForm();
+  const [searchQuery, setSearchQuery] = useState({
+    query: "",
+    department: "",
+    topic: "",
+  });
+  const [userList, setUserList] = useState([]);
+  const [groupList, setGroupList] = useState([]);
+
+  const topicList = useSelector((state) => state.theCurriculum.departments);
+  const tagList = useSelector((state) => state.theCurriculum.tagList);
+
+  useEffect(() => {
+    dispatch(getTagList());
+  }, []);
+
+  useEffect(() => {
+    let fetchData = async () => {
+      if (optionId === 0) {
+        let resp = await dispatch(searchUser(searchQuery));
+        resp = unwrapResult(resp);
+        setUserList(resp);
+        setGroupList([]);
+      }
+      if (optionId === 1) {
+        let resp = await dispatch(searchGroup(searchQuery));
+        resp = unwrapResult(resp);
+        setGroupList(resp);
+        setUserList([]);
+      }
+    };
+
+    fetchData();
+  }, [optionId, searchQuery]);
+
 
   const options = [
     {
-      id: "0",
-      icon: Icons.FilterAllIcon,
-      text: "Tất cả",
-    },
-    {
-      id: "1",
+      id: 0,
       icon: Icons.PersonIcon,
-      text: "Mọi người",
+      text: "Người dùng",
     },
     {
-      id: "2",
+      id: 1,
       icon: Icons.Group,
       text: "Nhóm",
     },
   ];
 
-  const search = (data) => {
+  const search = (e) => {
+    e.preventDefault();
     setShowOption(true);
-    console.log(data);
+  };
+  const onChange = async (e) => {
+    let { name, value } = e.target;
+    if (!searchQuery.query) {
+      setOptionId(0);
+    }
+    setSearchQuery({ ...searchQuery, [name]: value });
+    setShowOption(true);
   };
 
   let style = {
@@ -42,15 +91,70 @@ const SearchPage = (props) => {
 
   return (
     <Grid item sm={12} md={6} style={style} className="responsiveGrid">
-      <form className={classes.searchForm} onSubmit={handleSubmit(search)}>
+      <form className={classes.searchForm} onSubmit={search}>
         <Icons.SearchIcon className={classes.searchIcon} />
         <input
           name="query"
           type="text"
           className={classes.searchInput}
           placeholder="Tìm kiếm..."
-          ref={register}
+          onChange={onChange}
+          autocomplete="off"
         />
+        {optionId === 0 ? (
+          <select
+            id="demo-customized-s-native"
+            value=""
+            name="department"
+            style={{
+              width: "50%",
+              background: "transparent",
+              padding: 10,
+              border: "none",
+            }}
+            onChange={onChange}
+          >
+            <option disabled value="">
+              Lọc theo khoa
+            </option>
+            {topicList.map((topic, index) => {
+              return (
+                <option key={index} value={topic._id}>
+                  {topic.name}
+                </option>
+              );
+            })}
+            <option value="" style={{ fontWeight: "bold" }}>
+              Đã ra trường
+            </option>
+          </select>
+        ) : (
+          optionId === 1 && (
+            <select
+              name="topic"
+              id="demo-customized-s-native"
+              value=""
+              style={{
+                width: "50%",
+                background: "transparent",
+                padding: 10,
+                border: "none",
+              }}
+              onChange={onChange}
+            >
+              <option disabled value="">
+                Lọc theo chủ đề
+              </option>
+              {tagList.map((tag, index) => {
+                return (
+                  <option key={index} value={tag._id}>
+                    {tag.name}
+                  </option>
+                );
+              })}
+            </select>
+          )
+        )}
       </form>
       {showOption ? (
         <Grid className={classes.filterResult}>
@@ -81,8 +185,8 @@ const SearchPage = (props) => {
       <hr />
       <Grid>
         <h4>Kết quả tìm kiếm</h4>
-        {/* <SearchUserList/> */}
-        <SearchGroupList/>
+        {userList && <SearchUserList users={userList} />}
+        {groupList && <SearchGroupList groups={groupList} />}
       </Grid>
     </Grid>
   );

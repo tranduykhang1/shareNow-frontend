@@ -8,6 +8,10 @@ const style = () => ({
         // boxShadow: '1px 1px 5px 1px #e4e4e4',
         // maxWidth: '300px'
     },
+    menuButton: {
+        position: 'fixed',
+        marginTop: -10
+    },
     logo: {
         textAlign: 'center',
         height: 100,

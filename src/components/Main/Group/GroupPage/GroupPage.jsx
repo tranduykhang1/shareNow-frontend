@@ -99,7 +99,7 @@ const GroupPage = (props) => {
   }, [isUpload]);
 
   return (
-    <Grid item sm={12} md={6} style={style.container}>
+    <Grid item sm={12} md={6} style={style.container} className="responsiveGrid">
       {success && <SuccessAnimation />}
       <Grid>
         <Typography className="group-title">Các bài đăng trong nhóm</Typography>

@@ -28,7 +28,7 @@ export default function SuccessAnimation() {
 
   return (
     <div style={style}>
-      <div ref={containerRef} ></div>
+      <div ref={containerRef} style={{height:100, width: 100}} ></div>
     </div>
   );
 }

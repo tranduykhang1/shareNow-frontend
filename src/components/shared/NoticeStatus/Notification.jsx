@@ -7,7 +7,7 @@ const style = {
     position: "fixed",
     right: 20,
     bottom: 20,
-    zIndex: 1000,
+    zIndex: 10000,
   },
   slide: {
     padding: "10px 15px",

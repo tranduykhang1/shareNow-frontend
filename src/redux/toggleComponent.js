@@ -6,7 +6,9 @@ const toggleSlice = createSlice({
     initialState: {
         uploadForm: false,
         commentForm: false,
-        post_id: ""
+        post_id: "",
+        reply: ""
+
     },
     reducers: {
         toggleUploadForm: (state, action) => {
@@ -15,10 +17,13 @@ const toggleSlice = createSlice({
         toggleCommentForm: (state, action) => {
             state.commentForm = !state.commentForm
             state.post_id = action.payload
+        },
+        replyTo: (state, action) => {
+            state.reply = action.payload
         }
     },
 });
 
 const { actions, reducer } = toggleSlice
-export const { toggleUploadForm, toggleCommentForm } = actions
+export const { toggleUploadForm, toggleCommentForm, replyTo } = actions
 export default reducer

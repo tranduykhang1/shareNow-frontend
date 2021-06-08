@@ -7,6 +7,9 @@ import toggleReducer from "./toggleComponent"
 import groupReducer from "./group"
 import postReducer from "./post"
 import notificationReducer from "./notification"
+import interactiveReducer from "./interactive"
+import messageReducer from "./message"
+import searchReducer from "./search"
 
 
 const store = configureStore({
@@ -17,7 +20,10 @@ const store = configureStore({
         toggle: toggleReducer,
         group: groupReducer,
         post: postReducer,
-        notification: notificationReducer
+        notification: notificationReducer,
+        interactive: interactiveReducer,
+        message: messageReducer,
+        search: searchReducer
     }
 })
 

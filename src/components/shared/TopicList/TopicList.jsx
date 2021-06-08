@@ -9,13 +9,18 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import { ContactSupportOutlined, ExpandLess, ExpandMore } from "@material-ui/icons";
+import {
+  ContactSupportOutlined,
+  ExpandLess,
+  ExpandMore,
+} from "@material-ui/icons";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Icons from "constants/Icons/Icons.js";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { filterPost } from "redux/post.js";
 import { currentTopic, getDepartments } from "redux/theCurriculum";
+import { getTotalUser } from "redux/user.js";
 
 import style from "./Style.js";
 
@@ -24,16 +29,25 @@ const TopicList = (props) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
 
-  const [topicList, setTopicList] = useState();
+  const [topicList, setTopicList] = useState([]);
   const [isActive, setIsActive] = useState(false);
   const [activeId, setActiveId] = useState();
-  const [isDispatch, setIsDispatch] = useState(false)
-
+  const [isDispatch, setIsDispatch] = useState(false);
+  const [totalUser, setTotalUser] = useState({});
 
   let isActiveItem = false;
   const topics = useSelector((state) => state.theCurriculum.departments);
   const tag = useSelector((state) => state.theCurriculum.currentTag);
 
+  useEffect(() => {
+    let fetchData = async () => {
+      let resp = await dispatch(getTotalUser());
+      resp = unwrapResult(resp);
+      setTotalUser(resp);
+    };
+
+    fetchData();
+  }, []);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -48,7 +62,7 @@ const TopicList = (props) => {
 
   const filterTopic = (topic) => {
     window.scrollTo(0, 0);
-    setIsDispatch(true)
+    setIsDispatch(true);
     setActiveId(topic);
     setIsActive(false);
     if (activeId === topic) {
@@ -71,25 +85,26 @@ const TopicList = (props) => {
 
   let renderTopics = topics.map((topic, index) => {
     isActiveItem = topic._id === activeId;
-    return (
-      <ListItem
-        button
-        onClick={() => filterTopic(topic._id)}
-        key={index}
-        className={isActiveItem && classes.active}
-      >
-        {/* <topic.icon
+    if (topic.alias !== "OLD_STUDENT") {
+      return (
+        <ListItem
+          button
+          onClick={() => filterTopic(topic._id)}
+          key={index}
+          className={isActiveItem && classes.active}
+        >
+          {/* <topic.icon
             className={isActiveItem ? classes.iconActive : classes.icon}
           /> */}
-        <Typography
-          className={isActiveItem ? classes.textActive : classes.textItem}
-        >
-          {topic.name}
-        </Typography>
-      </ListItem>
-    );
+          <Typography
+            className={isActiveItem ? classes.textActive : classes.textItem}
+          >
+            {topic.name}
+          </Typography>
+        </ListItem>
+      );
+    }
   });
-
   return (
     <Hidden smDown>
       <Grid className={classes.topicContainer}>
@@ -132,11 +147,11 @@ const TopicList = (props) => {
         <Box className={classes.statistic}>
           <Box display="flex">
             <Icons.ChartIcon className={classes.totalIcon} />
-            <h5>Tham gia: 1000</h5>
+            <h5>Tham gia: {totalUser.total}</h5>
           </Box>
           <Box display="flex">
             <Icons.ChartIcon className={classes.onlineIcon} />
-            <h5>Đang truy cập: 20</h5>
+            <h5>Đang truy cập: {totalUser.online}</h5>
           </Box>
         </Box>
       </Grid>

@@ -6,6 +6,8 @@ const style = () => ({
     msgHeader: {
         padding: 10,
         borderBottom: "1px solid #CCCCCC",
+        justifyContent: "space-between",
+        alignItems: "center"
     },
     userAvatar: {
         color: "white",
@@ -19,6 +21,19 @@ const style = () => ({
         fontSize: "12px !important",
         color: "grey",
     },
+    btnFollow: {
+        height: 0,
+        padding: 15,
+        marginLeft: 30
+    },
+    moreIcon: {
+        color: 'grey',
+        fontSize: '18px !important',
+        cursor: "pointer"
+    },
+    popoverItem: {
+        cursor: "pointer"
+    },
     scrollView: {
         height: '84%'
     },
@@ -26,7 +41,7 @@ const style = () => ({
         display: "flex",
         flexDirection: "column",
         overflow: 'auto',
-        height: '91%',
+        height: '87.5%',
         backgroundColor: '#b2b2b21f',
         borderRight: '1px solid #CCCCCC',
 
@@ -43,17 +58,18 @@ const style = () => ({
         }
     },
     typing: {
-        position: 'sticky',
+        position: 'absolute',
         left: 0,
-        bottom: 0,
+        bottom: "7vh",
 
-        height: 50,
-        width: 50,
+        height: 30,
+        width: 30,
         margin: '0 15px'
 
     },
     msgFooter: {
         borderTop: '1px solid #CCCCCC',
+        background: 'white',
         position: "absolute",
         bottom: "0",
         width: "100%",
@@ -68,7 +84,7 @@ const style = () => ({
         borderRadius: "0px 0px 10px",
     },
     attachIcon: {
-        alignItems: "center",
+        // alignItems: "center",
         width: "auto",
         flexWrap: "nowrap",
         marginRight: 10

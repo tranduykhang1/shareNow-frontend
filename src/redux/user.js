@@ -32,6 +32,19 @@ export const toggleFollowUser = createAsyncThunk('user/toggleFollowUser', async(
     return response.data
 })
 
+export const getTotalUser = createAsyncThunk('user/getTotalUser', async(params, thunAPI) => {
+    let response = await userApi.getTotalUser(params)
+    return response.data
+})
+export const getRelatedUser = createAsyncThunk('user/getRelatedUser', async(params, thunAPI) => {
+    let response = await userApi.getRelatedUser(params)
+    return response.data
+})
+
+export const getFollowingList = createAsyncThunk('user/getFollowingList', async(params, thunAPI) => {
+    let response = await userApi.getFollowingList()
+    return response.data
+})
 
 
 const userSlice = createSlice({
@@ -44,7 +57,10 @@ const userSlice = createSlice({
         isUpdateBackground: false,
         isActive: false,
         isFollow: false,
-        isFollowing: 0
+        isFollowing: 0,
+        totalUser: {},
+        relatedUser: [],
+        followingList: []
     },
     reducers: {},
     extraReducers: {
@@ -71,6 +87,15 @@ const userSlice = createSlice({
         },
         [getUserProfile.fulfilled]: (state, action) => {
             state.userProfile = action.payload
+        },
+        [getTotalUser.fulfilled]: (state, action) => {
+            state.totalUser = action.payload
+        },
+        [getRelatedUser.fulfilled]: (state, action) => {
+            state.relatedUser = action.payload
+        },
+        [getFollowingList.fulfilled]: (state, action) => {
+            state.followingList = action.payload
         },
     },
 });

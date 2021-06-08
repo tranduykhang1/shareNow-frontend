@@ -26,8 +26,6 @@ const style = () => ({
         width: '100%'
     },
     btnFollow: {
-        backgroundColor: '#337ab7 !important',
-        color: 'white',
         textTransform: 'initial',
         height: '5vh'
     }

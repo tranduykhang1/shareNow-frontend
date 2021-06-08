@@ -25,6 +25,8 @@ const HomePage = (props) => {
   let isActive = useSelector((state) => state.user.isActive);
   let isCreate = useSelector((state) => state.post.isCreate);
   let posts = useSelector((state) => state.post.postList);
+  let isComment = useSelector((state) => state.interactive.isComment);
+
 
   useEffect(() => {
     window.onscroll = () => {
@@ -55,10 +57,11 @@ const HomePage = (props) => {
       setPostList(resp);
     };
     fetchData();
-  }, [page,isCreate]);
+  }, [page,isCreate, isComment]);
+
   useEffect(() => {
     setPostList(posts);
-  }, [posts, ]);
+  }, [posts]);
 
   return (
     <Grid item sm={12} md={6} style={style} className="responsiveGrid">

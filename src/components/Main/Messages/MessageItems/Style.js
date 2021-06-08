@@ -3,32 +3,33 @@ const style = () => ({
         flexDirection: "row-reverse",
         flexWrap: "nowrap",
         padding: "10px 15px",
-        margin: "10px 0 10px auto",
-        width: "auto",
-        maxWidth: "70%",
+        marginLeft: "auto",
+        width: 'auto',
+        maxWidth: "50%",
     },
     msgItemOther: {
         flexWrap: "nowrap",
         padding: "10px 15px",
-        margin: "10px auto 10px 0",
+        marginRight: "auto",
         width: "auto",
-        maxWidth: "70%",
+        // width: "auto",
+        maxWidth: "50%",
     },
     msgAvatar: {
         margin: "0 5px",
     },
     msgBodyMe: {
-        backgroundColor: "#DADADA",
+        backgroundColor: "white",
         color: "black",
-        boxShadow: "1px 2px 1px 1px #DADADA",
+        boxShadow: "1px 2px 3px 1px #e0e0e0",
 
         padding: '10px 15px',
         borderRadius: 7
     },
     msgBodyOther: {
-        backgroundColor: "#0478B9",
+        backgroundColor: "#337ab7",
         color: "white",
-        boxShadow: "1px 2px 1px 1px #337ab7;",
+        boxShadow: "1px 2px 3px 1px #e0e0e0",
 
         padding: '10px 15px',
         borderRadius: 7,
@@ -44,7 +45,7 @@ const style = () => ({
     },
     msgTime: {
         fontSize: "13px !important",
-        color: "#949494",
+        color: "#cccccc",
         marginTop: 5,
     },
 });

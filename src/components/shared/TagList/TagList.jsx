@@ -12,7 +12,7 @@ function TagList(props) {
   const dispatch = useDispatch();
   const [activeId, setActiveId] = useState();
   const [tagList, setTagList] = useState([]);
-  const [color, setColor] = useState("#dcdcfd");
+  const [color, setColor] = useState("#337ab7");
   const [isDispatch, setIsDispatch] = useState(false)
 
 
@@ -55,7 +55,7 @@ function TagList(props) {
           key={index}
           onClick={() => getPostList(tag)}
           className={classes.tagItem}
-          style={{ background: activeId !== tag._id ? color : "#ececec" }}
+          style={{ background: activeId !== tag._id ? color : "#013563" }}
         >
           {tag.name}
         </li>

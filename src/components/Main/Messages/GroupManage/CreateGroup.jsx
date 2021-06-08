@@ -2,16 +2,20 @@ import {Fade, Paper, withStyles } from "@material-ui/core";
 import Icons from "constants/Icons/Icons";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { createRoom } from "redux/message";
 
 import style from "./Style";
 
 const CreateGroup = (props) => {
   const { classes } = props;
   let { isCreate } = props;
+  const dispatch = useDispatch()
 
   const { register, handleSubmit } = useForm();
+
   const onSubmit = (data) => {
-    console.log(data)
+    dispatch(createRoom(data))
   };
 
   return (
@@ -23,12 +27,13 @@ const CreateGroup = (props) => {
             className={classes.createForm}
           >
             <input
-              name="group_name"
+              name="room_name"
               type="text"
               className={classes.input}
               placeholder="Tạo nhóm mới .."
               require="true"
               ref={register}
+              autoComplete="off"
             />
             <button type="submit" size="small" className={classes.btnCreate}>
               <Icons.ArrowRightIcon className={classes.createIcon} />

@@ -76,6 +76,36 @@ const userApi = {
             resp = err
         })
         return resp
+    },
+    getTotalUser: async(params) => {
+        let resp
+        await axios.get(`${url}/user/total-user`, headers, ).then(result => resp = result).catch(err => {
+            if (err.response.status === 401) {
+                return refreshTokenApi()
+            }
+            resp = err
+        })
+        return resp
+    },
+    getRelatedUser: async(params) => {
+        let resp
+        await axios.get(`${url}/user/related-user`, headers, ).then(result => resp = result).catch(err => {
+            if (err.response.status === 401) {
+                return refreshTokenApi()
+            }
+            resp = err
+        })
+        return resp
+    },
+    getFollowingList: async() => {
+        let resp
+        await axios.get(`${url}/user/list-following`, headers, ).then(result => resp = result).catch(err => {
+            if (err.response.status === 401) {
+                return refreshTokenApi()
+            }
+            resp = err
+        })
+        return resp
     }
 }
 export default userApi

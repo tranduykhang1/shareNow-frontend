@@ -40,7 +40,7 @@ import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined'
 import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 import BarChartOutlinedIcon from '@material-ui/icons/BarChartOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
+import MenuIcon from '@material-ui/icons/Menu';
 
 const Icons = {
     Home: HomeIcon,
@@ -80,7 +80,8 @@ const Icons = {
     PersonIcon: PersonOutlineOutlinedIcon,
     FilterAllIcon: FilterNoneOutlinedIcon,
     ChartIcon: BarChartOutlinedIcon,
-    MoreIcon: MoreVertIcon
+    MoreIcon: MoreVertIcon,
+    MenuIcon: MenuIcon
 }
 
 export default Icons

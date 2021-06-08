@@ -13,8 +13,10 @@ import Picker from "emoji-picker-react";
 
 import style from "./Style";
 import CommentList from "../CommentList/CommentList";
-import CommentForm from "./CommentForm"
+import CommentForm from "./CommentForm";
 import { useDispatch, useSelector } from "react-redux";
+import { getCommentList } from "redux/interactive";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const CommentDialog = (props) => {
   const pickerRel = useRef();
@@ -24,11 +26,13 @@ const CommentDialog = (props) => {
   const { classes } = props;
   const [isShowPicker, setIsShowPicker] = useState(false);
 
+  let postId = useSelector((state) => state.toggle.post_id);
+  let isOpen = useSelector((state) => state.toggle.commentForm);
 
-  let isOpen = useSelector((state) => state.toggle.commentForm)
-  useEffect(() =>{
-    setOpen(!open)
-  }, [isOpen])
+
+  useEffect(() => {
+    setOpen(!open);
+  }, [isOpen]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,7 +47,7 @@ const CommentDialog = (props) => {
   };
 
   return (
-    <>
+    <div style={{ paddingBottom: 15 }}>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -55,14 +59,14 @@ const CommentDialog = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.commentBody}>
-          <CommentList />
+          <CommentList/>
         </DialogContent>
         <DialogActions className={classes.commentFooter}>
           {isShowPicker && <Picker ref={pickerRel} />}
-          <CommentForm/>
+          <CommentForm />
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
 

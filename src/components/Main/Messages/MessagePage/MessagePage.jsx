@@ -13,7 +13,7 @@ const style = {
 };
 const MessagePage = () => {
   return (
-    <Grid container item sm={12} md={9} style={style}>
+    <Grid container item sm={12} md={9} style={style} className="messageResponsive">
       <UserList />
       <MessageList />
     </Grid>

@@ -1,7 +1,10 @@
 const style = () => ({
     container: {
         width: '100%',
-        display: 'flex'
+        display: 'flex',
+        position: "sticky",
+        top: 0,
+        zIndex: "1000"
     },
     tagList: {
         display: 'flex',
@@ -9,10 +12,10 @@ const style = () => ({
         margin: '0 auto'
     },
     tagItem: {
-        margin: 10,
-        borderRadius: 25,
-        fontWeight: 'bold',
-        color: '#4B4B4B',
+        marginBottom: 10,
+        // borderRadius: 25,
+        fontWeight: '500',
+        color: 'white',
         padding: '6px 10px',
         cursor: 'pointer',
         transition: '.2s',

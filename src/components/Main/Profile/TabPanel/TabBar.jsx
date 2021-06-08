@@ -75,17 +75,17 @@ export default function TabBar(props) {
           <Tab label="Ảnh" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      {value === 0 ? (
+      {/* {value === 0 ? (
         <Box>{renderItems}</Box>
       ) : (
         <Box display="flex" style={{flexWrap: 'wrap', marginLeft: 50}}>
           {" "}
           <PhotoList />
         </Box>
-      )}
+      )} */}
 
       <TabPanel value={value} index={0} component="div">
-        {renderItems}
+        {/* {renderItems} */}
       </TabPanel>
       <TabPanel value={value} index={1} component="div">
         <Masonry

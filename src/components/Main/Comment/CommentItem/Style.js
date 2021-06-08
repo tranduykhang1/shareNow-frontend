@@ -3,7 +3,8 @@ const style = () => ({
         borderBottom: '1px solid #ededed',
     },
     commentHeader: {
-        padding: '10px 0'
+        padding: '10px 0',
+        // marginBottom: 10
     },
     commentAvatar: {
         background: 'grey !important',
@@ -31,7 +32,7 @@ const style = () => ({
     },
     reply: {
         position: 'relative',
-        top: -11,
+        top: -10,
         left: 60,
         width: '40%'
     },

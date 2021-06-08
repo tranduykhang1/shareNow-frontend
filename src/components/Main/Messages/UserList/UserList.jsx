@@ -3,6 +3,7 @@ import {
   Badge,
   Box,
   Grid,
+  Hidden,
   InputBase,
   List,
   ListItem,
@@ -11,19 +12,35 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import { unwrapResult } from "@reduxjs/toolkit";
 import Icons from "constants/Icons/Icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  getConversations,
+  getMessageRoomAction,
+  getRoomMembers,
+  getUserMessageAction,
+} from "redux/message";
 import CreateGroup from "../GroupManage/CreateGroup";
 import FindGroup from "../GroupManage/FindGroup";
+import Moment from "react-moment";
+import socketIOClient from "socket.io-client";
+import constants from "constants/Const/socketIo";
 
 import style from "./Style";
 
+const socket = socketIOClient(constants.ENDPOINT);
+
 const UserList = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
   const [isCreate, setIsCreate] = useState(false);
   const [isFind, setIsFind] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [activeId, setActiveId] = useState({ userId: "", conversationId: "" });
   const { register, handleSubmit } = useForm();
 
   const userList = [
@@ -53,78 +70,281 @@ const UserList = (props) => {
     },
   ];
 
+  const isSent = useSelector((state) => state.message.isSent);
+  const isSentRoom = useSelector((state) => state.message.isSentRoom);
+  const isCreateRoom = useSelector((state) => state.message.isCreateRoom);
+
+
+  useEffect(() => {
+    let fetchData = async () => {
+      let resp = await dispatch(getConversations());
+      resp = unwrapResult(resp);
+      setConversations(resp);
+    };
+
+    fetchData();
+  }, [isSent, isSentRoom, isCreateRoom]);
+
+  socket.on("SEND_MESSAGE", (data) => console.log(data));
+
+  useEffect(() => {
+    if (isSent > 0) {
+      console.log(activeId.userId, activeId.conversationId)
+      getUserMessage(activeId.userId, activeId.conversationId);
+      socket.emit("SEND_MESSAGE", activeId.userId);
+    }
+  }, [isSent]);
+
+  useEffect(() => {
+    if (isSentRoom > 0) {
+      getRoomMessage(activeId.conversationId);
+    }
+  }, [isSentRoom]);
+
   const search = (data) => {
     console.log(data);
   };
   const toggleForm = (type) => {
-    if (type === "create") {
-      setIsCreate(!isCreate);
-      setIsFind(false);
-    }
-    if (type === "find") {
-      setIsFind(!isFind);
-      setIsCreate(false);
-    }
+    setIsCreate(!isCreate);
   };
 
-  const renderUserList = userList.map((u, i) => {
-    return (
-      <List className={classes.userList}>
-        <ListItem className={classes.userItem}>
-          <ListItemAvatar>
-            <Badge
-              color={u.isOnline ? "primary" : "secondary"}
-              overlap="circle"
-              variant="dot"
+  const getUserMessage = (userId, conversationId) => {
+    dispatch(getUserMessageAction(userId));
+    setActiveId({
+      userId: userId,
+      conversationId: conversationId,
+    });
+  };
+  const getRoomMessage = (id) => {
+    dispatch(getRoomMembers(id))
+    dispatch(getMessageRoomAction(id));
+    setActiveId({ ...activeId, conversationId: id });
+  };
+
+  let renderConversation;
+  if (conversations) {
+    renderConversation = conversations.map((conversation, i) => {
+      let messageContent =
+        conversation.message && conversation.message.message_body;
+      if (conversation.message) {
+        if (
+          conversation.message.message_content &&
+          conversation.message.message_content.length > 10
+        ) {
+          messageContent =
+            conversation.message.message_content.slice(0, 10) + "...";
+        }
+        if (
+          conversation.message.message_body &&
+          conversation.message.message_body.length > 10
+        ) {
+          messageContent =
+            conversation.message.message_body.slice(0, 10) + "...";
+        }
+      }
+      if (conversation.name) {
+        return (
+          <List
+            className={classes.userList}
+            key={i}
+            onClick={() => getRoomMessage(conversation._id)}
+          >
+            <ListItem
+              className={
+                activeId.conversationId === conversation._id
+                  ? classes.userItemActive
+                  : classes.userItem
+              }
             >
-              <Avatar src={u.avatar}>{u.name}</Avatar>
-            </Badge>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <React.Fragment>
-                <Typography className={classes.userName}>{u.name}</Typography>
-              </React.Fragment>
-            }
-            secondary={
-              <React.Fragment>
-                <Typography className={classes.userMessage}>
-                  {u.message}
+              <ListItemAvatar>
+                <Avatar src="" className={classes.userAvatar}>
+                  {conversation.name.split("")[0]}
+                </Avatar>
+              </ListItemAvatar>
+              <Hidden smDown>
+                <ListItemText
+                  primary={
+                    <React.Fragment>
+                      <Typography className={classes.userName}>
+                        {conversation.name}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                  secondary={
+                    <React.Fragment>
+                      <Typography className={classes.userMessage}>
+                        {conversation.message &&
+                          conversation.message.message_body}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <Typography className={classes.messageTime}>
+                  <Moment fromNow ago>
+                    {conversation.message && conversation.message.sent_at}
+                  </Moment>
                 </Typography>
-              </React.Fragment>
+              </Hidden>
+            </ListItem>
+          </List>
+        );
+      }
+      if (conversation.userFrom) {
+        let userFrom;
+        if (conversation.userFrom) {
+          userFrom = conversation.userFrom[0];
+        }
+        return (
+          <List
+            className={classes.userList}
+            key={i}
+            onClick={() =>
+              getUserMessage(conversation.userFrom[0]._id, conversation._id)
             }
-          />
-          <Typography className={classes.messageTime}>10m</Typography>
-        </ListItem>
-      </List>
-    );
-  });
+          >
+            <ListItem
+              className={
+                activeId.conversationId === conversation._id
+                  ? classes.userItemActive
+                  : classes.userItem
+              }
+            >
+              <ListItemAvatar>
+                <Badge
+                  color={userFrom.state.online ? "primary" : "secondary"}
+                  overlap="circle"
+                  variant="dot"
+                >
+                  <Avatar
+                    src={conversation.userFrom && userFrom.avatar}
+                    className={classes.userAvatar}
+                  >
+                    {conversation.userFrom && userFrom.full_name.split("")[0]}
+                  </Avatar>
+                </Badge>
+              </ListItemAvatar>
+              <Hidden smDown>
+                <ListItemText
+                  primary={
+                    <React.Fragment>
+                      <Typography className={classes.userName}>
+                        {conversation.userFrom && userFrom.full_name}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                  secondary={
+                    <React.Fragment>
+                      <Typography className={classes.userMessage}>
+                        {conversation.message && messageContent}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <Typography className={classes.messageTime}>
+                  {" "}
+                  <Moment fromNow ago>
+                    {conversation.message && conversation.message.sent_at}
+                  </Moment>
+                </Typography>
+              </Hidden>
+            </ListItem>
+          </List>
+        );
+      }
+      if (conversation.userTo) {
+        return (
+          <List
+            className={classes.userList}
+            key={i}
+            onClick={() =>
+              getUserMessage(conversation.userTo[0]._id, conversation._id)
+            }
+          >
+            <ListItem
+              className={
+                activeId.conversationId === conversation._id
+                  ? classes.userItemActive
+                  : classes.userItem
+              }
+            >
+              <ListItemAvatar>
+                <Badge
+                  color={
+                    conversation.userTo && conversation.userTo[0].state.online
+                      ? "primary"
+                      : "secondary"
+                  }
+                  overlap="circle"
+                  variant="dot"
+                >
+                  <Avatar
+                    className={classes.userAvatar}
+                    src={conversation.userTo && conversation.userTo[0].avatar}
+                  >
+                    {conversation.userTo &&
+                      conversation.userTo[0].full_name.split("")[0]}
+                  </Avatar>
+                </Badge>
+              </ListItemAvatar>
+              <Hidden smDown>
+                <ListItemText
+                  primary={
+                    <React.Fragment>
+                      <Typography className={classes.userName}>
+                        {conversation.userTo &&
+                          conversation.userTo[0].full_name}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                  secondary={
+                    <React.Fragment>
+                      <Typography className={classes.userMessage}>
+                        {conversation.message && messageContent}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <Typography className={classes.messageTime}>
+                  {" "}
+                  <Moment fromNow ago>
+                    {conversation.message && conversation.message.sent_at}
+                  </Moment>
+                </Typography>
+              </Hidden>
+            </ListItem>
+          </List>
+        );
+      }
+    });
+  }
+
   return (
-    <Grid item={true} md={3} sm={2} className={classes.listContainer}>
+    <Grid item={true} md={3} sm={1} className={classes.listContainer}>
       <Box
         display="flex"
         justifyContent="space-between"
         className={classes.listHeader}
       >
-        {!isCreate & !isFind ? (
-          <Typography className={classes.headerText}>
-            Tin nhắn của bạn
-          </Typography>
-        ) : isCreate ? (
-          <CreateGroup isCreate={isCreate} />
-        ) : (
-          <FindGroup isFind={isFind} />
-        )}
-        <Box display="flex" align="center">
-          <Icons.AddMemberIcon
-            className={classes.AddMemberIcon}
-            onClick={() => toggleForm("find")}
-          />
-          <Icons.CreateIcon
-            className={classes.createGroupIcon}
-            onClick={() => toggleForm("create")}
-          />
-        </Box>
+        <Hidden smDown>
+          {!isCreate ? (
+            <Typography className={classes.headerText}>
+              Tin nhắn của bạn
+            </Typography>
+          ) : (
+            <CreateGroup isCreate={isCreate} />
+          )}
+
+          <Box display="flex" align="center">
+            {/* <Icons.AddMemberIcon
+              className={classes.AddMemberIcon}
+              onClick={() => toggleForm()}
+            /> */}
+            <Icons.CreateIcon
+              className={classes.createGroupIcon}
+              onClick={() => toggleForm()}
+            />
+          </Box>
+        </Hidden>
       </Box>
       <Grid className={classes.listBody}>
         <Box className={classes.searchBar}>
@@ -139,7 +359,7 @@ const UserList = (props) => {
             />
           </form>
         </Box>
-        <Box className={classes.showUserList}>{renderUserList}</Box>
+        <Box className={classes.showUserList}>{renderConversation}</Box>
       </Grid>
     </Grid>
   );

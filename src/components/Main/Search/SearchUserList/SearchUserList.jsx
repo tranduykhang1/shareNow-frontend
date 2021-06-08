@@ -7,32 +7,73 @@ import {
   ListItemAvatar,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getUser, toggleFollowUser } from "redux/user";
 
 import style from "./Style";
 
 const SearchUserList = (props) => {
-  const { classes } = props;
+  const { classes, users } = props;
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  let isFollow = useSelector((state) => state.user.isFollow);
 
-  const data = [1, 2, 3, 4, 5, 6];
+  useEffect(() => {
+    dispatch(getUser());
+  }, [isFollow]);
 
-  let renderList = data.map((d, index) => {
+  const followUser = async (user_id) => {
+    await dispatch(toggleFollowUser(user_id));
+  };
+
+  let renderList = users.map((user, index) => {
     return (
-      <Link to="#" className={classes.userItem} key={index}>
-        <ListItem className={classes.userItemNested}>
+      <ListItem className={classes.userItemNested}>
+        <Link
+          to={`/profile/${user._id}`}
+          className={classes.userItem}
+          key={index}
+        >
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>H</Avatar>
+            <Avatar className={classes.avatar} src={user.avatar}>
+              {user.full_name.split("")[0]}
+            </Avatar>
           </ListItemAvatar>
-          <Box className={classes.userInfo} ml={1}>
-            <Box>
-              <b>Nguyen Van A</b>
-              <h6>KTPM - K5</h6>
-            </Box>
-            <Button variant="contained" className={classes.btnFollow}>Theo dõi</Button>
+        </Link>
+        <Box className={classes.userInfo} ml={1}>
+          <Box>
+            <b>{user.full_name}</b>
+            <h6>
+              {user.class_room} - Khóa: {user.course}
+            </h6>
           </Box>
-        </ListItem>
-      </Link>
+          {currentUser && currentUser._id === user._id ? (
+            "Bạn"
+          ) : !currentUser.following.includes(user._id) ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="small"
+              className={classes.btnFollow}
+              onClick={() => followUser(user._id)}
+            >
+              Theo dõi
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="small"
+              className={classes.btnFollow}
+              onClick={() => followUser(user._id)}
+            >
+              Bỏ theo dõi
+            </Button>
+          )}
+        </Box>
+      </ListItem>
     );
   });
 

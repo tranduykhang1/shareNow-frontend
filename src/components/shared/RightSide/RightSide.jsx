@@ -11,81 +11,77 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import style from "./Style";
 import Icons from "constants/Icons/Icons";
 import { Link } from "react-router-dom";
+import { getRelatedUser } from "redux/user";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const RightSide = (props) => {
   const { classes } = props;
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-  const listUser = [
-    {
-      name: "Minh Luân",
-      industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=2",
-    },
-    {
-      name: "Trường Nhật",
-      industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=3",
-    },
-    {
-      name: "Phước Chung",
-      industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=4",
-    },
-    {
-      name: "Hoài Nhật",
-      industry: "KTPM",
-      avatar: "https://picsum.photos/200/300?random=6",
-    },
-  ];
+  const [userList, setUserList] = useState([]);
+
+  let currentUser = useSelector((state) => state.user.currentUser);
+  useEffect(() => {
+    let fetchData = async () => {
+      let resp = await dispatch(getRelatedUser());
+      resp = unwrapResult(resp);
+      setUserList(resp);
+    };
+
+    fetchData();
+  }, []);
 
   const search = (data) => {};
 
-  const renderListUser = listUser.map((u, i) => {
-    return (
-      <Link to="/" key={i}>
-        <List className={classes.userList}>
-          <ListItem alignItems="flex-start" className={classes.userItem}>
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src={u.avatar} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.userName}
-                  >
-                    {u.name}
-                  </Typography>
-                </React.Fragment>
-              }
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body1"
-                    className={classes.userIndustry}
-                    color="textPrimary"
-                  >
-                    {u.industry}
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-            <Button variant="contained" className={classes.btnFollow}>
-              Theo dõi
-            </Button>
-          </ListItem>
-        </List>
-      </Link>
-    );
+  const renderListUser = userList.map((u, i) => {
+    if (currentUser._id !== u._id) {
+      return (
+        <Link to={`/profile/${u._id}`} key={i}>
+          <List className={classes.userList}>
+            <ListItem alignItems="flex-start" className={classes.userItem}>
+              <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src={u.avatar} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.userName}
+                    >
+                      {u.full_name}
+                    </Typography>
+                  </React.Fragment>
+                }
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body1"
+                      className={classes.userIndustry}
+                      color="textPrimary"
+                    >
+                      {u.class_room} - Khóa {u.course}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+              <Button variant="outlined" className={classes.btnFollow}>
+                Xem
+              </Button>
+            </ListItem>
+          </List>
+        </Link>
+      );
+    }
   });
   return (
     <Hidden smDown>

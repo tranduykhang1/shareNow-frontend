@@ -172,7 +172,7 @@ input:focus-visible {
 }
 
 time {
-    font-size: 13px !important
+    font-size: 11px !important
 }
 
 
@@ -215,10 +215,29 @@ div.fullscreen-container {
     .responsiveGrid {
         margin: 0 !important
     }
+    .messageResponsive {
+        margin-left: 4% !important
+    }
+}
+
+@media(max-width: 600px) {
+    .messageResponsive {
+        margin-left: 6% !important
+    }
 }
 
 .MuiBox-root-112>a {
     color: black !important;
+}
+
+.MuiGrid-root>.emoji-picker-react {
+    position: fixed;
+    top: 57%
+}
+
+.MuiBox-root>.grid-container {
+    padding: 0 !important;
+    margin-bottom: 10px
 }
 
 

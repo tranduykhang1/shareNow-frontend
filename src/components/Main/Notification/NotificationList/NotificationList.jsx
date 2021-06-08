@@ -50,7 +50,6 @@ const NotificationList = (props) => {
     let fetchData = async () => {
       let resp = await dispatch(getNotification());
       resp = unwrapResult(resp);
-      console.log(resp)
       setNotificationList(resp);
     };
 

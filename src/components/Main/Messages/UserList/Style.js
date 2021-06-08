@@ -1,6 +1,7 @@
 const style = () => ({
     listContainer: {
-        borderRight: '1px solid #CCCCCC'
+        borderRight: '1px solid #CCCCCC',
+        height: '100%',
     },
     listHeader: {
         padding: "0 15px",
@@ -48,29 +49,40 @@ const style = () => ({
     },
     showUserList: {
         overflow: 'auto',
-        height: '100%'
+        height: '100%',
     },
     userList: {
-        padding: "0 !important"
+        padding: "0 !important",
+    },
+    userItemActive: {
+        backgroundColor: "#e0e0e0",
+        height: 70
     },
     userItem: {
-        padding: "5px 10px",
+        // padding: "5px 10px",
+        height: 70,
         borderBottom: '1px solid #EEEEEE',
-        transition: '.3s',
+        // transition: '.3s',
         cursor: 'pointer',
         '&:hover': {
             backgroundColor: '#F7F7F7'
         }
     },
+    userAvatar: {
+        color: 'grey',
+        backgroundColor: "#e8e8e8 !important"
+    },
     userName: {
         fontWeight: 'bold',
-        color: 'black'
+        color: 'black',
+        fontSize: '13px !important',
+
     },
     userMessage: {
         fontSize: 15,
     },
     messageTime: {
-        fontSize: '12px !important',
+        fontSize: '10px !important',
         color: 'grey'
     },
     isOnline: {

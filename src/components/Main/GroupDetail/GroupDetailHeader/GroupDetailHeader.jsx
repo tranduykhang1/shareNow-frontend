@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -34,7 +35,7 @@ const GroupDetailHeader = (props) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
 
   const { id } = useParams();
 
@@ -52,6 +53,7 @@ const GroupDetailHeader = (props) => {
     let fetchData = async () => {
       let resp = await dispatch(getGroupDetail(id));
       resp = unwrapResult(resp);
+      setPassword(resp.password)
       setGroup(resp);
     };
 
@@ -129,6 +131,9 @@ const GroupDetailHeader = (props) => {
         </>
       )}
       <Grid container className={classes.groupInfo}>
+        <Box position="absolute" display="flex" alignItems="center" style={{color: 'white', top: "-90%"}}>
+           <h5>Mật khẩu nhóm:</h5><b style={{marginLeft: 5}}>{group.password}</b>
+        </Box>
         <div>
           <Typography className={classes.groupName}>{group.name}</Typography>
           <Typography className={classes.groupMember}>

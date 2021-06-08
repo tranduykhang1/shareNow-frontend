@@ -12,6 +12,14 @@ const style = () => ({
         border: '3px solid #d7d7d7',
         color: '#d7d7d7'
     },
+    popoverItem: {
+        cursor: 'pointer'
+    },
+    popoverIcon: {
+        fontSize: "15px !important",
+        color: "grey !important",
+        marginRight: 5
+    },
     postUsername: {
         fontWeight: 'bold',
         color: 'black !important',
@@ -47,7 +55,7 @@ const style = () => ({
     cardInteract: {
         // width: 'auto !important',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         flexWrap: 'nowrap',
     },
     reportIcon: {
@@ -60,6 +68,11 @@ const style = () => ({
     },
     interactIcons: {
         color: "#c3c3c3 !important",
+        fontSize: "20px !important",
+        cursor: 'pointer'
+    },
+    interactIconsActive: {
+        color: "#337ab7 !important",
         fontSize: "20px !important",
         cursor: 'pointer'
     },
