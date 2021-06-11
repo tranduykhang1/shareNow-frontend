@@ -60,7 +60,8 @@ const userSlice = createSlice({
         isFollowing: 0,
         totalUser: {},
         relatedUser: [],
-        followingList: []
+        followingList: [],
+        userPostList: []
     },
     reducers: {},
     extraReducers: {

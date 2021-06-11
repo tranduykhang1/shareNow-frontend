@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import Style from "./Style";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,7 @@ import { getDepartments, getIndustries } from "redux/theCurriculum";
 import { updateProfile } from "redux/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SuccessAnimation from "components/shared/SuccessAnimtion/SuccessAnimation";
+import toast, { Toaster } from "react-hot-toast";
 
 const style = {
   marginLeft: "21.5%",
@@ -44,8 +45,6 @@ const schema = yup.object().shape({
     .required("Mục này không nên để trống"),
   class_room: yup.string().required("Mục này không nên để trống"),
 });
-
-
 
 const UpdateProfileForm = (props) => {
   const { classes } = props;
@@ -70,9 +69,9 @@ const UpdateProfileForm = (props) => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsSuccess(false);
-    }, 2400);
+    if (isSuccess) {
+      toast.success("Cập nhật thông tin thành công!");
+    }
   }, [isSuccess]);
 
   let options = {
@@ -114,13 +113,22 @@ const UpdateProfileForm = (props) => {
 
   return (
     <Grid item sm={12} md={6} style={style} className="responsiveGrid">
-      {isSuccess && <SuccessAnimation />}
-      <Box display="flex" alignItems="center" mb={3}>
-        <Icons.BackIcon
-          onClick={() => history.goBack()}
-          className={classes.goBackIcon}
-        />
-        <h3 className={classes.title}>Cập nhật thông tin</h3>
+      <div>
+        <Toaster />
+      </div>
+      <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+        <Box display="flex" alignItems="center">
+          <Icons.BackIcon
+            onClick={() => history.goBack()}
+            className={classes.goBackIcon}
+          />
+          <h3 className={classes.title}>Cập nhật thông tin</h3>
+        </Box>
+        <Box>
+          <a href="/update-password">
+            <Button variant="outlined" color="primary">Đổi mật khẩu</Button>
+          </a>
+        </Box>
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CustomInput
@@ -266,14 +274,12 @@ const UpdateProfileForm = (props) => {
           )}
         </Box>
       </form>
-      )
     </Grid>
   );
 };
 
 UpdateProfileForm.propTypes = {
-  preValues: PropTypes.object.isRequired
-}
+  preValues: PropTypes.object.isRequired,
+};
 
 export default withStyles(Style)(UpdateProfileForm);
-

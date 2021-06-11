@@ -25,6 +25,11 @@ const style = () => ({
         fontSize: '13px !important'
 
     },
+    editInput: {
+        border: "none",
+        background: "transparent",
+        padding: 4
+    },
     commentAt: {
         fontSize: '11px !important',
         color: 'grey',
@@ -43,6 +48,11 @@ const style = () => ({
         "&:hover": {
             color: '#cecece !important',
         }
+    },
+    icon: {
+        color: 'grey !important',
+        fontSize: "15px !important",
+        cursor: 'pointer'
     }
 })
 export default style

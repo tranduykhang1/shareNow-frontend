@@ -7,8 +7,8 @@ const toggleSlice = createSlice({
         uploadForm: false,
         commentForm: false,
         post_id: "",
-        reply: ""
-
+        reply: "",
+        editPost: false
     },
     reducers: {
         toggleUploadForm: (state, action) => {
@@ -20,10 +20,13 @@ const toggleSlice = createSlice({
         },
         replyTo: (state, action) => {
             state.reply = action.payload
+        },
+        editPost: (state, action) => {
+            state.editPost = !state.editPost
         }
     },
 });
 
 const { actions, reducer } = toggleSlice
-export const { toggleUploadForm, toggleCommentForm, replyTo } = actions
+export const { toggleUploadForm, toggleCommentForm, replyTo, editPost } = actions
 export default reducer

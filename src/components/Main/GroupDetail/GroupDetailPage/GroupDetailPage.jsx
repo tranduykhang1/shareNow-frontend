@@ -3,6 +3,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import PostList from "components/shared/Post/PostList/PostList";
 import SuccessAnimation from "components/shared/SuccessAnimtion/SuccessAnimation";
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { checkUserIn, newsInGroup } from "redux/group";
@@ -21,6 +22,7 @@ const GroupDetailPage = (props) => {
   const [success, setSuccess] = useState(false);
   let [currentGroup, setGroup] = useState();
   let isUpload = useSelector((state) => state.group.uploadForm);
+  let isPending = useSelector((state) => state.group.isPending);
   let group = useSelector((state) => state.group.groupDetail);
   let isJoin = useSelector((state) => state.group.isJoin);
   let isAdd = useSelector((state) => state.group.isAdd);
@@ -34,21 +36,20 @@ const GroupDetailPage = (props) => {
 
   useEffect(() => {
     if (isUpload > 0) {
-      setSuccess(true);
+      toast.success("Cập nhật thành công!");
     }
-    setTimeout(() => {
-      setSuccess(false);
-    }, 2300);
   }, [isUpload]);
 
   useEffect(() => {
-    if (isCreatePost > 0) {
-      setSuccess(true);
+    let toastLoading;
+    if (isPending) {
+      toastLoading = toast.loading("Đang tải bài viết...!");
     }
-    setTimeout(() => {
-      setSuccess(false);
-    }, 2300);
-  }, [isCreatePost]);
+    if(isCreatePost > 0 && !isPending) {
+      toast.remove(toastLoading)
+      toast.success("Tải bài viết thành công!");
+    }
+  }, [isPending, isCreatePost]);
 
   useEffect(() => {
     let fetchData = async () => {
@@ -60,7 +61,10 @@ const GroupDetailPage = (props) => {
 
   return (
     <Grid item sm={12} md={6} style={style} className="responseGrid">
-      {success ? <SuccessAnimation text={"Thành công"}/> : ""}
+      {/* {success ? <SuccessAnimation text={"Thành công"}/> : ""} */}
+      <div>
+        <Toaster />
+      </div>
       <GroupDetailHeader />
       {isJoin ? (
         <>

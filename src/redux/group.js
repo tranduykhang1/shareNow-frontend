@@ -75,6 +75,7 @@ const groupSlice = createSlice({
         isAdd: false,
         isRemove: false,
         isRemove: false,
+        isPending: false,
         isCreatePost: 0,
         userGroups: [],
         posts: []
@@ -108,8 +109,12 @@ const groupSlice = createSlice({
         [groupByUser.fulfilled]: (state, action) => {
             state.userGroups = action.payload
         },
+        [createGroupPost.pending]: (state, action) => {
+            state.isPending = true
+        },
         [createGroupPost.fulfilled]: (state, action) => {
             state.isCreatePost += 1
+            state.isPending = false
         },
         [newsInGroup.fulfilled]: (state, action) => {
             state.posts = action.payload

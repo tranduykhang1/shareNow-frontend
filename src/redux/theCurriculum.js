@@ -23,8 +23,8 @@ const theCurriculumSlice = createSlice({
         departments: [],
         industries: [],
         tagList: [],
-        currentTag: "",
-        currentTopic: "",
+        currentTag: false,
+        currentTopic: false,
         postList: []
     },
     reducers: {

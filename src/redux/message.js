@@ -41,6 +41,7 @@ export const createRoom = createAsyncThunk("message/createRoom", async(data, thu
     return response.data
 })
 
+//io realtime
 
 
 const messageSlice = createSlice({
@@ -54,10 +55,20 @@ const messageSlice = createSlice({
         roomMembers: [],
         isJoin: 0,
         isLeave: 0,
-        isCreateRoom: 0
+        isCreateRoom: 0,
+        isTyping: false,
+        sendPending: 0
     },
     reducers: {
-
+        isTyping: (state, action) => {
+            state.isTyping = action.payload
+        },
+        isSentSocket: (state, action) => {
+            state.isSent += 1
+        },
+        isSentRoomSocket: (state, action) => {
+            state.isSentRoom += 1
+        }
     },
     extraReducers: {
         [getConversations.fulfilled]: (state, action) => {
@@ -66,9 +77,14 @@ const messageSlice = createSlice({
         [getUserMessageAction.fulfilled]: (state, action) => {
             state.userMessage = action.payload
         },
+        [sendMessageAction.pending]: (state, action) => {
+            state.sendPending += 1
+        },
         [sendMessageAction.fulfilled]: (state, action) => {
             state.isSent += 1
+            state.sendPending += 1
         },
+
         [getMessageRoomAction.fulfilled]: (state, action) => {
             state.userMessage = action.payload
         },
@@ -90,5 +106,7 @@ const messageSlice = createSlice({
     },
 });
 
-const { reducer: messageReducer } = messageSlice;
+const { actions, reducer: messageReducer } = messageSlice;
+export const { isTyping, isSentSocket, isSentRoomSocket } = actions
+
 export default messageReducer

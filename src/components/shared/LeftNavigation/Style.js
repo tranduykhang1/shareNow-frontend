@@ -72,12 +72,43 @@ const style = () => ({
         alignItems: "center",
         bottom: 0,
         width: '100%',
-        margin: '0 auto'
+        margin: '0 auto',
+        cursor: 'pointer'
+    },
+    avatarBox: {
+        borderRadius: 40,
+        border: '1px solid #c3c3c3',
+        padding: '3px 5px'
     },
     userAvatar: {
         color: 'grey',
         border: '1px solid grey'
     },
+    moreIcon: {
+        color: "grey !important"
+    },
+    expand: {
+        background: 'white',
+        padding: 10,
+        boxShadow: '1px 1px 3px 4px #efefef',
+        borderRadius: 5
+    },
+    toProfile: {
+        color: "black !important",
+        fontSize: 15,
+        marginBottom: '0 !important',
+        fontWeight: 500
+    },
+    toLogout: {
+        fontSize: 15,
+        marginBottom: '0 !important',
+        fontWeight: 500
+    },
+    expandIcon: {
+        fontSize: "20px !important",
+        marginRight: 3,
+        color: 'grey !important'
+    }
 })
 
 export default style

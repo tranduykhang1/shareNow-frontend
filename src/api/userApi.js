@@ -106,6 +106,7 @@ const userApi = {
             resp = err
         })
         return resp
-    }
+    },
+
 }
 export default userApi

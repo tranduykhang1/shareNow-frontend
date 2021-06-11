@@ -23,6 +23,8 @@ import {
   getMessageRoomAction,
   getRoomMembers,
   getUserMessageAction,
+  isSentRoomSocket,
+  isSentSocket,
 } from "redux/message";
 import CreateGroup from "../GroupManage/CreateGroup";
 import FindGroup from "../GroupManage/FindGroup";
@@ -73,7 +75,12 @@ const UserList = (props) => {
   const isSent = useSelector((state) => state.message.isSent);
   const isSentRoom = useSelector((state) => state.message.isSentRoom);
   const isCreateRoom = useSelector((state) => state.message.isCreateRoom);
+  const isPending = useSelector((state) => state.message.isPending);
 
+  useEffect(() => {
+    dispatch(isSentSocket());
+    dispatch(isSentRoomSocket());
+  }, [isPending]);
 
   useEffect(() => {
     let fetchData = async () => {
@@ -85,13 +92,9 @@ const UserList = (props) => {
     fetchData();
   }, [isSent, isSentRoom, isCreateRoom]);
 
-  socket.on("SEND_MESSAGE", (data) => console.log(data));
-
   useEffect(() => {
     if (isSent > 0) {
-      console.log(activeId.userId, activeId.conversationId)
       getUserMessage(activeId.userId, activeId.conversationId);
-      socket.emit("SEND_MESSAGE", activeId.userId);
     }
   }, [isSent]);
 
@@ -116,7 +119,7 @@ const UserList = (props) => {
     });
   };
   const getRoomMessage = (id) => {
-    dispatch(getRoomMembers(id))
+    dispatch(getRoomMembers(id));
     dispatch(getMessageRoomAction(id));
     setActiveId({ ...activeId, conversationId: id });
   };
@@ -172,10 +175,10 @@ const UserList = (props) => {
                   }
                   secondary={
                     <React.Fragment>
-                      <Typography className={classes.userMessage}>
+                      <span className={classes.userMessage}>
                         {conversation.message &&
                           conversation.message.message_body}
-                      </Typography>
+                      </span>
                     </React.Fragment>
                   }
                 />
@@ -227,16 +230,16 @@ const UserList = (props) => {
                 <ListItemText
                   primary={
                     <React.Fragment>
-                      <Typography className={classes.userName}>
+                      <span className={classes.userName}>
                         {conversation.userFrom && userFrom.full_name}
-                      </Typography>
+                      </span>
                     </React.Fragment>
                   }
                   secondary={
                     <React.Fragment>
-                      <Typography className={classes.userMessage}>
+                      <span className={classes.userMessage}>
                         {conversation.message && messageContent}
-                      </Typography>
+                      </span>
                     </React.Fragment>
                   }
                 />
@@ -298,9 +301,9 @@ const UserList = (props) => {
                   }
                   secondary={
                     <React.Fragment>
-                      <Typography className={classes.userMessage}>
+                      <span className={classes.userMessage}>
                         {conversation.message && messageContent}
-                      </Typography>
+                      </span>
                     </React.Fragment>
                   }
                 />

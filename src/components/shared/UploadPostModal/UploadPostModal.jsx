@@ -43,17 +43,10 @@ const UploadPostModel = (props) => {
   const [isGroup, setIsGroup] = useState(false);
   const [tempPhoto, setTemPhoto] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ tag: "", topic: "" });
 
-  let schema = {};
 
-  if (!isGroup) {
-    yup.object().shape({
-      topic: yup.string().required("Bạn cần phân loại bài đăng"),
-      tag: yup.string().required("Bạn cần phân loại bài đăng"),
-    });
-  }
-
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit } = useForm({
     mode: "onBlur",
     // resolver: yupResolver(schema),
   });
@@ -73,6 +66,7 @@ const UploadPostModel = (props) => {
   let departmentList = useSelector((state) => state.theCurriculum.departments);
   let tagList = useSelector((state) => state.theCurriculum.tagList);
   let isCreatePost = useSelector((state) => state.group.isCreatePost);
+  let isCreate = useSelector((state) => state.post.isCreate);
   //
 
   useEffect(() => {
@@ -88,15 +82,17 @@ const UploadPostModel = (props) => {
   useEffect(() => {
     setPost({ ...post, group_id: groupDetail._id });
 
-    if (isCreatePost > 0) {
+    if (isCreatePost > 0 || isCreate > 0) {
       setPost({ group_id: "", photos: [], caption: "", topic: "", tag: "" });
       array = [];
     }
-  }, [groupDetail, isCreatePost]);
+  }, [groupDetail, isCreatePost, isCreate]);
 
   const onEmojiClick = (e, emojiObject) => {
     let { emoji } = emojiObject;
     let ref = inputRef.current;
+    ref.focus();
+
     let start = post.caption.substring(0, ref.selectionStart);
     let end = post.caption.substring(ref.selectionStart);
     let msg = start + emoji + end;
@@ -130,31 +126,39 @@ const UploadPostModel = (props) => {
   };
 
   const uploadStatus = () => {
-    setLoading(true);
     if (isGroup) {
-      //  dispatch()
+      setLoading(true);
       let resp = dispatch(createGroupPost(post));
       resp = unwrapResult(resp);
       dispatch(toggleUploadForm());
       setLoading(false);
     } else {
       //  dispatch()
-      let resp = dispatch(createPost(post));
-      resp = unwrapResult(resp);
-      console.log(post)
-      dispatch(toggleUploadForm());
-      setLoading(false);
-    }
-
-    if (isCreatePost > 0) {
-      setPost({ group_id: "", photos: [], caption: "", topic: "", tag: "" });
-      array = [];
+      if (post.topic && post.tag) {
+        setLoading(true);
+        let resp = dispatch(createPost(post));
+        resp = unwrapResult(resp);
+        console.log(post);
+        dispatch(toggleUploadForm());
+        setLoading(false);
+      } else {
+        if (!post.topic) {
+          setErrors({ ...errors, topic: "Cần chọn chủ đề" });
+        }
+        if (!post.tag) {
+          setErrors({ ...errors, tag: "Cần chọn thẻ" });
+        }
+      }
     }
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} style={{height: "0 !important"}}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        style={{ height: "0 !important" }}
+      >
         {!isGroup ? (
           <h5 className={classes.title}>Tạo bài đăng mới</h5>
         ) : (

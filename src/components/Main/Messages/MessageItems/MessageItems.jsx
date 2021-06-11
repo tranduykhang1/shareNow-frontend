@@ -17,20 +17,20 @@ import { useSelector } from "react-redux";
 const MessageItems = (props) => {
   const { classes } = props;
 
-  const messageRef = useRef()
+  const messageRef = useRef();
   const currentUser = useSelector((state) => state.user.currentUser);
+  const roomMembers = useSelector((state) => state.user.roomMembers);
 
   const { msg } = props;
 
-
-  useEffect(() =>{
-    messageRef.current.scrollIntoView({behavior: "smooth"})
-  }, msg)
+  useEffect(() => {
+    messageRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [msg]);
 
   return (
     <Grid
       container
-      alignItems="start"
+      // alignItems="start"
       className={
         msg.sent_by.id === currentUser._id
           ? classes.msgItemMe
@@ -42,14 +42,16 @@ const MessageItems = (props) => {
         {msg.sent_by.full_name.split("")[0]}
       </Avatar>
       <Box display="flex" flexDirection="column">
-        {msg.photos.length ?(
+        {msg.photos.length ? (
           <FbImageLibrary
             images={msg.photos}
             width={300}
             maxWidth={400}
             style={{ width: 300 }}
           />
-        ) : ''}
+        ) : (
+          ""
+        )}
         <Box display="flex" flexDirection="row-reverse">
           <Grid
             item={true}
@@ -60,6 +62,10 @@ const MessageItems = (props) => {
                 : classes.msgBodyOther
             }
           >
+            {roomMembers && currentUser._id !== msg.sent_by.id && (
+              <h6 className={classes.msgName}>{msg.sent_by.full_name}</h6>
+            )}
+
             <Typography>{msg.message_body}</Typography>
             <Typography className={classes.msgTime}>
               {" "}

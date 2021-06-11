@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import toast, { Toaster } from 'react-hot-toast';
 
 import PostItems from "components/shared/Post/PostItems/PostItems";
 import GroupForm from "./GroupForm";
@@ -91,16 +92,14 @@ const GroupPage = (props) => {
 
   useEffect(() => {
     if (isUpload) {
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-      }, 2300);
+     toast.success("Tạo nhóm thành công!")
     }
   }, [isUpload]);
 
   return (
     <Grid item sm={12} md={6} style={style.container} className="responsiveGrid">
-      {success && <SuccessAnimation />}
+      {/* {success && <SuccessAnimation />} */}
+      <div><Toaster/></div>
       <Grid>
         <Typography className="group-title">Các bài đăng trong nhóm</Typography>
         <div>

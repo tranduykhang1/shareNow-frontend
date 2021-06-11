@@ -55,7 +55,7 @@ const style = () => ({
         padding: "0 !important",
     },
     userItemActive: {
-        backgroundColor: "#e0e0e0",
+        backgroundColor: "#ebf6ff",
         height: 70
     },
     userItem: {

@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  LinearProgress,
 } from "@material-ui/core";
 import React, { useRef, useState, useEffect, createRef } from "react";
 import { useForm } from "react-hook-form";
@@ -43,10 +44,11 @@ const MessageList = (props) => {
   const dispatch = useDispatch();
   const messageEndRel = useRef(null),
     inputRef = useRef(null),
-    typingRel = useRef(null);
+    typingRel = useRef(null),
+    messageBodyRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   const [message, setMessage] = useState({ body: "", photo: "" });
-  const [showAnimation, setShowAnimation] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(true);
   const [messageList, setMessageList] = useState();
   const [messageRoomList, setMessageRoomList] = useState();
   const [tempPhoto, setTempPhoto] = useState([]);
@@ -59,6 +61,8 @@ const MessageList = (props) => {
   const [openInvite, setOpenInvite] = useState(false);
   const [openMembers, setOpenMembers] = useState(false);
   const [anchor, setAnchor] = useState();
+  const [isSendPending, setIsSendPending] = useState(true);
+  const [messageCount, setMessageCount] = useState(20);
 
   useEffect(() => {
     if (typingRel) {
@@ -72,15 +76,24 @@ const MessageList = (props) => {
     }
   }, [showAnimation]);
 
+  const onScroll = (e) => {
+    if (messageBodyRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messageBodyRef.current;
+      if (scrollTop === 0) {
+        setMessageCount(messageCount + 20);
+      }
+    }
+  };
+
   const userMessage = useSelector((state) => state.message.userMessage);
   const listMessageRoom = useSelector((state) => state.message.listMessageRoom);
   const isSent = useSelector((state) => state.message.isSent);
   const currentUser = useSelector((state) => state.user.currentUser);
   const roomMembers = useSelector((state) => state.message.roomMembers);
+  const isTyping = useSelector((state) => state.message.isTyping);
+  const isPending = useSelector((state) => state.message.sendPending);
 
   const inputChange = (e) => {
-    setShowAnimation(true);
-
     let { name, value } = e.target;
     if (name === "photos") {
       value = e.target.files;
@@ -95,16 +108,31 @@ const MessageList = (props) => {
   const onEmojiClick = async (e, emojiObject) => {
     let { emoji } = emojiObject;
     let ref = inputRef.current;
-    let start = messageSend.message.substring(0, ref.selectionStart);
-    let end = messageSend.message.substring(ref.selectionStart);
-    let msg = start + emoji + end;
+    ref.focus();
+    let start, end, msg;
+    if (messageSend.message) {
+      start = messageSend.message.substring(0, ref.selectionStart);
+      end = messageSend.message.substring(ref.selectionStart);
+      msg = start + emoji + end;
+    } else {
+      msg = emoji;
+    }
     setMessageSend({ ...messageSend, message: msg });
   };
 
   useEffect(() => {
+    setIsSendPending(!isSendPending);
+    if (isPending > 0) {
+      console.log("oke");
+      socket.emit("SEND_MESSAGE", messageList.userInfo[0]._id);
+      socket.emit("ROOM_MESSAGE", messageSend.roomId);
+    }
+  }, [isPending]);
+
+  useEffect(() => {
     dispatch(getFollowingList());
-    if (userMessage.length) {
-      if (userMessage[0].room_code) {
+    if (userMessage[0]) {
+      if (userMessage[0].name) {
         setMessageList(userMessage[0]);
         setMessageSend({ roomId: userMessage[0]._id });
       }
@@ -127,33 +155,63 @@ const MessageList = (props) => {
   //         target.scroll({ top: target.scrollHeight, behavior: "smooth" });
   //       });
   //   }
-  // }, []);
+  // }, []);a
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    e.target.reset();
-    if (messageSend.conversationId) {
-      dispatch(sendMessageAction(messageSend));
+    if (messageSend.message || messageSend.photos) {
+      if (messageSend.conversationId) {
+        dispatch(sendMessageAction(messageSend));
+        socket.emit("SEND_MESSAGE", messageList.userInfo[0]._id);
+      }
+      if (messageSend.roomId) {
+        dispatch(sendMessageRoomAction(messageSend));
+        socket.emit("ROOM_MESSAGE", messageSend.roomId);
+      }
+      e.target.reset();
+      setShowAnimation(false);
+      setIsShow(false);
+      setTempPhoto([]);
+      setMessageSend({ ...messageSend, message: "", photos: [] });
     }
-    if (messageSend.roomId) {
-      dispatch(sendMessageRoomAction(messageSend));
-    }
-    setIsShow(false);
-    setTempPhoto([]);
-    setMessageSend({ ...messageSend, message: "", photos: [] });
   };
   const toggleEmoji = () => {
     setIsShow(!isShow);
   };
 
   useEffect(() => {
-    socket.on("TYPING", (data) => console.log("hello"));
-  });
+    if (!isTyping) {
+      setShowAnimation(isTyping);
+    }
+    if (
+      messageList &&
+      !messageList.room_code &&
+      isTyping.userId === messageList.userInfo[0]._id
+    ) {
+      setShowAnimation(isTyping.status);
+    }
+  }, [isTyping]);
 
   const toggleTyping = (e) => {
-    if (!messageList.room_code) {
-      socket.emit("TYPING", messageList.userInfo[0]._id);
-      setShowAnimation(false);
+    if (e.type === "focus") {
+      if (!messageList.room_code) {
+        socket.emit("TYPING", {
+          receiver: messageList.userInfo[0]._id,
+          sender: currentUser._id,
+          status: true,
+        });
+        // setShowAnimation(false);
+      }
+    }
+    if (e.type === "blur") {
+      if (!messageList.room_code) {
+        socket.emit("TYPING", {
+          receiver: messageList.userInfo[0]._id,
+          sender: currentUser._id,
+          status: false,
+        });
+        // setShowAnimation(false);
+      }
     }
   };
 
@@ -200,8 +258,15 @@ const MessageList = (props) => {
   ////////////////////////////////
 
   let renderMsg;
-  if (messageList) {
-    renderMsg = messageList.message_list.map((m, i) => {
+  if (messageList && messageList.message_list) {
+    let length = messageList.message_list.length;
+    let message;
+    if (length > 20) {
+      message = messageList.message_list.slice(length - messageCount, length);
+    } else {
+      message = messageList.message_list;
+    }
+    renderMsg = message.map((m, i) => {
       return <MessageItems key={i} msg={m} />;
     });
   }
@@ -264,16 +329,19 @@ const MessageList = (props) => {
                   className={classes.popoverItem}
                   onClick={onOpenInvite}
                 >
+                  <Icons.AddMemberIcon className={classes.roomIcon}/>
                   <ListItemText>Thêm</ListItemText>
                 </ListItem>
                 <ListItem className={classes.popoverItem} onClick={onLeaveRoom}>
+                  <Icons.ExitIcon className={classes.roomIcon}/>
                   <ListItemText>Rời phòng</ListItemText>
                 </ListItem>
-                {currentUser._id === messageList.admin_key && (
+                {messageList && currentUser._id === messageList.admin_key && (
                   <ListItem
                     className={classes.popoverItem}
                     onClick={onRemoveRoom}
                   >
+                    <Icons.TrashIcon className={classes.roomIcon}/>
                     <ListItemText>Xóa phòng</ListItemText>
                   </ListItem>
                 )}
@@ -331,10 +399,25 @@ const MessageList = (props) => {
           <img src={images.logo} alt="" width={170} height={170} />
         </Box>
       ) : (
-        <Grid className={classes.msgBody}>
+        <Grid
+          className={classes.msgBody}
+          onScroll={() => onScroll()}
+          ref={messageBodyRef}
+        >
           {renderMsg}
 
-          {showAnimation && <Grid className={classes.typing}></Grid>}
+          <Box
+            p={3}
+            width="50%"
+            m="auto"
+            style={{ color: "grey", textAlign: "center" }}
+          >
+            {isSendPending ? <LinearProgress /> : ""}
+          </Box>
+          {showAnimation && (
+            <div className={classes.typing} ref={typingRel}></div>
+          )}
+
           {isShow && <Picker onEmojiClick={onEmojiClick} />}
           <Grid item={true} className={classes.msgFooter}>
             <form onSubmit={sendMessage} className={classes.msgForm}>
@@ -358,7 +441,7 @@ const MessageList = (props) => {
               <input
                 name="message"
                 type="text"
-                value={messageSend.message}
+                value={messageSend.message || ""}
                 placeholder="Nhập tin nhắn..."
                 autoComplete="off"
                 className={classes.msgInput}
@@ -387,13 +470,11 @@ const MessageList = (props) => {
           </Grid>
         </Grid>
       )}
-      {messageList && messageList.room_code ? (
+      {messageSend.roomId && (
         <>
           <MessageMembers open={openMembers} />
           <InviteMembers open={openInvite} />
         </>
-      ) : (
-        ""
       )}
     </Grid>
   );

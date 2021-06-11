@@ -43,6 +43,12 @@ const style = () => ({
             color: "#ff6060 !important",
         },
     },
+    msgName: {
+        color: '#b6b6b6',
+        fontWeight: '500',
+        marginTop: '0 !important',
+
+    },
     msgTime: {
         fontSize: "13px !important",
         color: "#cccccc",

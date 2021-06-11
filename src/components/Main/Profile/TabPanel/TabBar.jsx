@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -8,6 +8,10 @@ import TabPanel from "./TabPanel";
 import PostItems from "components/shared/Post/PostItems/PostItems";
 import PhotoList from "../PhotoList/PhotoList";
 import { Box, Typography } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserPost } from "redux/post";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useParams } from "react-router-dom";
 
 function a11yProps(index) {
   return {
@@ -31,29 +35,27 @@ const breakpointColumnsObj = {
 export default function TabBar(props) {
   const [value, setValue] = React.useState(0);
   const { classes } = props;
-  const data = [1, 2, 3, 4, 5, 6, 7];
+  const dispatch = useDispatch();
+
+  let { id } = useParams();
+
+  let userPostList = useSelector((state) => state.post.userPostList)
+
+  useEffect(() => {
+    let fetchData = async () => {
+      dispatch(getUserPost(id));
+    };
+
+    fetchData();
+  }, []);
 
 
-  let post = [
-    {
-      _id: "",
-      caption: "Xin chào! Mình là",
-      user: {
-        _id: "",
-        name: "Duy Khang",
-        avatar: "http://res.cloudinary.com/dfniu86vr/image/upload/v1622445257/avatar/rgixskumkjt7xkdewoly.jpg"
-      },
-      photos: ["https://picsum.photos/200/300"],
-      create_at: Date(),
-      comments: [1],
-      likers: [3]
-    }
-  ]
-
-
-  const renderItems = post.map((data, i) => {
-    return <PostItems key={i} post={data} />;
-  });
+  let renderItems;
+  if (userPostList) {
+    renderItems = userPostList.map((data, i) => {
+      return <PostItems key={i} post={data} />;
+    });
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -75,14 +77,14 @@ export default function TabBar(props) {
           <Tab label="Ảnh" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      {/* {value === 0 ? (
+      {value === 0 ? (
         <Box>{renderItems}</Box>
       ) : (
-        <Box display="flex" style={{flexWrap: 'wrap', marginLeft: 50}}>
+        <Box display="flex" style={{ flexWrap: "wrap", marginLeft: 50 }}>
           {" "}
           <PhotoList />
         </Box>
-      )} */}
+      )}
 
       <TabPanel value={value} index={0} component="div">
         {/* {renderItems} */}

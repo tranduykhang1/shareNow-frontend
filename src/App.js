@@ -4,16 +4,26 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "router/PrivateRouter";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "@material-ui/core";
 
 import routes from "./router/router";
 import UploadPostModal from "components/shared/UploadPostModal/UploadPostModal";
 import ConfirmUserForm from "components/shared/ConfirmUserForm/ConfirmUserForm";
 import Notification from "components/shared/NoticeStatus/Notification";
-//const socket = io("http://localhost:1234");
+// import Socket from "components/Main/Messages/Socket"
+
+import io from "socket.io-client";
+import token from "assets/Config/jwtChecker";
+import constants from "constants/Const/socketIo";
+import { isTyping , isSentSocket,isSentRoomSocket} from "redux/message";
+import { useDispatch } from "react-redux";
+
+const socket = io(constants.ENDPOINT);
 
 const App = () => {
+  const dispatch = useDispatch();
+
   let { pathname } = window.location;
   let padding = 10;
   if (pathname === "/register") {
@@ -27,6 +37,26 @@ const App = () => {
     minHeight: "100%",
   };
 
+  //
+  useEffect(() =>{
+    socket.emit("NEW_USER", token)
+  },[ ])
+
+  useEffect(() => {
+    socket.on("TYPING", (data) =>{
+      dispatch(isTyping(data));
+    })
+    socket.on("SEND_MESSAGE", () =>{
+      console.log("oke")
+      dispatch(isSentSocket());
+    })
+    socket.on("ROOM_MESSAGE", () =>{
+      dispatch(isSentRoomSocket())
+    })
+
+  });
+
+  ///
   return (
     <Router>
       <Grid
@@ -37,12 +67,12 @@ const App = () => {
         xs={12}
         style={containerStyle}
       >
-        <Notification /> <UploadPostModal />
+        <Notification />
+        <UploadPostModal />
         <ConfirmUserForm />
         <Switch> {switchRoute(routes)} </Switch>{" "}
-        {/* <NotificationContainer /> */}{" "}
+        {/* <NotificationContainer /> */} {/* <Socket/> */}
       </Grid>{" "}
-
     </Router>
   );
 };

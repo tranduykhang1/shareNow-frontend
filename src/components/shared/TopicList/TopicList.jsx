@@ -66,7 +66,7 @@ const TopicList = (props) => {
     setActiveId(topic);
     setIsActive(false);
     if (activeId === topic) {
-      setActiveId("");
+      setActiveId(false);
     } else {
       setActiveId(topic);
     }

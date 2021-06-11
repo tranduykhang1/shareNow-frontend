@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import { leaveRoom } from "redux/message";
 import Swal from "sweetalert2";
 
+import Icons from "constants/Icons/Icons";
+
 export default function MessageMembers({ open }) {
   const [isOpen, setIsOpen] = useState(true);
   const dispatch = useDispatch();
@@ -72,6 +74,14 @@ export default function MessageMembers({ open }) {
                     primary={member.users[0].full_name}
                     secondary={member.users[0].class_room}
                   />
+                  {userMessage &&
+                  member.users[0]._id === userMessage[0].admin_key ? (
+                    <Icons.KeyIcon
+                      className="key-member"
+                    />
+                  ) : (
+                    ""
+                  )}
                   {currentUser._id === member.userId ? (
                     <h6>Bạn</h6>
                   ) : (
@@ -88,6 +98,7 @@ export default function MessageMembers({ open }) {
                       </Button>
                     )
                   )}
+
                   {currentUser._id !== member.userId && (
                     <Button
                       size="small"

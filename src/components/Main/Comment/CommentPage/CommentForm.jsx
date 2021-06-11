@@ -66,7 +66,7 @@ const CommentForm = (props) => {
   return (
     <>
       {isShow && <Picker onEmojiClick={onEmojiClick} />}
-      {comment.replyName && <b>Trả lời: {comment.replyName}</b>}
+      {comment.replyName && <b style={{marginLeft: '5%'}}> Trả lời: {comment.replyName}</b>}
       <form onSubmit={onSubmit} className={classes.commentForm}>
         <Icons.MoodIcon className={classes.emojiIcon} onClick={togglePicker} />
 

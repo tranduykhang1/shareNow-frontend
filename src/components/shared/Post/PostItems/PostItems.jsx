@@ -28,11 +28,12 @@ import { Link } from "react-router-dom";
 import CommentPage from "components/Main/Comment/CommentPage/CommentPage";
 import PostSke from "components/shared/Skeleton/PostSke";
 import Moment from "react-moment";
-import { toggleCommentForm } from "redux/toggleComponent";
+import { editPost, toggleCommentForm } from "redux/toggleComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { current } from "@reduxjs/toolkit";
 import { likePost, unLikePost } from "redux/interactive";
 import Swal from "sweetalert2";
+import { removePost, setCurrentPost } from "redux/post";
 
 const PostItems = ({ post, classes }) => {
   const [isAnimated, setIsAnimated] = useState(false);
@@ -144,9 +145,19 @@ const PostItems = ({ post, classes }) => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Xóa",
       cancelButtonText: "Không",
-    }).then((result) => {});
+    }).then((result) => {
+      if (!post.post) {
+        dispatch(removePost(post._id));
+      }
+    });
   };
-  const onEdit = () => {};
+  const onEdit = () => {
+    setAnchor(null);
+    if (!post.post) {
+      dispatch(setCurrentPost(post))
+      dispatch(editPost());
+    }
+  };
 
   return (
     <Grid item={true} sm={10} md={12} className={classes.postItem}>
@@ -281,10 +292,14 @@ const PostItems = ({ post, classes }) => {
                 </Typography>
               </Grid> */}
               <Grid container className={classes.cardInteract}>
-                <Box display="flex" alignItems="center" style={{color: 'grey', fontSize: '12px !important'}}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  style={{ color: "grey", fontSize: "12px !important" }}
+                >
                   <h6>{post.topic ? post.topic[0].alias : ""}</h6>
-                  <h6 style={{margin: "0 5px"}}> - </h6>
-                  <h6>{post.tag ?  post.tag[0].name: ""}</h6>
+                  <h6 style={{ margin: "0 5px" }}> - </h6>
+                  <h6>{post.tag ? post.tag[0].name : ""}</h6>
                 </Box>
                 <Box display="flex">
                   <Box

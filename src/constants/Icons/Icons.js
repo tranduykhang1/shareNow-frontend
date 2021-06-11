@@ -41,6 +41,10 @@ import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 import BarChartOutlinedIcon from '@material-ui/icons/BarChartOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MenuIcon from '@material-ui/icons/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const Icons = {
     Home: HomeIcon,
@@ -81,7 +85,11 @@ const Icons = {
     FilterAllIcon: FilterNoneOutlinedIcon,
     ChartIcon: BarChartOutlinedIcon,
     MoreIcon: MoreVertIcon,
-    MenuIcon: MenuIcon
+    MenuIcon: MenuIcon,
+    ExitIcon: ExitToAppIcon,
+    KeyIcon: VpnKeyIcon,
+    DownIcon: ArrowDropDownOutlinedIcon,
+    ProfileIcon: AccountCircleIcon
 }
 
 export default Icons

@@ -73,6 +73,11 @@ p {
     font-size: 13px !important
 }
 
+.cover,
+.cover-text {
+    display: none !important
+}
+
 
 /* fb-grid */
 
@@ -238,6 +243,12 @@ div.fullscreen-container {
 .MuiBox-root>.grid-container {
     padding: 0 !important;
     margin-bottom: 10px
+}
+
+.key-member {
+    color: #f8c718 !important;
+    font-size: 20px !important;
+    margin-right: 5px
 }
 
 

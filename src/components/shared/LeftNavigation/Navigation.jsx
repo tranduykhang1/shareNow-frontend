@@ -13,6 +13,7 @@ import {
   Drawer,
   IconButton,
   Popover,
+  Divider,
 } from "@material-ui/core";
 import { Link, NavLink, useHistory, useRouteMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,24 +25,17 @@ import style from "./Style";
 //action
 import { getUser } from "redux/user";
 import { toggleUploadForm } from "redux/toggleComponent";
-import token from "assets/Config/jwtChecker";
-
-import socketIOClient from "socket.io-client";
-import constants from "constants/Const/socketIo";
 
 const Navigation = (props) => {
   const { classes } = props;
   const { url, path } = useRouteMatch();
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [expand, setExpand] = useState(false);
   const userState = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
-    const socket = socketIOClient(constants.ENDPOINT);
-    socket.emit("NEW_USER", token);
-
     dispatch(getUser());
   }, []);
 
@@ -51,6 +45,12 @@ const Navigation = (props) => {
 
   const handleDrawerToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    history.push('/login')
   };
 
   const navItems = [
@@ -142,17 +142,41 @@ const Navigation = (props) => {
             </Button>
           </Grid>
           <Grid>
-             <Link
-              to={`/profile/` + userState._id}
-              className={classes.navFooter}
-            >
-              <Avatar src={userState.avatar} className={classes.userAvatar}>
-                {userState && userState.full_name.split("")[0]}
-              </Avatar>
-              <Typography color="textSecondary">
+            <Box className={classes.navFooter}>
+              {expand && (
+                <Box className={classes.expand}>
+                  <Box p={1}>
+                    <b>{userState.full_name}</b>
+                  </Box>
+                  <Divider />
+                  <Box pt={2} pb={2} display="flex" alignItems="center">
+                  <Icons.ProfileIcon className={classes.expandIcon}/>
+                    <Link to={`/profile/${userState._id}`} >
+                      <p className={classes.toProfile}>Trang cá nhân</p>
+                    </Link>
+                  </Box>
+                  <Box pb={2} display="flex"  alignItems="center">
+                    <Icons.ExitIcon className={classes.expandIcon}/>
+                    <p onClick={logout} className={classes.toLogout}>Đăng xuất</p>
+                  </Box>
+                </Box>
+              )}
+              <Box
+                display="flex"
+                alignItems="center"
+                className={classes.avatarBox}
+                onClick={() => setExpand(!expand)}
+                aria-describedby="popover"
+              >
+                <Avatar src={userState.avatar} className={classes.userAvatar}>
+                  {userState && userState.full_name.split("")[0]}
+                </Avatar>
+                <Icons.DownIcon className={classes.moreIcon} />
+              </Box>
+              {/* <Typography color="textSecondary">
                 @{userState.username}
-              </Typography>
-            </Link>
+              </Typography> */}
+            </Box>
           </Grid>
         </Grid>
       </Hidden>
@@ -184,17 +208,14 @@ const Navigation = (props) => {
               </Button>
             </Grid>
             <Grid>
-              <Link
-                to={`/profile/` + userState._id}
-                className={classes.navFooter}
-              >
+              <Box className={classes.navFooter}>
                 <Avatar src={userState.avatar} className={classes.userAvatar}>
                   {userState && userState.full_name.split("")[0]}
                 </Avatar>
                 <Typography color="textSecondary">
                   @{userState.username}
                 </Typography>
-              </Link>
+              </Box>
             </Grid>
           </Grid>
         </Drawer>

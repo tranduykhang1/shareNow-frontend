@@ -47,6 +47,29 @@ const groupApi = {
                 }
             })
         return resp
+    },
+    getUserPost: async(params) => {
+        let resp;
+        await axios.get(`${url}/post/user/${params}`, headerConfig)
+            .then(result => resp = result)
+            .catch(err => {
+                if (err.response.status === 401) {
+                    refreshTokenApi()
+                }
+            })
+        return resp
+    },
+
+    removePost: async(params) => {
+        let resp;
+        await axios.delete(`${url}/post/delete?id=${params}`, headerConfig)
+            .then(result => resp = result)
+            .catch(err => {
+                if (err.response.status === 401) {
+                    refreshTokenApi()
+                }
+            })
+        return resp
     }
 }
 

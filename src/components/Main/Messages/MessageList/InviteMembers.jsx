@@ -68,7 +68,7 @@ export default function InviteMembers({ open }) {
           {followingList &&
             followingList.map((user, index) => {
               return (
-                <Link to={`/profile/${user.users[0]._id}`} style={style.link}>
+                <Link to={`/profile/${user.users[0]._id}`} style={style.link} key={index}>
                 <ListItem key={index} style={{color: 'black'}}>
                   <ListItemAvatar>
                     <Avatar src={user.users[0].avatar}>

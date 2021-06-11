@@ -60,7 +60,7 @@ const style = () => ({
     typing: {
         position: 'absolute',
         left: 0,
-        bottom: "7vh",
+        bottom: "6vh",
 
         height: 30,
         width: 30,
@@ -120,6 +120,13 @@ const style = () => ({
         color: "#0478B9 !important",
         fontSize: "25px !important",
     },
+
+    /////////
+    roomIcon: {
+        marginRight: 3,
+        color: "grey !important",
+        fontSize: '19px !important',
+    }
 });
 
 export default style;

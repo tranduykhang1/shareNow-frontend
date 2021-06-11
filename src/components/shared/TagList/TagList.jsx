@@ -31,7 +31,7 @@ function TagList(props) {
   const getPostList = (tag) => {
     setIsDispatch(true)
     if (activeId === tag._id) {
-      setActiveId("");
+      setActiveId(false);
     } else {
       setActiveId(tag._id);
     }

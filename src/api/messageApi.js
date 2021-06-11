@@ -28,20 +28,17 @@ const messageApi = {
         return resp
     },
     sendMessage: async(data) => {
-
+        console.log(data)
         let resp;
         let fd = new FormData();
         fd.append("message_content", data.message)
         fd.append("conversation_id", data.conversationId)
-
+        console.log(data)
         if (data.photos) {
             Array.from(data.photos).map(photo => {
                 fd.append("photos", photo)
             })
-
         }
-
-
         await axios.post(`${url}/message/new`, fd, headerConfig)
             .then(result => resp = result)
             .catch(err => {
@@ -64,7 +61,6 @@ const messageApi = {
     },
 
     getRoomMembers: async(params) => {
-        console.log(params)
         let resp;
         await axios.get(`${url}/room/members?room=${params}`, headerConfig)
             .then(result => resp = result)
