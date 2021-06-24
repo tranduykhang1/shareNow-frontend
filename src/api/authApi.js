@@ -2,8 +2,8 @@ import axios from "axios";
 import { url } from "assets/Config/Url";
 
 const authApi = {
-    login: (data) => {
-        const resp = axios.post(`${url}/auth/login`, {
+    login: async(data) => {
+        const resp = await axios.post(`${url}/auth/login`, {
             email: data.email,
             password: data.password,
         });

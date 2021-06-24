@@ -33,6 +33,7 @@ import socketIOClient from "socket.io-client";
 import constants from "constants/Const/socketIo";
 
 import style from "./Style";
+import { setIsGroup, setIsPost } from "redux/toggleComponent";
 
 const socket = socketIOClient(constants.ENDPOINT);
 
@@ -76,11 +77,17 @@ const UserList = (props) => {
   const isSentRoom = useSelector((state) => state.message.isSentRoom);
   const isCreateRoom = useSelector((state) => state.message.isCreateRoom);
   const isPending = useSelector((state) => state.message.isPending);
+  const isJoin = useSelector((state) => state.message.isJoin);
 
   useEffect(() => {
     dispatch(isSentSocket());
     dispatch(isSentRoomSocket());
   }, [isPending]);
+
+
+  useEffect(() =>{
+    setIsCreate(false)
+  },[isCreateRoom])
 
   useEffect(() => {
     let fetchData = async () => {
@@ -99,10 +106,10 @@ const UserList = (props) => {
   }, [isSent]);
 
   useEffect(() => {
-    if (isSentRoom > 0) {
+    if (isSentRoom > 0 || isJoin >0) {
       getRoomMessage(activeId.conversationId);
     }
-  }, [isSentRoom]);
+  }, [isSentRoom, isJoin]);
 
   const search = (data) => {
     console.log(data);
@@ -112,6 +119,7 @@ const UserList = (props) => {
   };
 
   const getUserMessage = (userId, conversationId) => {
+    dispatch(setIsPost())
     dispatch(getUserMessageAction(userId));
     setActiveId({
       userId: userId,
@@ -119,10 +127,15 @@ const UserList = (props) => {
     });
   };
   const getRoomMessage = (id) => {
+    dispatch(setIsGroup())
     dispatch(getRoomMembers(id));
     dispatch(getMessageRoomAction(id));
     setActiveId({ ...activeId, conversationId: id });
   };
+
+  const searchConversation = (e) =>{
+    console.log(e.target.value)
+  }
 
   let renderConversation;
   if (conversations) {
@@ -130,13 +143,6 @@ const UserList = (props) => {
       let messageContent =
         conversation.message && conversation.message.message_body;
       if (conversation.message) {
-        if (
-          conversation.message.message_content &&
-          conversation.message.message_content.length > 10
-        ) {
-          messageContent =
-            conversation.message.message_content.slice(0, 10) + "...";
-        }
         if (
           conversation.message.message_body &&
           conversation.message.message_body.length > 10
@@ -177,7 +183,7 @@ const UserList = (props) => {
                     <React.Fragment>
                       <span className={classes.userMessage}>
                         {conversation.message &&
-                          conversation.message.message_body}
+                          messageContent}
                       </span>
                     </React.Fragment>
                   }
@@ -359,6 +365,7 @@ const UserList = (props) => {
               inputRef={register}
               placeholder="Tìm kiếm..."
               className={classes.searchInput}
+              onChange={searchConversation}
             />
           </form>
         </Box>

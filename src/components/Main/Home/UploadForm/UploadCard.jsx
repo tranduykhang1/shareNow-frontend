@@ -67,7 +67,7 @@ const UploadCard = (props) => {
     >
       <Grid className={classes.cardAvatar}>
         <Avatar className={classes.avatar} src={currentUser && currentUser.avatar}>
-          K
+          {currentUser && currentUser.full_name.split("")[0]}
         </Avatar>
       </Grid>
       <Grid item={true} sm={12} md={12} className={classes.cardBody}>

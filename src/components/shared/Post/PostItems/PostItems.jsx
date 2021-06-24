@@ -31,7 +31,7 @@ import Moment from "react-moment";
 import { editPost, toggleCommentForm } from "redux/toggleComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { current } from "@reduxjs/toolkit";
-import { likePost, unLikePost } from "redux/interactive";
+import { likePost, likePostGroup, unLikePost } from "redux/interactive";
 import Swal from "sweetalert2";
 import { removePost, setCurrentPost } from "redux/post";
 
@@ -49,7 +49,6 @@ const PostItems = ({ post, classes }) => {
   const dispatch = useDispatch();
   const heartRel = useRef();
   const { path } = useRouteMatch();
-  const { url } = useRouteMatch();
 
   const currentUser = useSelector((state) => state.user.currentUser);
 
@@ -75,11 +74,14 @@ const PostItems = ({ post, classes }) => {
       });
     }
 
-    if (post.length) {
-      setIsLoading(true);
-    } else {
+    setTimeout(() =>{
       setIsLoading(false);
-    }
+    }, 300)
+    // if (post.length) {
+    //   setIsLoading(true);
+    // } else {
+    //   setIsLoading(false);
+    // }
   }, [post]);
   useEffect(() => {
     if (heartRel) {
@@ -118,11 +120,17 @@ const PostItems = ({ post, classes }) => {
     if (post) {
       _id = post._id;
     }
-    if (isLike) {
-      setIsLike(false);
-      await dispatch(unLikePost(likeObj));
+    if (path === "/group/:id" || path === "/groups") {
+      if (!isLike) {
+        await dispatch(likePostGroup(_id));
+      }
     } else {
-      await dispatch(likePost(_id));
+      if (isLike) {
+        setIsLike(false);
+        await dispatch(unLikePost(likeObj));
+      } else {
+        await dispatch(likePost(_id));
+      }
     }
   };
 
@@ -146,15 +154,20 @@ const PostItems = ({ post, classes }) => {
       confirmButtonText: "Xóa",
       cancelButtonText: "Không",
     }).then((result) => {
-      if (!post.post) {
-        dispatch(removePost(post._id));
+      if (result.isConfirmed) {
+        if (!post.post) {
+          dispatch(removePost(post._id));
+        }
       }
     });
   };
   const onEdit = () => {
     setAnchor(null);
     if (!post.post) {
-      dispatch(setCurrentPost(post))
+      dispatch(setCurrentPost(post));
+      dispatch(editPost());
+    } else {
+      dispatch(setCurrentPost(post.post));
       dispatch(editPost());
     }
   };
@@ -306,7 +319,9 @@ const PostItems = ({ post, classes }) => {
                     display="flex"
                     alignItems="center"
                     className={classes.wrapperIcon}
-                    onClick={() => dispatch(toggleCommentForm(post._id))}
+                    onClick={() => {
+                      dispatch(toggleCommentForm(post._id || post.post._id));
+                    }}
                   >
                     <Icons.CommentIcon
                       className={classes.interactIcons}

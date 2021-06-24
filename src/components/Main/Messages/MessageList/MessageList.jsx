@@ -53,7 +53,9 @@ const MessageList = (props) => {
   const [messageRoomList, setMessageRoomList] = useState();
   const [tempPhoto, setTempPhoto] = useState([]);
   const [messageSend, setMessageSend] = useState({
-    conversationId: "",
+    id: "",
+    full_name: "",
+    avatar: "",
     message: "",
     photos: [],
     type: "",
@@ -62,7 +64,7 @@ const MessageList = (props) => {
   const [openMembers, setOpenMembers] = useState(false);
   const [anchor, setAnchor] = useState();
   const [isSendPending, setIsSendPending] = useState(true);
-  const [messageCount, setMessageCount] = useState(20);
+  const [messageCount, setMessageCount] = useState(15);
 
   useEffect(() => {
     if (typingRel) {
@@ -80,7 +82,7 @@ const MessageList = (props) => {
     if (messageBodyRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messageBodyRef.current;
       if (scrollTop === 0) {
-        setMessageCount(messageCount + 20);
+        setMessageCount(messageCount + 15);
       }
     }
   };
@@ -92,6 +94,7 @@ const MessageList = (props) => {
   const roomMembers = useSelector((state) => state.message.roomMembers);
   const isTyping = useSelector((state) => state.message.isTyping);
   const isPending = useSelector((state) => state.message.sendPending);
+  const isJoin = useSelector((state) => state.message.isJoin);
 
   const inputChange = (e) => {
     let { name, value } = e.target;
@@ -122,23 +125,41 @@ const MessageList = (props) => {
 
   useEffect(() => {
     setIsSendPending(!isSendPending);
-    if (isPending > 0) {
-      console.log("oke");
-      socket.emit("SEND_MESSAGE", messageList.userInfo[0]._id);
-      socket.emit("ROOM_MESSAGE", messageSend.roomId);
-    }
+    // if (isPending > 0) {
+    //   socket.emit("SEND_MESSAGE", messageList.userInfo[0]._id);
+    //   socket.emit("ROOM_MESSAGE", messageSend.roomId);
+    // }
   }, [isPending]);
+
+  useEffect(() => {
+    if (currentUser) {
+      setMessageSend({
+        ...messageSend,
+        id: currentUser._id,
+        avatar: currentUser.avatar,
+        full_name: currentUser.full_name,
+      });
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     dispatch(getFollowingList());
     if (userMessage[0]) {
-      if (userMessage[0].name) {
+      if (userMessage[0].room_code) {
         setMessageList(userMessage[0]);
-        setMessageSend({ roomId: userMessage[0]._id });
+        setMessageSend({
+          ...messageSend,
+          conversationId: "",
+          roomId: userMessage[0]._id,
+        });
       }
       if (!userMessage[0].room_code) {
         setMessageList(userMessage[0]);
-        setMessageSend({ conversationId: userMessage[0]._id });
+        setMessageSend({
+          ...messageSend,
+          roomId: "",
+          conversationId: userMessage[0]._id,
+        });
       }
     }
   }, [userMessage]);
@@ -166,7 +187,7 @@ const MessageList = (props) => {
       }
       if (messageSend.roomId) {
         dispatch(sendMessageRoomAction(messageSend));
-        socket.emit("ROOM_MESSAGE", messageSend.roomId);
+        socket.emit("ROOM_MESSAGE", messageSend);
       }
       e.target.reset();
       setShowAnimation(false);
@@ -221,7 +242,7 @@ const MessageList = (props) => {
 
     Swal.fire({
       title: "Xác nhận",
-      html: `Bạn có muốn mời phòng?`,
+      html: `Bạn có muốn rời phòng?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -329,11 +350,11 @@ const MessageList = (props) => {
                   className={classes.popoverItem}
                   onClick={onOpenInvite}
                 >
-                  <Icons.AddMemberIcon className={classes.roomIcon}/>
+                  <Icons.AddMemberIcon className={classes.roomIcon} />
                   <ListItemText>Thêm</ListItemText>
                 </ListItem>
                 <ListItem className={classes.popoverItem} onClick={onLeaveRoom}>
-                  <Icons.ExitIcon className={classes.roomIcon}/>
+                  <Icons.ExitIcon className={classes.roomIcon} />
                   <ListItemText>Rời phòng</ListItemText>
                 </ListItem>
                 {messageList && currentUser._id === messageList.admin_key && (
@@ -341,7 +362,7 @@ const MessageList = (props) => {
                     className={classes.popoverItem}
                     onClick={onRemoveRoom}
                   >
-                    <Icons.TrashIcon className={classes.roomIcon}/>
+                    <Icons.TrashIcon className={classes.roomIcon} />
                     <ListItemText>Xóa phòng</ListItemText>
                   </ListItem>
                 )}
@@ -412,7 +433,13 @@ const MessageList = (props) => {
             m="auto"
             style={{ color: "grey", textAlign: "center" }}
           >
-            {isSendPending ? <LinearProgress /> : ""}
+            {isSendPending ? (
+              <div className={classes.sendingContainer}>
+                <span className={classes.sendingText}>Đang gửi...</span>
+              </div>
+            ) : (
+              ""
+            )}
           </Box>
           {showAnimation && (
             <div className={classes.typing} ref={typingRel}></div>

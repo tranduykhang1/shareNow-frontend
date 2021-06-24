@@ -8,7 +8,8 @@ const toggleSlice = createSlice({
         commentForm: false,
         post_id: "",
         reply: "",
-        editPost: false
+        editPost: false,
+        isGroup: false
     },
     reducers: {
         toggleUploadForm: (state, action) => {
@@ -23,10 +24,16 @@ const toggleSlice = createSlice({
         },
         editPost: (state, action) => {
             state.editPost = !state.editPost
+        },
+        setIsPost: (state, action) => {
+            state.isGroup = false
+        },
+        setIsGroup: (state, action) => {
+            state.isGroup = true
         }
     },
 });
 
 const { actions, reducer } = toggleSlice
-export const { toggleUploadForm, toggleCommentForm, replyTo, editPost } = actions
+export const { toggleUploadForm, toggleCommentForm, replyTo, editPost, setIsPost, setIsGroup } = actions
 export default reducer

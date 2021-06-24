@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 
 import style from "./Style";
 import { replyTo } from "redux/toggleComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { removeComment, setCurrentComment } from "redux/interactive";
 
 const CommentItem = (props) => {
   const { classes, data } = props;
@@ -15,34 +16,34 @@ const CommentItem = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [comment, setComment] = useState();
 
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const postId = useSelector((state) => state.toggle.post_id);
+
   const reply = () => {
     dispatch(replyTo(data));
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     setComment({
       id: data.id,
-      content: data.content
-    })
-  }, [data])
+      content: data.content,
+    });
+  }, [data]);
 
   const inputChange = (e) => {
-    let {name, value} =e.target
-    setComment({...comment, [name]: value });
+    let { name, value } = e.target;
+    setComment({ ...comment, [name]: value });
   };
 
-  const editComment = () => {
-    if (editRef.current) {
-      let ref = editRef.current;
-      ref.focus();
-    }
-    setIsEdit(!isEdit);
+  const onEditComment = () => {
+    dispatch(setCurrentComment(data));
   };
-  const removeComment = () => {};
-
-  const onEdit = e => {
-    e.preventDefault();
-    console.log(comment)
+  const onRemoveComment = () => {
+    let data = {
+      postId: postId,
+      commentId: comment.id,
+    };
+    dispatch(removeComment(data));
   };
 
   return (
@@ -51,7 +52,7 @@ const CommentItem = (props) => {
         <Link to="">
           <Avatar
             className={classes.commentAvatar}
-            src="http://res.cloudinary.com/dfniu86vr/image/upload/v1622863383/avatar/pibuqw0blzem9iul5bik.jpg"
+            src={data.comment_by.avatar}
           >
             H
           </Avatar>
@@ -60,30 +61,34 @@ const CommentItem = (props) => {
           <Typography className={classes.commentUsername}>
             {data.comment_by.name}
           </Typography>
-          {isEdit ? (
-            <form onSubmit={onEdit}>
-              <input
-                ref={editRef}
-                type="text"
-                name="content"
-                value={comment.content}
-                onChange={inputChange}
-                className={classes.editInput}
-              />
-            </form>
-          ) : (
-            <Typography className={classes.commentContent}>
-              {data.content}
-            </Typography>
-          )}
+
+          <Typography className={classes.commentContent}>
+            {data.reply_to && (
+              <>
+                {" "}
+                <span>Trả lời</span>{" "}
+                <b style={{ marginRight: 3 }}>{data.reply_to}</b>{" "}
+              </>
+            )}
+            {data.content}
+          </Typography>
+
           <Typography className={classes.commentAt}>
             <Moment fromNow>{data.create_at}</Moment>
           </Typography>
         </Box>
-        <Box display="flex" flexDirection="column">
-          <Icons.StudentIcon onClick={editComment} className={classes.icon} />
-          <Icons.TrashIcon onClick={removeComment} className={classes.icon} />
-        </Box>
+        {currentUser._id === data.comment_by.id && (
+          <Box display="flex" flexDirection="column">
+            <Icons.StudentIcon
+              onClick={onEditComment}
+              className={classes.icon}
+            />
+            <Icons.TrashIcon
+              onClick={onRemoveComment}
+              className={classes.icon}
+            />
+          </Box>
+        )}
       </Grid>
       <Grid className={classes.commentBody}>
         <div className={classes.reply} onClick={reply}>

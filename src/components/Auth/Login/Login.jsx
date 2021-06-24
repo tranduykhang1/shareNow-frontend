@@ -48,36 +48,41 @@ const Login = (props) => {
     resolver: yupResolver(schema),
   });
 
-  const responseGoogle = async(res) => {
-    setIsLoading(true);
-    const resp = await dispatch(googleLogin(res));
-    const response = unwrapResult(resp);
-    setIsLoading(false);
+  const responseGoogle = async (res) => {
+    if (!res.error) {
+      setIsLoading(true);
+      if (!isLoading) {
+        const resp = await dispatch(googleLogin(res));
+        const response = unwrapResult(resp);
+        setIsLoading(false);
 
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-    window.location.pathname = "/";
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        window.location.pathname = "/";
+      }
+    }
   };
   const onSubmit = async (data) => {
     setIsLoading(true);
     const resp = await dispatch(loginAction(data));
     const response = unwrapResult(resp);
     setIsLoading(false);
-    if (response.data === "Password incorrect") {
-      setLoginState({
-        type: "password",
-        msg: "Mật khẩu không đúng",
-      });
-    } else if (response.data === "Email not Found") {
-      setLoginState({
-        type: "username",
-        msg: "Không tìm thấy Email",
-      });
-    } else {
-      console.log(response);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
-      window.location.pathname = "/";
+    if (response) {
+      if (response.data === "Password incorrect") {
+        setLoginState({
+          type: "password",
+          msg: "Mật khẩu không đúng",
+        });
+      } else if (response.data === "Email not Found") {
+        setLoginState({
+          type: "username",
+          msg: "Không tìm thấy Email",
+        });
+      } else {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        window.location.pathname = "/";
+      }
     }
   };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading/Loading";
 import CustomSelect from "../Input/CustomSelect";
 
@@ -26,15 +26,20 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import { useParams, useRouteMatch } from "react-router-dom";
+import { editPost } from "redux/post";
 
 let array = [];
 const EditPost = ({ classes }) => {
   const [open, setOpen] = useState(true);
   const inputRef = useRef();
+  const dispatch = useDispatch();
 
   const [isShow, setIsShow] = useState(false);
   const [post, setPost] = useState({});
   const [tempPhoto, setTempPhoto] = useState([]);
+
+  let { path } = useRouteMatch();
 
   let isEdit = useSelector((state) => state.toggle.editPost);
   let currentPost = useSelector((state) => state.post.currentPost);
@@ -44,17 +49,16 @@ const EditPost = ({ classes }) => {
   useEffect(() => {
     if (currentPost) {
       setPost({
+        postId: currentPost._id,
         caption: currentPost.caption,
         tag: currentPost.tags,
-        topic: currentPost.topic,
+        topic: currentPost.topic && currentPost.topic[0]._id,
       });
     }
   }, [currentPost]);
   useEffect(() => {
     setOpen(!open);
   }, [isEdit]);
-
-  console.log(currentPost);
 
   const onEmojiClick = (e, { emoji }) => {
     let ref = inputRef.current;
@@ -82,7 +86,8 @@ const EditPost = ({ classes }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(post);
+    setOpen(!open);
+    dispatch(editPost(post));
   };
 
   return (
@@ -109,29 +114,30 @@ const EditPost = ({ classes }) => {
               ref={inputRef}
             />
 
-            <Box display="flex" justifyContent="space-between">
-              <CustomSelect
-                id="department"
-                name="topic"
-                require="true"
-                label="Chủ đề:"
-                defaultValue={post.topic}
-                onChange={selectOption}
-                options={departmentList}
-                // errors={errors.topic}
-              />
-              <CustomSelect
-                id="tag"
-                name="tag"
-                require="true"
-                label="Tag:"
-                defaultValue={post.tag}
-                onChange={selectOption}
-                options={tagList}
-                // errors={errors.tag}
-              />
-            </Box>
-
+            {path === "/" && (
+              <Box display="flex" justifyContent="space-between">
+                <CustomSelect
+                  id="department"
+                  name="topic"
+                  require="true"
+                  label="Chủ đề:"
+                  defaultValue={post.topic}
+                  onChange={selectOption}
+                  options={departmentList}
+                  // errors={errors.topic}
+                />
+                <CustomSelect
+                  id="tag"
+                  name="tag"
+                  require="true"
+                  label="Tag:"
+                  defaultValue={post.tag}
+                  onChange={selectOption}
+                  options={tagList}
+                  // errors={errors.tag}
+                />
+              </Box>
+            )}
             <Box display="flex" justifyContent="space-between">
               <Box
                 display="flex"

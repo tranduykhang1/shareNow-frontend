@@ -70,7 +70,23 @@ const groupApi = {
                 }
             })
         return resp
-    }
+    },
+    editPost: async(data) => {
+        let resp;
+        await axios.put(`${url}/post/update`, {
+                post_id: data.postId,
+                caption: data.caption,
+                tag: data.tag,
+                topic: data.topic
+            }, headerConfig)
+            .then(result => resp = result)
+            .catch(err => {
+                if (err.response.status === 401) {
+                    refreshTokenApi()
+                }
+            })
+        return resp
+    },
 }
 
 export default groupApi

@@ -43,7 +43,7 @@ const RightSide = (props) => {
   const renderListUser = userList.map((u, i) => {
     if (currentUser._id !== u._id) {
       return (
-        <Link to={`/profile/${u._id}`} key={i}>
+        <a href={`/profile/${u._id}`} key={i}>
           <List className={classes.userList}>
             <ListItem alignItems="flex-start" className={classes.userItem}>
               <ListItemAvatar>
@@ -79,7 +79,7 @@ const RightSide = (props) => {
               </Button>
             </ListItem>
           </List>
-        </Link>
+        </a>
       );
     }
   });

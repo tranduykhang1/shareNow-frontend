@@ -16,6 +16,7 @@ const CreateGroup = (props) => {
 
   const onSubmit = (data) => {
     dispatch(createRoom(data))
+
   };
 
   return (
@@ -30,7 +31,7 @@ const CreateGroup = (props) => {
               name="room_name"
               type="text"
               className={classes.input}
-              placeholder="Tạo nhóm mới .."
+              placeholder="Tạo phòng mới .."
               require="true"
               ref={register}
               autoComplete="off"

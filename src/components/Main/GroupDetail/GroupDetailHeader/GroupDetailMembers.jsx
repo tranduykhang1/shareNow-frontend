@@ -37,8 +37,10 @@ export default function GroupDetailMembers(props) {
   let group = useSelector((state) => state.group.groupDetail);
   let isRemove = useSelector((state) => state.group.isRemove);
   let isFollow = useSelector((state) => state.user.isFollow);
+  let isJoin = useSelector((state) => state.message.isJoin);
 
   useEffect(() => {
+    console.log(isJoin)
     let fetchData = async () => {
       let resp = await dispatch(getMembers(id));
       resp = unwrapResult(resp);
@@ -46,7 +48,7 @@ export default function GroupDetailMembers(props) {
     };
 
     fetchData();
-  }, [isRemove]);
+  }, [isRemove, isJoin]);
   useEffect(() =>{
     dispatch(getUser())
   }, [isFollow])

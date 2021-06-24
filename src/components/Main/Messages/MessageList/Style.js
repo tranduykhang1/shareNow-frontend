@@ -126,7 +126,19 @@ const style = () => ({
         marginRight: 3,
         color: "grey !important",
         fontSize: '19px !important',
+    },
+    //
+    sendingContainer: {
+        background: "#2e6da42e",
+        padding: 3,
+        borderRadius: 7,
+        margin: 'auto',
+        width: "30%"
+    },
+    sendingText: {
+        color: '#656565'
     }
+
 });
 
 export default style;

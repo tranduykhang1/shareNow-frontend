@@ -28,7 +28,6 @@ const messageApi = {
         return resp
     },
     sendMessage: async(data) => {
-        console.log(data)
         let resp;
         let fd = new FormData();
         fd.append("message_content", data.message)
@@ -48,6 +47,18 @@ const messageApi = {
             })
         return resp
     },
+    deleteMessage: async(params) => {
+        let resp
+        await axios.delete(`${url}/message/delete-message?message_id=${params}`, headerConfig)
+            .then(result => resp = result)
+            .catch(err => {
+                if (err.response.status === 401) {
+                    refreshTokenApi()
+                }
+            })
+        return resp
+    },
+    //
     getMessageRoom: async(params) => {
         let resp;
         await axios.get(`${url}/room/message?room=${params}`, headerConfig)

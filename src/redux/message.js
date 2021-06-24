@@ -14,6 +14,11 @@ export const sendMessageAction = createAsyncThunk("message/sendMessageAction", a
     const response = await messageApi.sendMessage(data);
     return response.data
 })
+export const deleteMessage = createAsyncThunk("message/deleteMessage", async(params, thunAPI) => {
+    const response = await messageApi.deleteMessage(params);
+    return response.data
+})
+
 
 
 export const getRoomMembers = createAsyncThunk("message/getRoomMembers", async(params, thunAPI) => {
@@ -49,7 +54,7 @@ const messageSlice = createSlice({
     initialState: {
         listConversation: [],
         listMessageRoom: [],
-        userMessage: "",
+        userMessage: [],
         isSent: 0,
         isSentRoom: 0,
         roomMembers: [],
@@ -57,7 +62,7 @@ const messageSlice = createSlice({
         isLeave: 0,
         isCreateRoom: 0,
         isTyping: false,
-        sendPending: 0
+        sendPending: 0,
     },
     reducers: {
         isTyping: (state, action) => {
@@ -67,7 +72,21 @@ const messageSlice = createSlice({
             state.isSent += 1
         },
         isSentRoomSocket: (state, action) => {
-            state.isSentRoom += 1
+            if (state.userMessage.length) {
+                state.userMessage[0].message_list.push(action.payload)
+            }
+        },
+        searchConversationAction: (state, action) => {
+            const q = action.payload
+            const newList = state.listConversation.filter(conversation => {
+                // if (conversation.room_name) {
+                //     conversation.room_name = q
+                // }
+                // if (conversation.userTo) {
+                //     conversation.userTo[0].full_name
+                // }
+            })
+            return newList
         }
     },
     extraReducers: {
@@ -84,13 +103,14 @@ const messageSlice = createSlice({
             state.isSent += 1
             state.sendPending += 1
         },
+        [deleteMessage.fulfilled]: (state, action) => {
+            state.isSent += 1
+        },
 
         [getMessageRoomAction.fulfilled]: (state, action) => {
             state.userMessage = action.payload
         },
-        [sendMessageRoomAction.fulfilled]: (state, action) => {
-            state.isSentRoom += 1
-        },
+        [sendMessageRoomAction.fulfilled]: (state, action) => {},
         [getRoomMembers.fulfilled]: (state, action) => {
             state.roomMembers = action.payload
         },
@@ -103,10 +123,11 @@ const messageSlice = createSlice({
         [createRoom.fulfilled]: (state, action) => {
             state.isCreateRoom += 1
         },
+
     },
 });
 
 const { actions, reducer: messageReducer } = messageSlice;
-export const { isTyping, isSentSocket, isSentRoomSocket } = actions
+export const { isTyping, isSentSocket, isSentRoomSocket, searchConversationAction } = actions
 
 export default messageReducer

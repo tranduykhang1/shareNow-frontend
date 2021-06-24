@@ -17,14 +17,14 @@ import { joinRoom } from "redux/message";
 
 const style = {
   link: {
-    color: 'black !important'
+    color: "black !important",
   },
   list: {
     paddingTop: "0 !important",
   },
   listItem: {
     padding: "0 !important",
-    color: 'black !important'
+    color: "black !important",
   },
   btnInvite: {
     textTransform: "initial",
@@ -42,7 +42,6 @@ export default function InviteMembers({ open }) {
 
   const followingList = useSelector((state) => state.user.followingList);
   const roomMessage = useSelector((state) => state.message.userMessage);
-
 
   const inviteMember = (id) => {
     let { room_code } = roomMessage[0];
@@ -68,31 +67,32 @@ export default function InviteMembers({ open }) {
           {followingList &&
             followingList.map((user, index) => {
               return (
-                <Link to={`/profile/${user.users[0]._id}`} style={style.link} key={index}>
-                <ListItem key={index} style={{color: 'black'}}>
-                  <ListItemAvatar>
-                    <Avatar src={user.users[0].avatar}>
-                      {user.users[0].full_name.split("")[0]}
-                    </Avatar>
-                  </ListItemAvatar>
+                <ListItem key={index} style={{ color: "black" }} key={index}>
+                  <Link to={`/profile/${user.users[0]._id}`} style={style.link}>
+                    <ListItemAvatar>
+                      <Avatar src={user.users[0].avatar}>
+                        {user.users[0].full_name.split("")[0]}
+                      </Avatar>
+                    </ListItemAvatar>
+                  </Link>
                   <ListItemText
                     primary={user.users[0].full_name}
                     secondary={user.users[0].class_room}
-                    />
-                  {roomMessage[0].members && !roomMessage[0].members.includes(user.users[0]._id) ? (
+                  />
+                  {roomMessage[0].members &&
+                  !roomMessage[0].members.includes(user.users[0]._id) ? (
                     <Button
-                    size="small"
-                    variant="contained"
-                    style={style.btnInvite}
-                    onClick={() => inviteMember(user.users[0]._id)}
+                      size="small"
+                      variant="contained"
+                      style={style.btnInvite}
+                      onClick={() => inviteMember(user.users[0]._id)}
                     >
                       Mời
                     </Button>
                   ) : (
                     "Đang trong phòng"
-                    )}
+                  )}
                 </ListItem>
-                    </Link>
               );
             })}
         </List>

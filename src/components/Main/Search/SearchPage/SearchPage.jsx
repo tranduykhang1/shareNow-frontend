@@ -104,7 +104,7 @@ const SearchPage = (props) => {
         {optionId === 0 ? (
           <select
             id="demo-customized-s-native"
-            value=""
+            // value=""
             name="department"
             style={{
               width: "50%",
@@ -114,7 +114,7 @@ const SearchPage = (props) => {
             }}
             onChange={onChange}
           >
-            <option disabled value="">
+            <option  value="">
               Lọc theo khoa
             </option>
             {topicList.map((topic, index) => {
@@ -133,7 +133,7 @@ const SearchPage = (props) => {
             <select
               name="topic"
               id="demo-customized-s-native"
-              value=""
+              // value=""
               style={{
                 width: "50%",
                 background: "transparent",
@@ -142,7 +142,7 @@ const SearchPage = (props) => {
               }}
               onChange={onChange}
             >
-              <option disabled value="">
+              <option value="">
                 Lọc theo chủ đề
               </option>
               {tagList.map((tag, index) => {

@@ -1,7 +1,12 @@
 import "./App.css";
 //import io from "socket.io-client";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useRouteMatch,
+} from "react-router-dom";
 import PrivateRoute from "router/PrivateRouter";
 
 import React, { useEffect } from "react";
@@ -16,15 +21,15 @@ import Notification from "components/shared/NoticeStatus/Notification";
 import io from "socket.io-client";
 import token from "assets/Config/jwtChecker";
 import constants from "constants/Const/socketIo";
-import { isTyping , isSentSocket,isSentRoomSocket} from "redux/message";
-import { useDispatch } from "react-redux";
+import { isTyping, isSentSocket, isSentRoomSocket } from "redux/message";
+import { useDispatch, useSelector } from "react-redux";
 
 const socket = io(constants.ENDPOINT);
 
 const App = () => {
   const dispatch = useDispatch();
 
-  let { pathname } = window.location;
+  const { pathname } = window.location;
   let padding = 10;
   if (pathname === "/register") {
     padding = 0;
@@ -37,23 +42,22 @@ const App = () => {
     minHeight: "100%",
   };
 
-  //
-  useEffect(() =>{
-    socket.emit("NEW_USER", token)
-  },[ ])
+  useEffect(() => {
+    socket.emit("NEW_USER", token);
+  }, []);
 
   useEffect(() => {
-    socket.on("TYPING", (data) =>{
+    socket.on("TYPING", (data) => {
+      console.log(data);
       dispatch(isTyping(data));
-    })
-    socket.on("SEND_MESSAGE", () =>{
-      console.log("oke")
+    });
+    socket.on("SEND_MESSAGE", () => {
+      console.log("oke");
       dispatch(isSentSocket());
-    })
-    socket.on("ROOM_MESSAGE", () =>{
-      dispatch(isSentRoomSocket())
-    })
-
+    });
+    socket.on("ROOM_MESSAGE", (data) => {
+      dispatch(isSentRoomSocket(data));
+    });
   });
 
   ///
@@ -71,7 +75,7 @@ const App = () => {
         <UploadPostModal />
         <ConfirmUserForm />
         <Switch> {switchRoute(routes)} </Switch>{" "}
-        {/* <NotificationContainer /> */} {/* <Socket/> */}
+        {/* <NotificationContainer /> */} {/* <Socket/> */}{" "}
       </Grid>{" "}
     </Router>
   );

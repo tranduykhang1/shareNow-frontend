@@ -53,7 +53,7 @@ const GroupDetailHeader = (props) => {
     let fetchData = async () => {
       let resp = await dispatch(getGroupDetail(id));
       resp = unwrapResult(resp);
-      setPassword(resp.password)
+      // setPassword(resp.password)
       setGroup(resp);
     };
 
@@ -102,6 +102,22 @@ const GroupDetailHeader = (props) => {
       }
     });
   };
+  const onLeaveGroup = () =>{
+    Swal.fire({
+      title: "Xác nhận",
+      text: `Bạn muốn rời nhóm này?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // dispatch(removeGroupAction(group._id));
+      }
+    });
+  }
 
   const styles = {
     headerImage: {
@@ -131,9 +147,9 @@ const GroupDetailHeader = (props) => {
         </>
       )}
       <Grid container className={classes.groupInfo}>
-        <Box position="absolute" display="flex" alignItems="center" style={{color: 'white', top: "-90%"}}>
+        {isJoin && <Box position="absolute" display="flex" alignItems="center" style={{color: 'white', top: "-90%"}}>
            <h5>Mật khẩu nhóm:</h5><b style={{marginLeft: 5}}>{group.password}</b>
-        </Box>
+        </Box>}
         <div>
           <Typography className={classes.groupName}>{group.name}</Typography>
           <Typography className={classes.groupMember}>
@@ -153,7 +169,7 @@ const GroupDetailHeader = (props) => {
             size="small"
             variant="contained"
             className={classes.btnJoin}
-            onClick={() => setOpen(true)}
+            onClick={onLeaveGroup}
           >
             Rời nhóm
           </Button>
@@ -195,7 +211,7 @@ const GroupDetailHeader = (props) => {
     </Grid>
   ) : (
     <Typography align="center" style={{ fontSize: "25px !important" }}>
-      Không tìm thấy nhóm này
+      <Loading/>
     </Typography>
   );
 };

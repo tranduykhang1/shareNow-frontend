@@ -88,11 +88,11 @@ const ProfileInfo = (props) => {
       type: name,
       url: photo,
     });
-    setTempPhoto({ [name]: URL.createObjectURL(photo) });
+    setTempPhoto({...tempPhoto, [name]: URL.createObjectURL(photo) });
   };
 
   const confirmClose = () => {
-    setTempPhoto({ avatar: "", background: "" });
+    setTempPhoto({ avatar: userProfile.avatar, background: userProfile.background });
     setPhoto({ type: "", url: "" });
   };
   const confirmDone = () => {
@@ -150,7 +150,7 @@ const ProfileInfo = (props) => {
             </Box>
           )}
           <label htmlFor="update-bg">
-            <span className={classes.updateBgCover}>Cập nhật ảnh bìa</span>
+            {currentUser._id === userProfile._id && <span className={classes.updateBgCover}>Cập nhật ảnh bìa</span>}
             <input
               onChange={updatePhoto}
               name="background"
@@ -191,7 +191,7 @@ const ProfileInfo = (props) => {
             </Box>
           )}
           <label htmlFor="update-avatar">
-            <Icons.CameraIcon className={classes.cameraIcon} />
+            {currentUser._id === userProfile._id && <Icons.CameraIcon className={classes.cameraIcon} />}
             <input
               onChange={updatePhoto}
               name="avatar"
@@ -273,7 +273,7 @@ const ProfileInfo = (props) => {
             size="small"
             variant="outlined"
             className={classes.btnUpdate}
-            onClick={() => history.push("/update-profile/123")}
+            onClick={() => history.push(`/update-profile/${userProfile._id}`)}
           >
             Cập nhật thông tin
           </Button>

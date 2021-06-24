@@ -14,8 +14,8 @@ const style = () => ({
         height: 90,
         width: 90,
         border: '5px solid #fdfdfd',
-        fontSize: 80,
-        color: 'white',
+        fontSize: 30,
+        color: 'grey',
         background: '#fdfdfd !important',
         boxShadow: '-3px 0px 5px 0px #e4e4e4'
     },

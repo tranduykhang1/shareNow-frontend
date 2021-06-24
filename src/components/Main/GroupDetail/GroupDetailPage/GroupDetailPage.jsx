@@ -27,6 +27,8 @@ const GroupDetailPage = (props) => {
   let isJoin = useSelector((state) => state.group.isJoin);
   let isAdd = useSelector((state) => state.group.isAdd);
   let isCreatePost = useSelector((state) => state.group.isCreatePost);
+  let isComment = useSelector((state) => state.interactive.isComment);
+
 
   useEffect(() => {
     if (group) {
@@ -57,7 +59,7 @@ const GroupDetailPage = (props) => {
       setGroup(unwrapResult(resp));
     };
     fetchData();
-  }, [isCreatePost]);
+  }, [isCreatePost, isComment]);
 
   return (
     <Grid item sm={12} md={6} style={style} className="responseGrid">
@@ -71,9 +73,9 @@ const GroupDetailPage = (props) => {
           <GroupDetailMembers group={group.admin_key} />
           {currentGroup && <PostList data={currentGroup} />}
         </>
-      ) : isJoin ? (
+      ) : !isJoin ? (
         <p style={{ textAlign: "center", marginTop: 50 }}>
-          Hãy tham gia nhóm để xem bài viết
+          Hãy tham gia nhóm để xem các bài viết!
         </p>
       ) : (
         ""

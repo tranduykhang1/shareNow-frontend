@@ -10,22 +10,26 @@ const refreshTokenApi = async() => {
 
     refreshToken = null;
     localStorage.setItem("token", newToken);
+
     return;
 };
 
 const refreshTokenRequest = async() => {
     let refreshToken = localStorage.getItem("refreshToken");
-    try {
-        let tokenResponse = await axios.post(`${url}/auth/refresh-token`, {
-            refresh_token: refreshToken,
-        });
-        if (refreshToken) {
-            window.location.reload();
-        }
-        return tokenResponse.data
-    } catch (err) {
-        if (err.response.status === 403) {
-            window.location.pathname = "/";
+    if (refreshToken) {
+
+        try {
+            let tokenResponse = await axios.post(`${url}/auth/refresh-token`, {
+                refresh_token: refreshToken,
+            });
+            if (refreshToken) {
+                window.location.reload();
+            }
+            return tokenResponse.data
+        } catch (err) {
+            if (err.response.status === 403) {
+                window.location.pathname = "/login";
+            }
         }
     }
 };

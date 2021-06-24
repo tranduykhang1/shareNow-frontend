@@ -195,6 +195,11 @@ div.fullscreen-container {
     position: static !important;
 }
 
+.grid-container>.container {
+    width: auto !important;
+    min-width: 150px;
+}
+
 .photoItem {
     width: 133px;
     height: auto;

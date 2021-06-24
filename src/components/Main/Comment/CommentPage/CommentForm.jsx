@@ -6,15 +6,23 @@ import style from "./Style";
 import Icons from "constants/Icons/Icons";
 import { InputBase, withStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { postComment } from "redux/interactive";
+import {
+  editComment,
+  postComment,
+  postCommentGroup,
+  setCurrentComment,
+} from "redux/interactive";
+import { useRouteMatch } from "react-router-dom";
 
 const CommentForm = (props) => {
   const inputRef = useRef();
 
+  const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { classes } = props;
   const [isShow, setIsShow] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [comment, setComment] = useState({
     post_id: "",
     text: "",
@@ -24,6 +32,7 @@ const CommentForm = (props) => {
 
   let postId = useSelector((state) => state.toggle.post_id);
   let replyTo = useSelector((state) => state.toggle.reply);
+  let currentComment = useSelector((state) => state.interactive.currentComment);
 
   useEffect(() => {
     if (replyTo) {
@@ -38,11 +47,37 @@ const CommentForm = (props) => {
     setComment({ ...comment, post_id: postId });
   }, [postId]);
 
-  const onSubmit = async(e) => {
+  useEffect(() => {
+    if (currentComment) {
+      setIsEdit(true);
+      setComment({
+        ...comment,
+        text: currentComment.content,
+        comment_id: currentComment.id,
+      });
+    }
+  }, [currentComment]);
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    await dispatch(postComment(comment));
-    setIsShow(false)
-    setComment({ post_id: "", text: "", replyId: "", replyName: "" });
+    console.log(path === "/group/:id");
+    if (path === "/group/:id" || path === "/groups") {
+      dispatch(postCommentGroup(comment));
+      setComment({ ...comment, text: "", replyId: "", replyName: "" });
+      dispatch(setCurrentComment(false));
+    } else {
+      if (isEdit) {
+        setIsEdit(false);
+        dispatch(editComment(comment));
+        dispatch(setCurrentComment(false));
+        setComment({ ...comment, text: "", replyId: "", replyName: "" });
+      } else {
+        dispatch(postComment(comment));
+        setIsShow(false);
+        setIsEdit(false);
+        setComment({ ...comment, text: "", replyId: "", replyName: "" });
+      }
+    }
   };
 
   const togglePicker = () => {
@@ -66,7 +101,9 @@ const CommentForm = (props) => {
   return (
     <>
       {isShow && <Picker onEmojiClick={onEmojiClick} />}
-      {comment.replyName && <b style={{marginLeft: '5%'}}> Trả lời: {comment.replyName}</b>}
+      {comment.replyName && (
+        <b style={{ marginLeft: "5%" }}> Trả lời: {comment.replyName}</b>
+      )}
       <form onSubmit={onSubmit} className={classes.commentForm}>
         <Icons.MoodIcon className={classes.emojiIcon} onClick={togglePicker} />
 

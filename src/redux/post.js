@@ -26,6 +26,10 @@ export const removePost = createAsyncThunk("post/removePost", async(params, thun
     return response.data
 })
 
+export const editPost = createAsyncThunk("post/editPost", async(data, thunAPI) => {
+    const response = await postApi.editPost(data);
+    return response.data
+})
 
 
 const postSlice = createSlice({
@@ -62,6 +66,9 @@ const postSlice = createSlice({
             state.userPostList = action.payload
         },
         [removePost.fulfilled]: (state, action) => {
+            state.isRemove += 1
+        },
+        [editPost.fulfilled]: (state, action) => {
             state.isRemove += 1
         }
     },

@@ -69,7 +69,7 @@ const HomePage = (props) => {
       }
     };
     fetchData();
-  }, [page, isCreate,isRemove, isComment, currentTopic, currentTag]);
+  }, [page, isCreate, isRemove, isComment, currentTopic, currentTag]);
 
   useEffect(() => {
     setPostList(posts);
